@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@theme {
+  --font-cormorant-garamond: var(--font-cormorant-garamond), serif;
+
+  --color-cream: var(--cream);
+  --color-white: var(--white);
+  --color-gold: var(--gold);
+  --color-gold-light: var(--gold-light);
+  --color-gold-dark: var(--gold-dark);
+  --color-teal: var(--teal);
+  --color-teal-light: var(--teal-light);
+  --color-teal-pale: var(--teal-pale);
+  --color-blush: var(--blush);
+  --color-blush-light: var(--blush-light);
+  --color-navy: var(--navy);
+  --color-charcoal: var(--charcoal);
+  --color-gray: var(--gray);
+  --color-light-gray: var(--light-gray);
+  --color-pink: var(--pink);
+}
+
+:root {
+  --cream: #fdfaf5;
+  --white: #ffffff;
+  --gold: #c9a84c;
+  --gold-light: #e8d5a0;
+  --gold-dark: #8b6914;
+  --teal: #2a7c74;
+  --teal-light: #5ba8a0;
+  --teal-pale: #e8f5f4;
+  --blush: #e8c5c5;
+  --blush-light: #f7eaea;
+  --navy: #1a2744;
+  --charcoal: #2c2c2c;
+  --gray: #6b6b6b;
+  --light-gray: #e5e0d8;
+  --pink: #d4829a;
+}
+
+@layer {
+  button {
+    @apply transition-all duration-400;
+  }
+}
