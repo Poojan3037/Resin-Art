@@ -52,7 +52,7 @@ const AdminNavbar = () => {
           ))}
           <button
             onClick={handleLogout}
-            className="bg-transparent text-gold-light border border-gold/40 px-5 py-2 text-[13px] tracking-[0.12em] uppercase cursor-pointer font-semibold hover:bg-gold hover:text-charcoal hover:border-gold transition-all duration-300"
+            className="bg-transparent px-5 py-2 text-gold-light border border-gold/40  text-[13px] tracking-[0.12em] uppercase cursor-pointer font-semibold hover:bg-gold hover:text-charcoal hover:border-gold transition-all duration-300"
           >
             Logout
           </button>
