@@ -24,14 +24,17 @@ const CTABannerSection = () => {
           <h2 className=" text-[clamp(36px,4vw,60px)] font-semibold text-white mb-5 leading-[1.15]">
             Create Your Own
             <br />
-            <em className="text-gold-light italic">Resin Masterpiece</em>
+            <em className="text-gold-light italic">Resin Art Masterpiece</em>
           </h2>
+          <p className="text-[rgba(255,255,255,0.65)] text-[13px] tracking-[0.12em] uppercase mb-8">
+            Calgary &amp; High River&nbsp;|&nbsp;Loved by 200+ Happy Artists
+          </p>
           <p className="text-[rgba(255,255,255,0.8)] text-[17px] leading-[1.8] mb-10 ">
             Looking for a fun and creative experience? Reserve your spot in our
             resin art workshop and enjoy an unforgettable artistic journey.
           </p>
           <button className="bg-charcoal text-gold-light border-none px-8 sm:px-13 py-4 sm:py-4.5 text-[14px] sm:text-[16px] tracking-[0.14em] uppercase font-extrabold cursor-pointer hover:bg-gold hover:text-white">
-            Book Your Seat
+            Book Your Workshop
           </button>
         </FadeIn>
       </div>

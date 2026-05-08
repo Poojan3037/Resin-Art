@@ -1,5 +1,6 @@
 import { WORK_EXPERIENCE_DATA } from "@/constants/home";
 import FadeIn from "../FadeIn";
+import Link from "next/link";
 
 const WorkshopExperienceSection = () => {
   return (
@@ -26,7 +27,7 @@ const WorkshopExperienceSection = () => {
                     alt={c.title}
                     className="w-full h-[280px] object-cover block transition-transform duration-[600ms] ease-out hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-linear-to-t from-[rgba(26,39,68,0.6)] to-transparent" />
+                  <div className="absolute inset-0 bg-linear-to-t from-[rgba(26,39,68,0.5)] to-transparent" />
                   <div className="absolute bottom-5 left-6">
                     <span className=" text-[36px] font-extrabold text-white tracking-[-0.02em]">
                       {c.title}
@@ -43,6 +44,15 @@ const WorkshopExperienceSection = () => {
               </div>
             </FadeIn>
           ))}
+        </div>
+        <div className="mt-10 text-center">
+          <FadeIn delay={0.1}>
+            <Link href="/workshops">
+              <button className="bg-charcoal text-gold-light border-none px-8 sm:px-13 py-4 sm:py-4.5 text-[14px] sm:text-[16px] tracking-[0.14em] uppercase font-extrabold cursor-pointer hover:bg-gold hover:text-white">
+                Book This Experience
+              </button>
+            </Link>
+          </FadeIn>
         </div>
       </div>
     </section>

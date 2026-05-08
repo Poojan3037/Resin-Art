@@ -64,7 +64,7 @@ const ContactSection = () => {
               Contact Info
             </h2>
             {[
-              ["📍", "Location", "Calgary, Alberta & surrounding area"],
+              ["📍", "Location", "Calgary, High River & surrounding area"],
               ["📸", "Instagram", "@resinartbytanvi"],
               ["📧", "Email", "hello@resinartbytanvi.com"],
             ].map(([icon, label, val]) => (
