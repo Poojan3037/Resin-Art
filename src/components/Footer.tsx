@@ -3,7 +3,6 @@
 import { NAV_LINKS } from "@/constants/routes";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 
 const GALLERY_IMAGES = [
   "/images/art/art-1.jpg",
@@ -49,8 +48,6 @@ const FacebookIcon = () => (
 );
 
 const Footer = () => {
-  const [email, setEmail] = useState("");
-
   return (
     <footer className="bg-charcoal text-[rgba(255,255,255,0.7)]">
       {/* Mini Instagram Gallery */}
@@ -72,17 +69,17 @@ const Footer = () => {
           <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
             {GALLERY_IMAGES.map((src, i) => (
               <a
-                key={i}
+                key={src}
                 href="https://www.instagram.com/resinbytanvi"
                 target="_blank"
                 rel="noreferrer"
                 className="relative aspect-square overflow-hidden group block rounded-2xl"
               >
-                <Image
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
                   src={src}
                   alt={`Resin art ${i + 1}`}
-                  fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-110"
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-[rgba(0,0,0,0)] group-hover:bg-[rgba(0,0,0,0.45)] transition-colors duration-300 flex items-center justify-center">
                   <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
