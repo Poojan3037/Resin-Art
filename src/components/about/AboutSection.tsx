@@ -8,7 +8,7 @@ const AboutSection = () => {
         <div className="max-w-7xl mx-auto py-14 sm:py-20 px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-20 items-center">
           <FadeIn>
             <div>
-              <span className="text-gold text-xs tracking-[0.2em] uppercase">
+              <span className="text-gold text-xs uppercase tracking-[0.2em] ">
                 About the Artist
               </span>
               <h1 className="text-[clamp(36px,4.5vw,68px)] font-semibold text-charcoal mt-3 leading-[1.15]">
