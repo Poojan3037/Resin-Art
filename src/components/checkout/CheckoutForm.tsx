@@ -10,6 +10,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { PaymentForm, CreditCard } from "react-square-web-payments-sdk";
+import { formatCanadianPhone } from "@/lib/phone-formatter";
 
 const inputClassName =
   "w-full px-4 py-3 border border-light-gray text-[14px] outline-none focus:border-gold transition-colors duration-200 bg-cream";
@@ -178,6 +179,10 @@ const CheckoutForm = () => {
               <input
                 id="customerPhone"
                 {...register("customerPhone")}
+                onChange={(e) => {
+                  const formatted = formatCanadianPhone(e.target.value);
+                  e.target.value = formatted;
+                }}
                 className={inputClassName}
               />
               <p className="text-red-500 text-[12px] mt-1">

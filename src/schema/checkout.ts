@@ -12,7 +12,7 @@ const canadianPostalCodeRegex =
 // - Exchange code: 3 digits (200–999, excludes 0xx/1xx)  ← NANP rule
 // - Subscriber number: 4 digits
 // Separators: spaces, dashes, dots, or parentheses around area code
-const canadianPhoneRegex =
+export const canadianPhoneRegex =
   /^(?:\+?1[-.\s]?)?\(?([2-9]\d{2})\)?[-.\s]?([2-9]\d{2})[-.\s]?(\d{4})$/;
 
 const CANADIAN_PROVINCES = [

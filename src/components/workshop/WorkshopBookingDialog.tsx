@@ -13,6 +13,7 @@ import { createBookingSchema, BookingFormValues } from "@/schema/booking";
 import { bookWorkshop } from "@/actions/workshop";
 import { toast } from "sonner";
 import { PaymentForm, CreditCard } from "react-square-web-payments-sdk";
+import { formatCanadianPhone } from "@/lib/phone-formatter";
 
 type PropsType = {
   workshop: Workshop;
@@ -143,11 +144,23 @@ const WorkshopBookingDialog = ({ workshop, onClose }: PropsType) => {
                 <label className="block text-[12px] tracking-widest uppercase text-gray mb-2">
                   {label}
                 </label>
-                <input
-                  type={type}
-                  {...register(field)}
-                  className="w-full px-4 py-3 border border-light-gray text-[15px] outline-none box-border"
-                />
+                {field === "phone" ? (
+                  <input
+                    type={type}
+                    {...register(field)}
+                    className="w-full px-4 py-3 border border-light-gray text-[15px] outline-none box-border"
+                    onChange={(e) => {
+                      const formatted = formatCanadianPhone(e.target.value);
+                      e.target.value = formatted;
+                    }}
+                  />
+                ) : (
+                  <input
+                    type={type}
+                    {...register(field)}
+                    className="w-full px-4 py-3 border border-light-gray text-[15px] outline-none box-border"
+                  />
+                )}
                 {errors[field] && (
                   <p className="text-red-500 text-[12px] mt-1">
                     {errors[field]?.message}

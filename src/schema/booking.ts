@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { canadianPhoneRegex } from "./checkout";
 
 export const createBookingSchema = (availableSeats: number) =>
   z.object({
@@ -7,9 +8,9 @@ export const createBookingSchema = (availableSeats: number) =>
     phone: z
       .string()
       .trim()
-      .regex(
-        /^\+?1?[\s.-]?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/,
-        "Enter a valid Canadian phone number",
+      .refine(
+        (value) => !value || canadianPhoneRegex.test(value),
+        "Enter a valid Canadian phone number (e.g. +1 416-555-0123)",
       ),
     seats: z
       .number({ error: "Select number of seats" })
