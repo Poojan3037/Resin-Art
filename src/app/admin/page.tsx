@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 
-export default function AdminIndexPage() {
+const AdminIndexPage = () => {
   redirect("/admin/dashboard");
-}
+};
+
+export default AdminIndexPage;

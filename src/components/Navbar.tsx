@@ -1,5 +1,7 @@
 "use client";
 
+import Button from "@/components/Button";
+import CartButton from "@/components/shop/CartButton";
 import { NAV_LINKS } from "@/constants/routes";
 import clsx from "clsx";
 import Image from "next/image";
@@ -22,9 +24,12 @@ const Navbar = () => {
           ✦ Workshops Available ✦
         </span>
         <Link href="/workshops">
-          <button className="bg-gold text-charcoal px-2 py-1 border-none text-[14px] tracking-widest-[0.12em] uppercase cursor-pointer font-semibold hover:bg-charcoal hover:text-white">
+          <Button
+            variant="gold"
+            className="text-charcoal hover:text-white px-2! py-1.5!"
+          >
             Book Your Seat
-          </button>
+          </Button>
         </Link>
       </div>
 
@@ -52,14 +57,16 @@ const Navbar = () => {
             </Link>
           ))}
           <Link href="/workshops">
-            <button className="bg-charcoal text-gold-light px-5 py-2.5 border-none text-[14px] tracking-widest-[0.12em] uppercase cursor-pointer font-semibold hover:bg-gold hover:text-white">
+            <Button variant="primary" size="sm">
               Book Your Seat
-            </button>
+            </Button>
           </Link>
+          <CartButton />
         </div>
 
         {/* Hamburger button */}
         <div className="lg:hidden flex justify-center items-center gap-2">
+          <CartButton />
           <button
             className=" flex flex-col justify-center items-center w-9 h-9 gap-1.5 cursor-pointer"
             onClick={() => setMenuOpen((o) => !o)}

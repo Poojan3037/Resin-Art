@@ -1,0 +1,242 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../prisma/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum WorkshopStatus {
+  UPCOMING
+  ONGOING
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum ProductStatus {
+  DRAFT
+  PUBLISHED
+  OUT_OF_STOCK
+  ARCHIVED
+}
+
+enum OrderStatus {
+  PENDING // Order placed by user
+  CONFIRMED // Admin confirmed the order
+  PROCESSING // Being prepared/packed
+  SHIPPED // Handed to courier
+  DELIVERED // Delivered to customer
+  CANCELLED // Cancelled by admin
+}
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  email     String   @unique
+  password  String
+  isAdmin   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@index([username])
+  @@index([isAdmin])
+  @@map("users")
+}
+
+model Workshop {
+  id             String         @id @default(cuid())
+  title          String
+  description    String?        @db.Text
+  date           DateTime       @db.Date
+  startTime      String
+  startPeriod    String
+  endTime        String
+  endPeriod      String
+  location       String
+  price          Int
+  totalSeats     Int
+  availableSeats Int
+  showToUsers    Boolean        @default(false)
+  status         WorkshopStatus @default(UPCOMING)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  registrations Registration[]
+
+  @@map("workshops")
+}
+
+model Registration {
+  id            String        @id @default(cuid())
+  workshopId    String
+  name          String
+  email         String
+  phone         String
+  seatsBooked   Int           @default(1)
+  paymentStatus PaymentStatus @default(PENDING)
+  registeredAt  DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  workshop Workshop         @relation(fields: [workshopId], references: [id], onDelete: Cascade)
+  payment  WorkshopPayment?
+
+  @@map("registrations")
+}
+
+model WorkshopPayment {
+  id              String        @id @default(cuid())
+  registrationId  String        @unique
+  squarePaymentId String?       @unique
+  amountCents     Int
+  currency        String        @default("CAD")
+  status          PaymentStatus @default(PAID)
+  receiptUrl      String?
+  paidAt          DateTime      @default(now())
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+
+  @@index([squarePaymentId])
+  @@map("workshop_payments")
+}
+
+model Product {
+  id          String @id @default(cuid())
+  title       String
+  slug        String @unique
+  description String
+  artistName  String
+
+  price         Decimal  @db.Decimal(10, 2)
+  discountPrice Decimal? @db.Decimal(10, 2)
+  quantity      Int      @default(1)
+
+  isFeatured Boolean       @default(false)
+  status     ProductStatus @default(DRAFT)
+
+  images     ProductImage[]
+  orderItems OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slug])
+  @@index([status])
+  @@index([isFeatured])
+  @@map("products")
+}
+
+model ProductImage {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  url       String
+  altText   String?
+  isPrimary Boolean @default(false)
+  sortOrder Int     @default(0)
+
+  createdAt DateTime @default(now())
+
+  @@index([productId])
+  @@map("product_images")
+}
+
+model Order {
+  id          String @id @default(cuid())
+  orderNumber String @unique // e.g. "ART-2025-00001"
+
+  // Customer info captured at checkout
+  customerName  String
+  customerEmail String
+  customerPhone String?
+
+  // Shipping address (flat fields — no separate table needed for MVP)
+  addressLine1 String
+  addressLine2 String?
+  city         String
+  state        String
+  postalCode   String
+  country      String  @default("US")
+
+  // Pricing
+  subtotal     Decimal @db.Decimal(10, 2)
+  shippingCost Decimal @default(0) @db.Decimal(10, 2)
+  totalAmount  Decimal @db.Decimal(10, 2)
+
+  // Status — only field admin changes
+  status OrderStatus @default(PENDING)
+
+  customerNotes String?
+  adminNotes    String?
+
+  items   OrderItem[]
+  payment OrderPayment?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([orderNumber])
+  @@index([customerEmail])
+  @@index([status])
+  @@index([createdAt])
+  @@map("orders")
+}
+
+model OrderItem {
+  id      String @id @default(cuid())
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  // Frozen snapshot — never recalculate from current product
+  productTitle String
+  artistName   String
+
+  quantity  Int     @default(1)
+  unitPrice Decimal @db.Decimal(10, 2)
+  lineTotal Decimal @db.Decimal(10, 2) // quantity x unitPrice
+
+  createdAt DateTime @default(now())
+
+  @@index([orderId])
+  @@index([productId])
+  @@map("order_items")
+}
+
+model OrderPayment {
+  id      String @id @default(cuid())
+  orderId String @unique
+
+  squarePaymentId String?       @unique
+  amountCents     Int
+  currency        String        @default("CAD")
+  status          PaymentStatus @default(PAID)
+  receiptUrl      String?
+  paidAt          DateTime      @default(now())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([squarePaymentId])
+  @@map("order_payments")
+}

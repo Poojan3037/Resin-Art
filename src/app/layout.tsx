@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { Toaster } from "sonner";
 
 const cormorantGaramond = Cormorant_Garamond({
   variable: "--font-cormorant-garamond",
@@ -24,7 +26,8 @@ export default function RootLayout({
       className={`${cormorantGaramond.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-cormorant-garamond tracking-wide">
-        {children}
+        <NuqsAdapter>{children}</NuqsAdapter>
+        <Toaster richColors position="top-right" />
       </body>
     </html>
   );
