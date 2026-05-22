@@ -88,7 +88,6 @@ const AdminDashboardPage = async () => {
                 </tr>
               </thead>
               <tbody>
-                7
                 {orders.slice(0, 5).map((order, i) => (
                   <tr
                     key={order.id}
