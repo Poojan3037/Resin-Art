@@ -131,17 +131,20 @@ const HeroContent = () => {
         </Link>
       </div>
 
-      <div className="flex flex-wrap gap-8 sm:gap-10 mt-10 sm:mt-14">
+      <div className="flex flex-nowrap overflow-x-auto gap-4 sm:gap-10 mt-10 sm:mt-14">
         {HERO_SECTION_DATA.map(([n, l], idx) => (
-          <div key={l} className="flex items-stretch gap-8 sm:gap-10">
+          <div
+            key={l}
+            className="flex items-stretch gap-4 sm:gap-10 whitespace-nowrap"
+          >
             {idx > 0 && (
               <div className="hero-stat-divider w-px bg-[rgba(255,255,255,0.12)] self-stretch" />
             )}
             <div className="hero-stat">
-              <div className="text-[26px] sm:text-[32px] font-extrabold text-gold-light">
+              <div className="text-[18px] sm:text-[32px] font-extrabold text-gold-light">
                 {n}
               </div>
-              <div className="text-[12px] sm:text-[13px] tracking-widest-[0.08em] uppercase text-[rgba(255,255,255,0.55)]">
+              <div className="text-[10px] sm:text-[13px] tracking-[0.08em] uppercase text-[rgba(255,255,255,0.55)]">
                 {l}
               </div>
             </div>
