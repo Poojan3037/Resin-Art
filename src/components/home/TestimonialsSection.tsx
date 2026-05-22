@@ -1,15 +1,21 @@
 "use client";
 
 import { REVIEWS } from "@/constants/home";
-import FadeIn from "../FadeIn";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplitText } from "gsap/SplitText";
+import { useGSAP } from "@gsap/react";
 import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
+
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
 const TestimonialsSection = () => {
   const [current, setCurrent] = useState(0);
   const [itemsPerView, setItemsPerView] = useState(3);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
 
   const total = REVIEWS.length;
   const maxIndex = Math.max(0, total - itemsPerView);
@@ -44,23 +50,97 @@ const TestimonialsSection = () => {
     startAutoPlay();
   };
 
+  useGSAP(
+    () => {
+      const split = new SplitText(".ts-title", { type: "words" });
+
+      // Header timeline
+      const headerTl = gsap.timeline({
+        scrollTrigger: { trigger: ".ts-header", start: "top 83%" },
+      });
+      headerTl
+        .from(".ts-eyebrow", {
+          opacity: 0,
+          scale: 0.8,
+          duration: 0.45,
+          ease: "back.out(2)",
+        })
+        .from(
+          split.words,
+          {
+            y: 60,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.065,
+            ease: "expo.out",
+          },
+          "-=0.1",
+        )
+        .from(
+          ".ts-divider",
+          {
+            scaleX: 0,
+            duration: 0.5,
+            transformOrigin: "center",
+            ease: "expo.out",
+          },
+          "-=0.25",
+        );
+
+      // Carousel slides in from right with slight perspective
+      gsap.from(".ts-carousel", {
+        x: 60,
+        opacity: 0,
+        rotateY: 4,
+        transformPerspective: 800,
+        duration: 1.0,
+        ease: "expo.out",
+        scrollTrigger: { trigger: ".ts-carousel", start: "top 86%" },
+      });
+
+      // CTA: scale bounce in
+      const ctaTl = gsap.timeline({
+        scrollTrigger: { trigger: ".ts-cta", start: "top 90%" },
+      });
+      ctaTl
+        .from(".ts-cta-heading", {
+          y: 40,
+          opacity: 0,
+          duration: 0.7,
+          ease: "expo.out",
+        })
+        .from(
+          ".ts-cta-link",
+          {
+            scale: 0.85,
+            opacity: 0,
+            duration: 0.55,
+            ease: "back.out(1.8)",
+          },
+          "-=0.2",
+        );
+    },
+    { scope: sectionRef },
+  );
+
   return (
-    <section className="w-full py-14 sm:py-20 lg:py-25 px-4 sm:px-6 lg:px-8 bg-charcoal">
+    <section
+      ref={sectionRef}
+      className="w-full py-14 sm:py-20 lg:py-25 px-4 sm:px-6 lg:px-8 bg-charcoal"
+    >
       <div className="max-w-7xl mx-auto">
-        <FadeIn>
-          <div className="text-center mb-12 sm:mb-18">
-            <span className="text-[12px] tracking-[0.2em] uppercase text-gold">
-              Reviews
-            </span>
-            <h2 className="text-[clamp(30px,4vw,56px)] font-semibold text-white mt-3 leading-[1.2]">
-              What Participants Are Saying
-            </h2>
-            <div className="w-12 h-px bg-gold mx-auto mt-5" />
-          </div>
-        </FadeIn>
+        <div className="ts-header text-center mb-12 sm:mb-18">
+          <span className="ts-eyebrow inline-block text-[12px] tracking-[0.2em] uppercase text-gold">
+            Reviews
+          </span>
+          <h2 className="ts-title text-[clamp(30px,4vw,56px)] font-semibold text-white mt-3 leading-[1.2]">
+            What Participants Are Saying
+          </h2>
+          <div className="ts-divider w-12 h-px bg-gold mx-auto mt-5 origin-center" />
+        </div>
 
         {/* Carousel */}
-        <FadeIn>
+        <div className="ts-carousel">
           <div className="overflow-hidden">
             <div
               className="flex transition-transform duration-700 ease-in-out"
@@ -123,22 +203,20 @@ const TestimonialsSection = () => {
               ))}
             </div>
           )}
-        </FadeIn>
+        </div>
 
         {/* CTA Banner */}
-        <FadeIn>
-          <div className="mt-12 sm:mt-16 pt-12 sm:pt-16 border-t border-[rgba(201,168,76,0.15)] text-center">
-            <h3 className="text-[clamp(22px,3vw,40px)] font-semibold text-white leading-[1.2] mb-7">
-              Ready To Create Your Own Resin Masterpiece?
-            </h3>
-            <Link
-              href="/workshops"
-              className="inline-block px-9 py-3.5 bg-gold text-charcoal text-[13px] font-semibold tracking-[0.15em] uppercase hover:bg-gold-light transition-colors duration-300"
-            >
-              Reserve Your Spot
-            </Link>
-          </div>
-        </FadeIn>
+        <div className="ts-cta mt-12 sm:mt-16 pt-12 sm:pt-16 border-t border-[rgba(201,168,76,0.15)] text-center">
+          <h3 className="ts-cta-heading text-[clamp(22px,3vw,40px)] font-semibold text-white leading-[1.2] mb-7">
+            Ready To Create Your Own Resin Masterpiece?
+          </h3>
+          <Link
+            href="/workshops"
+            className="ts-cta-link inline-block px-9 py-3.5 bg-gold text-charcoal text-[13px] font-semibold tracking-[0.15em] uppercase hover:bg-gold-light transition-colors duration-300"
+          >
+            Reserve Your Spot
+          </Link>
+        </div>
       </div>
     </section>
   );

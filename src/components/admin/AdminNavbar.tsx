@@ -1,26 +1,25 @@
 "use client";
 
+import Button from "@/components/Button";
+import { logoutAction } from "@/actions/auth";
+import { ADMIN_NAV_LINKS } from "@/constants/routes";
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
-
-const ADMIN_NAV_LINKS = [
-  { title: "Dashboard", path: "/admin/dashboard" },
-  { title: "Products", path: "/admin/products" },
-  { title: "Orders", path: "/admin/orders" },
-  { title: "Workshops", path: "/admin/workshops" },
-];
+import { useState, useTransition } from "react";
 
 const AdminNavbar = () => {
   const pathName = usePathname();
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isLoading, startTransition] = useTransition();
 
-  const handleLogout = () => {
-    localStorage.removeItem("admin_auth");
-    router.push("/admin/login");
+  const handleLogout = async () => {
+    startTransition(async () => {
+      await logoutAction();
+      router.push("/admin/login");
+    });
   };
 
   return (
@@ -50,12 +49,14 @@ const AdminNavbar = () => {
               {link.title}
             </Link>
           ))}
-          <button
+          <Button
+            variant="outline-gold"
+            size="sm"
             onClick={handleLogout}
-            className="bg-transparent px-5 py-2 text-gold-light border border-gold/40  text-[13px] tracking-[0.12em] uppercase cursor-pointer font-semibold hover:bg-gold hover:text-charcoal hover:border-gold transition-all duration-300"
+            isLoading={isLoading}
           >
             Logout
-          </button>
+          </Button>
         </div>
 
         {/* Hamburger */}
@@ -108,15 +109,18 @@ const AdminNavbar = () => {
               {link.title}
             </Link>
           ))}
-          <button
+          <Button
+            variant="outline-gold"
+            fullWidth
             onClick={() => {
               setMenuOpen(false);
               handleLogout();
             }}
-            className="mt-3 w-full bg-transparent text-gold-light border border-gold/40 py-3 text-[13px] tracking-[0.12em] uppercase cursor-pointer font-semibold hover:bg-gold hover:text-charcoal hover:border-gold transition-all duration-300"
+            isLoading={isLoading}
+            className="mt-3"
           >
             Logout
-          </button>
+          </Button>
         </div>
       </div>
     </nav>

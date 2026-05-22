@@ -1,7 +1,15 @@
+"use client";
+
 import { HOW_IT_WORKS_DATA } from "@/constants/home";
-import FadeIn from "../FadeIn";
 import clsx from "clsx";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplitText } from "gsap/SplitText";
+import { useGSAP } from "@gsap/react";
 import Image from "next/image";
+import { useRef } from "react";
+
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
 const HOW_IT_WORKS_ICONS = [
   "/images/art.png",
@@ -10,23 +18,78 @@ const HOW_IT_WORKS_ICONS = [
 ];
 
 const HowItWorksSection = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      // Header: eyebrow scales in, then title words stagger up
+      const split = new SplitText(".hiw-title", { type: "words" });
+
+      const headerTl = gsap.timeline({
+        scrollTrigger: { trigger: ".hiw-header", start: "top 82%" },
+      });
+      headerTl
+        .from(".hiw-eyebrow", {
+          scaleX: 0,
+          opacity: 0,
+          transformOrigin: "center",
+          duration: 0.5,
+          ease: "expo.out",
+        })
+        .from(
+          split.words,
+          {
+            y: 60,
+            opacity: 0,
+            duration: 0.75,
+            stagger: 0.06,
+            ease: "expo.out",
+          },
+          "-=0.1",
+        )
+        .from(
+          ".hiw-divider",
+          {
+            scaleX: 0,
+            duration: 0.5,
+            transformOrigin: "left",
+            ease: "expo.out",
+          },
+          "-=0.3",
+        );
+
+      // Cards: slide up with skew, then un-skew
+      gsap.from(".hiw-card", {
+        y: 80,
+        opacity: 0,
+        skewY: 4,
+        duration: 0.85,
+        ease: "expo.out",
+        stagger: { amount: 0.45 },
+        scrollTrigger: { trigger: ".hiw-card", start: "top 88%" },
+      });
+    },
+    { scope: sectionRef },
+  );
+
   return (
-    <section className="w-full py-14 sm:py-20 lg:py-25 px-4 relative   sm:px-6 lg:px-8 bg-cream antialiased">
+    <section
+      ref={sectionRef}
+      className="w-full py-14 sm:py-20 lg:py-25 px-4 relative   sm:px-6 lg:px-8 bg-cream antialiased"
+    >
       <div className="max-w-7xl mx-auto">
-        <FadeIn>
-          <div className="text-center mb-12 sm:mb-18">
-            <span className="text-[12px] tracking-[0.2em] uppercase text-gold">
-              The Experience
-            </span>
-            <h2 className="text-[clamp(30px,4vw,56px)] font-semibold text-charcoal mt-3 leading-[1.2]">
-              How the Workshop Works
-            </h2>
-            <div className="w-12 h-px bg-gold mx-auto mt-5" />
-          </div>
-        </FadeIn>
+        <div className="hiw-header text-center mb-12 sm:mb-18">
+          <span className="hiw-eyebrow inline-block text-[12px] tracking-[0.2em] uppercase text-gold">
+            The Experience
+          </span>
+          <h2 className="hiw-title text-[clamp(30px,4vw,56px)] font-semibold text-charcoal mt-3 leading-[1.2]">
+            How the Workshop Works
+          </h2>
+          <div className="hiw-divider w-12 h-px bg-gold mx-auto mt-5 origin-left" />
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5">
           {HOW_IT_WORKS_DATA.map((c, i) => (
-            <FadeIn key={c.title} delay={i * 0.15}>
+            <div key={c.title} className="hiw-card">
               <div
                 className={clsx(
                   "group relative isolate overflow-hidden py-10 px-7 sm:py-12 sm:px-9 h-full box-border border transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(26,39,68,0.12)]",
@@ -106,7 +169,7 @@ const HowItWorksSection = () => {
                   {c.desc}
                 </p>
               </div>
-            </FadeIn>
+            </div>
           ))}
         </div>
       </div>

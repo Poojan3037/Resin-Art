@@ -40,7 +40,7 @@
 
 @layer {
   button {
-    @apply transition-all duration-400;
+    @apply transition-all duration-400 disabled:opacity-50;
   }
 }
 
