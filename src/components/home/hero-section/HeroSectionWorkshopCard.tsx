@@ -140,7 +140,7 @@ const HeroSectionWorkshopCard = ({
         </h3>
 
         <p className="relative text-[13px] leading-[1.75] text-white/68 mb-5">
-          {workshop.description.length>100 ? workshop.description.slice(0,100)+"..." :workshop.description}
+          {workshop.description}
         </p>
 
         {/* Info rows */}

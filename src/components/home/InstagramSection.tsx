@@ -52,8 +52,8 @@ const POSTS = [
 ];
 
 const STATS = [
-  { value: "18.5K+", label: "Followers" },
-  { value: "200+", label: "Posts" },
+  { value: "12K+", label: "Followers" },
+  { value: "240+", label: "Posts" },
   { value: "98%", label: "Happy Clients" },
 ];
 
@@ -117,13 +117,13 @@ const InstagramGallery = () => {
         <div className="ig-header text-center mb-12 sm:mb-16 lg:mb-20">
           {/* Badge ── Instagram handle pill */}
           <Link
-            href="https://www.instagram.com/resin_by_tanvi"
+            href="https://www.instagram.com/resinbytanvi"
             target="_blank"
             rel="noreferrer"
             className="ig-badge inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[rgba(201,168,76,0.28)] text-gold text-[11px] tracking-[0.28em] uppercase font-medium mb-6 sm:mb-7 hover:border-gold hover:bg-[rgba(201,168,76,0.06)] transition-all duration-300"
           >
             <InstagramIcon />
-            @resin_by_tanvi
+            @resinbytanvi
           </Link>
 
           {/* Title */}
@@ -182,7 +182,7 @@ const InstagramGallery = () => {
           {POSTS.map((post) => (
             <Link
               key={post.src}
-              href="https://www.instagram.com/resin_by_tanvi"
+              href="https://www.instagram.com/resinbytanvi"
               target="_blank"
               rel="noreferrer"
               className="ig-card group relative aspect-3/4 overflow-hidden rounded-[3px]"
@@ -236,7 +236,7 @@ const InstagramGallery = () => {
 
           {/* ── CTA tile ──────────────────────────────────────────── */}
           <Link
-            href="https://www.instagram.com/resin_by_tanvi"
+            href="https://www.instagram.com/resinbytanvi"
             target="_blank"
             rel="noreferrer"
             className="ig-card group relative aspect-3/4 flex flex-col items-center justify-center gap-3 sm:gap-4 rounded-[3px] border border-[rgba(201,168,76,0.15)] hover:border-[rgba(201,168,76,0.5)] transition-all duration-500 overflow-hidden"
@@ -260,7 +260,7 @@ const InstagramGallery = () => {
                 Instagram
               </p>
               <p className="text-gold text-[10px] sm:text-[11px] tracking-[0.18em] mt-1.5">
-                @resin_by_tanvi
+                @resinbytanvi
               </p>
             </div>
 
@@ -273,7 +273,7 @@ const InstagramGallery = () => {
         {/* ── Bottom CTA button ──────────────────────────────────── */}
         <div className="ig-bottom-cta text-center mt-10 sm:mt-14">
           <Link
-            href="https://www.instagram.com/resin_by_tanvi"
+            href="https://www.instagram.com/resinbytanvi"
             target="_blank"
             rel="noreferrer"
             className="inline-flex items-center gap-2.5 px-6 sm:px-8 py-3 sm:py-3.5 rounded-full border border-[rgba(201,168,76,0.32)] text-[rgba(255,255,255,0.5)] text-[11px] sm:text-[12px] tracking-[0.22em] uppercase hover:bg-gold hover:text-[#0d0d0d] hover:border-gold transition-all duration-300"

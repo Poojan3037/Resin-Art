@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import CTABannerSection from "@/components/home/CTABannerSection";
 import EventSection from "@/components/home/EventSection";
-import HeroSection from "@/components/home/hero-section/HeroSection";
+import HeroSectionLoader from "@/components/home/hero-section/HeroSectionLoader";
+import HeroSkeleton from "@/components/skeleton/HeroSkeleton";
 import HowItWorksSection from "@/components/home/HowItWorksSection";
 import InstagramSection from "@/components/home/InstagramSection";
 import SubscribeSection from "@/components/home/SubscribeSection";
@@ -59,10 +61,12 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <div>
-        <HeroSection />
+        <Suspense fallback={<HeroSkeleton />}>
+          <HeroSectionLoader />
+        </Suspense>
         <HowItWorksSection />
         <WorkshopExperienceSection />
-        <EventSection />v
+        <EventSection />
         <TestimonialsSection />
         <InstagramSection />
         <CTABannerSection />

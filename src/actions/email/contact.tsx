@@ -4,10 +4,8 @@ import ContactInquiryEmail from "@/components/email-templates/contact/ContactInq
 import { ContactSchema } from "@/schema/contact";
 import { ContactActionArgs } from "@/types/contact";
 import { render } from "@react-email/render";
-import { Resend } from "resend";
+import { getResend } from "@/lib/resend";
 import { checkRateLimitByIp, rateLimitMessage } from "@/lib/rate-limit";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendContactInquiry = async (
   args: ContactActionArgs,
@@ -40,7 +38,7 @@ export const sendContactInquiry = async (
       />,
     );
 
-    await resend.emails.send({
+    await getResend().emails.send({
       from: fromEmail,
       to: supportEmail,
       replyTo: parsed.data.email,
@@ -49,7 +47,10 @@ export const sendContactInquiry = async (
     });
 
     return { success: true, message: "Your message has been sent!" };
-  } catch {
+  } catch (error) {
+    // Swallowing this silently made a missing RESEND_API_KEY indistinguishable
+    // from a provider outage.
+    console.error("[contact] send failed:", error);
     return {
       success: false,
       message: "Failed to send message. Please try again later.",

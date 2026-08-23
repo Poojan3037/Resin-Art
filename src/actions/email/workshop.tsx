@@ -1,9 +1,7 @@
 import WorkshopConfirmationEmail from "@/components/email-templates/workshop/WorkshopConfirmationEmail";
 import { SendConfirmationArgs } from "@/types/workshop";
 import { render } from "@react-email/render";
-import { Resend } from "resend";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import { getResend } from "@/lib/resend";
 
 export const sendWorkshopConfirmationEmail = async (
   args: SendConfirmationArgs,
@@ -25,7 +23,7 @@ export const sendWorkshopConfirmationEmail = async (
     />,
   );
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: fromEmail,
     to: args.toEmail,
     subject: `Booking Confirmed: ${args.workshop.title}`,

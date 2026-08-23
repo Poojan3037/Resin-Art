@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import WorkshopCardSkeleton from "@/components/skeleton/WorkshopCardSkeleton";
 import WorkshopInquirySection from "@/components/workshop/WorkshopInquirySection";
-import WorkshopList from "@/components/workshop/WorkshopList";
+import WorkshopListLoader from "@/components/workshop/WorkshopListLoader";
 import WorkshopsHero from "@/components/workshop/WorkshopsHero";
 import { Suspense } from "react";
 
@@ -72,7 +72,7 @@ const Page = () => {
               </div>
             }
           >
-            <WorkshopList />
+            <WorkshopListLoader />
           </Suspense>
 
           {/* Inquiry sections */}

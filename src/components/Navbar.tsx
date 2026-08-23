@@ -16,7 +16,7 @@ const Navbar = () => {
   return (
     <nav className="sticky top-0 left-0 right-0 z-50 transition-all duration-300 bg-white shadow-xl border-b border-light-gray">
       <div className="hidden sm:block  bg-charcoal text-gold-light text-center text-[11px] sm:text-[12px] tracking-widest-[0.12em] py-2 px-4">
-        ✦ Hands-on Resin Art Workshops in High River, Alberta ✦
+        ✦ Hands-on Resin Art Workshops in Calgary, Alberta ✦
       </div>
 
       <div className=" sm:hidden bg-charcoal text-gold-light flex items-center justify-between  py-2 px-4">

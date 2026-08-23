@@ -24,6 +24,7 @@ const ContactSection = () => {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<ContactFormValues>({
     resolver: zodResolver(ContactSchema),
@@ -34,25 +35,40 @@ const ContactSection = () => {
     },
   });
 
-  // Pre-fill message when coming from inquiry redirect
+  const messageType = searchParams.get("messageType");
+
+  // Pre-fill the message when arriving from an inquiry redirect.
+  //
+  // `setValue`, not `reset`: reset replaces the whole form state, so it blanked
+  // name/email. And the effect keys off the extracted `messageType` string
+  // rather than the `searchParams` object, whose identity can change on any
+  // render — that combination used to wipe input the visitor had already typed.
   useEffect(() => {
-    const messageType = searchParams.get("messageType");
     if (messageType && INQUIRY_MESSAGES[messageType]) {
-      reset({ message: INQUIRY_MESSAGES[messageType].message });
+      setValue("message", INQUIRY_MESSAGES[messageType].message, {
+        shouldDirty: false,
+      });
     }
-  }, [searchParams, reset]);
+  }, [messageType, setValue]);
 
   const onSubmit = async (data: ContactFormValues) => {
-    const messageType = searchParams.get("messageType");
     const subject = messageType
       ? (INQUIRY_MESSAGES[messageType]?.subject ?? undefined)
       : undefined;
-    const result = await sendContactInquiry({ ...data, subject });
-    if (result.success) {
-      toast.success(result.message);
-      reset();
-    } else {
-      toast.error(result.message);
+
+    try {
+      const result = await sendContactInquiry({ ...data, subject });
+      if (result.success) {
+        toast.success(result.message);
+        reset();
+      } else {
+        toast.error(result.message);
+      }
+    } catch (error) {
+      // A server action that throws rejects here. Without this the form just
+      // stopped, giving the visitor no signal that nothing was sent.
+      console.error("[contact] request failed:", error);
+      toast.error("Something went wrong. Please try again.");
     }
   };
 
@@ -218,7 +234,7 @@ const ContactSection = () => {
           </h2>
           {[
             ["📍", "Location", "Calgary, High River & surrounding area"],
-            ["📸", "Instagram", "@resin_by_tanvi"],
+            ["📸", "Instagram", "@resinartbytanvi"],
             ["📧", "Email", "hello@resinartbytanvi.com"],
           ].map(([icon, label, val]) => (
             <div
@@ -244,7 +260,7 @@ const ContactSection = () => {
               student artwork, and upcoming events.
             </p>
             <a
-              href="https://instagram.com/resin_by_tanvi"
+              href="https://instagram.com"
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2.5 bg-charcoal text-gold-light py-3 px-6 text-[13px] tracking-[0.12em] uppercase no-underline font-bold transition-all duration-300 hover:bg-gold hover:text-white"

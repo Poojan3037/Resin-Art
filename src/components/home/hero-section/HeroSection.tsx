@@ -4,12 +4,13 @@ import { getWorkshops } from "@/actions/workshop";
 import { cacheLife, cacheTag } from "next/cache";
 import { CACHE } from "@/constants/cache";
 
-const HeroSection = async () => {
+/** `todayKey` is a prop, not a call, so it forms part of the cache key below. */
+const HeroSection = async ({ todayKey }: { todayKey: string }) => {
   "use cache";
   cacheLife("hours");
   cacheTag(CACHE.WORKSHOP);
 
-  const workshops = await getWorkshops();
+  const workshops = await getWorkshops(todayKey);
   const hasWorkshops = workshops.length > 0;
 
   return (

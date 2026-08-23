@@ -1,16 +1,15 @@
 "use client";
 
-import Button from "@/components/Button";
+import NotifyMeForm from "@/components/NotifyMeForm";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { useGSAP } from "@gsap/react";
-import { useState, useRef } from "react";
+import { useRef } from "react";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
 const SubscribeSection = () => {
-  const [email, setEmail] = useState("");
   const sectionRef = useRef<HTMLElement>(null);
 
   useGSAP(
@@ -86,21 +85,8 @@ const SubscribeSection = () => {
               📍 Calgary &amp; High River event updates
             </li>
           </ul>
-          <div className="ss-form flex flex-col sm:flex-row gap-0 max-w-110 mx-auto">
-            <input
-              type="email"
-              placeholder="Your email address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="flex-1 px-5 py-3 text-[15px] bg-white text-charcoal outline-none border border-light-gray sm:border-r-0"
-            />
-            <Button
-              variant="primary"
-              size="md"
-              className="whitespace-nowrap font-extrabold"
-            >
-              Notify Me
-            </Button>
+          <div className="ss-form">
+            <NotifyMeForm source="home" layout="joined" />
           </div>
         </div>
       </div>

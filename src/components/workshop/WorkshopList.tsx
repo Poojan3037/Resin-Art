@@ -4,15 +4,16 @@ import NotifyMeForm from "@/components/NotifyMeForm";
 import { cacheLife, cacheTag } from "next/cache";
 import { CACHE } from "@/constants/cache";
 
-const WorkshopList = async () => {
+/** `todayKey` is a prop, not a call, so it forms part of the cache key below. */
+const WorkshopList = async ({ todayKey }: { todayKey: string }) => {
   "use cache";
   cacheLife("hours");
   cacheTag(CACHE.WORKSHOP);
 
-  const workshops = await getWorkshops();
+  const workshops = await getWorkshops(todayKey);
 
-  // `getWorkshops` already filters to visible, upcoming workshops, so an empty
-  // list means there is genuinely nothing to book right now.
+  // `getWorkshops` already filters to visible, upcoming, not-yet-past
+  // workshops, so an empty list means there is genuinely nothing to book.
   if (workshops.length === 0) {
     return (
       <div className="bg-white border border-light-gray p-10 sm:p-12 text-center mb-16 sm:mb-20">

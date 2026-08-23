@@ -3,9 +3,7 @@
 import AnnouncementEmail from "@/components/email-templates/announcement/AnnouncementEmail";
 import type { AnnouncementEmailProps } from "@/types/subscriber";
 import { render } from "@react-email/render";
-import { Resend } from "resend";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import { getResend } from "@/lib/resend";
 
 /** Resend caps a single batch call at 100 messages. */
 const BATCH_SIZE = 100;
@@ -51,7 +49,7 @@ export const sendAnnouncementEmails = async ({
     const chunk = recipients.slice(index, index + BATCH_SIZE);
 
     try {
-      const { error } = await resend.batch.send(
+      const { error } = await getResend().batch.send(
         chunk.map((to) => ({ from: fromEmail, to, subject, html })),
       );
 

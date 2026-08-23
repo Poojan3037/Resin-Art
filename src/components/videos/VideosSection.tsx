@@ -1,7 +1,6 @@
 "use client";
 
-import Button from "@/components/Button";
-import { VIDEOS_DATA } from "@/constants/videos";
+import NotifyMeForm from "@/components/NotifyMeForm";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
@@ -9,6 +8,25 @@ import { useGSAP } from "@gsap/react";
 import { useRef } from "react";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
+
+/** What the library will offer once it launches. */
+const PLANNED = [
+  {
+    icon: "🎬",
+    title: "Step-by-step tutorials",
+    desc: "Full-length lessons on pours, cells, and finishing — filmed from the studio bench.",
+  },
+  {
+    icon: "🔒",
+    title: "Buy once, stream forever",
+    desc: "Your link arrives by email after purchase. No account, no subscription.",
+  },
+  {
+    icon: "🎨",
+    title: "Beginner to advanced",
+    desc: "Start with a first coaster and work up to resin geodes and large pieces.",
+  },
+];
 
 const VideosSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -50,38 +68,32 @@ const VideosSection = () => {
           "-=0.3",
         );
 
-      // ── Cards ────────────────────────────────────────────────────────
-      gsap.utils.toArray<HTMLElement>(".videos-card").forEach((card) => {
-        gsap.from(card, {
-          y: 60,
-          opacity: 0,
-          scale: 0.93,
-          duration: 0.8,
-          ease: "expo.out",
+      // ── Coming-soon panel ────────────────────────────────────────────
+      gsap
+        .timeline({
           scrollTrigger: {
-            trigger: card,
+            trigger: ".videos-soon",
             start: "top 88%",
             once: true,
           },
-        });
-      });
-
-      // ── Secure access box ────────────────────────────────────────────
-      gsap.from(".videos-secure-box", {
-        opacity: 0,
-        y: 40,
-        duration: 0.75,
-        ease: "expo.out",
-        scrollTrigger: {
-          trigger: ".videos-secure-box",
-          start: "top 88%",
-          once: true,
-        },
-      });
-
-      return () => {
-        splitHeading.revert();
-      };
+        })
+        .from(".videos-soon", {
+          opacity: 0,
+          y: 40,
+          duration: 0.75,
+          ease: "expo.out",
+        })
+        .from(
+          ".videos-soon-item",
+          {
+            opacity: 0,
+            y: 24,
+            duration: 0.5,
+            stagger: 0.09,
+            ease: "power3.out",
+          },
+          "-=0.35",
+        );
     },
     { scope: sectionRef },
   );
@@ -96,63 +108,39 @@ const VideosSection = () => {
           Tutorial Videos
         </h1>
         <p className="videos-subtext text-white/65 text-base mx-auto mt-4 max-w-110">
-          Purchase once, stream securely forever. No login required.
+          We&apos;re filming a library of resin tutorials you can stream at home.
         </p>
       </div>
 
       <div className="max-w-7xl mx-auto py-14 sm:py-18 px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-10">
-          {VIDEOS_DATA.map((v) => (
-            <div
-              key={v.title}
-              className="videos-card border border-light-gray overflow-hidden bg-white transition-all duration-300 hover:shadow-[0_12px_40px_rgba(0,0,0,0.1)]"
-            >
-              <div className="relative">
-                <img
-                  src={v.thumb}
-                  alt={v.title}
-                  className="w-full h-55 object-cover block"
-                />
-                <div className="absolute inset-0 bg-navy/40 flex items-center justify-center">
-                  <div className="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center text-xl cursor-pointer">
-                    ▶
-                  </div>
-                </div>
-                <span className="absolute bottom-3 right-3 bg-black/70 text-white text-sm py-1 px-2.5">
-                  {v.duration}
-                </span>
-              </div>
-              <div className="px-6 pt-6 pb-7">
-                <h3 className="text-xl font-semibold text-charcoal mb-2.5 leading-[1.3]">
-                  {v.title}
-                </h3>
-                <p className="text-gray text-sm leading-[1.7] mb-5">{v.desc}</p>
-                <div className="flex justify-between items-center">
-                  <span className="text-[22px] font-bold text-gold">
-                    {v.price}
-                  </span>
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    className="font-bold tracking-widest"
-                  >
-                    Buy Now
-                  </Button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="videos-secure-box mt-14 sm:mt-18 bg-cream p-8 sm:p-12 text-center border border-light-gray">
-          <div className="text-[28px] mb-4">🔒</div>
-          <h3 className="text-[26px] font-semibold text-charcoal mb-3">
-            Secure &amp; Instant Access
-          </h3>
-          <p className="text-gray text-[15px] leading-[1.8] max-w-120 mx-auto">
-            After purchase, your video link is sent directly to your email. No
-            account needed — just click and create.
+        <div className="videos-soon bg-white border border-light-gray p-8 sm:p-12 text-center max-w-4xl mx-auto">
+          <span className="block text-[11px] tracking-[0.2em] uppercase text-gold mb-3">
+            Coming Soon
+          </span>
+          <h2 className="text-[26px] sm:text-[32px] font-semibold text-charcoal mb-3">
+            The video library is in the works
+          </h2>
+          <p className="text-gray text-[15px] leading-[1.8] max-w-140 mx-auto mb-10">
+            Tanvi is filming the first set of lessons in the Calgary studio.
+            Leave your email and we&apos;ll tell you the moment the first
+            tutorial goes live — no spam, just the launch.
           </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 text-left mb-10 pb-10 border-b border-light-gray">
+            {PLANNED.map((item) => (
+              <div key={item.title} className="videos-soon-item">
+                <div className="text-2xl mb-3">{item.icon}</div>
+                <h3 className="text-[17px] font-semibold text-charcoal mb-1.5">
+                  {item.title}
+                </h3>
+                <p className="text-gray text-[14px] leading-[1.7]">
+                  {item.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <NotifyMeForm source="videos" />
         </div>
       </div>
     </div>

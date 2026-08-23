@@ -12,6 +12,7 @@ import { createBookingSchema } from "@/schema/booking";
 import { WorkshopSchema } from "@/schema/workshop";
 import { calculateCanadianTax, type TaxLineType } from "@/lib/tax/canada";
 import { checkRateLimitByIp, rateLimitMessage } from "@/lib/rate-limit";
+import { getTodayKey, startOfDayUtc } from "@/lib/workshop-date";
 import { sendWorkshopConfirmationEmail } from "./email/workshop";
 
 /** Raised when the conditional seat decrement matches zero rows. */
@@ -271,7 +272,12 @@ export const getWorkshopQuote = async (
   if (!Number.isInteger(seats) || seats < 1) return null;
 
   const workshop = await prisma.workshop.findFirst({
-    where: { id: workshopId, showToUsers: true },
+    where: {
+      id: workshopId,
+      showToUsers: true,
+      status: "UPCOMING",
+      date: { gte: startOfDayUtc(getTodayKey()) },
+    },
     select: { priceCents: true, province: true },
   });
   if (!workshop) return null;
@@ -321,6 +327,16 @@ export const bookWorkshop = async (
     return {
       success: false,
       message: "This workshop is no longer accepting bookings.",
+    };
+  }
+
+  // A stale tab (or the cached list) can still point at an event whose date
+  // has passed. Refuse before a card is charged for it.
+  const todayStart = startOfDayUtc(getTodayKey());
+  if (workshop.date < todayStart) {
+    return {
+      success: false,
+      message: "This workshop has already taken place.",
     };
   }
 
@@ -374,6 +390,7 @@ export const bookWorkshop = async (
           id: workshopId,
           status: "UPCOMING",
           showToUsers: true,
+          date: { gte: todayStart },
           availableSeats: { gte: booking.seats },
         },
         data: { availableSeats: { decrement: booking.seats } },
@@ -520,15 +537,21 @@ const releaseSeatReservation = async (
   }
 };
 
-export const getWorkshops = async () => {
+/**
+ * Public workshop list. `todayKey` is threaded in from the uncached parent so
+ * that it lands in the caller's `"use cache"` key — see `@/lib/workshop-date`.
+ */
+export const getWorkshops = async (todayKey: string) => {
   try {
     const workshops = await prisma.workshop.findMany({
       where: {
         showToUsers: true,
         status: "UPCOMING",
+        // Events that have already happened must not be listed or bookable.
+        date: { gte: startOfDayUtc(todayKey) },
       },
       orderBy: {
-        createdAt: "desc",
+        date: "asc",
       },
     });
 

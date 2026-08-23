@@ -5,9 +5,7 @@ import OrderStatusEmail from "@/components/email-templates/order/OrderStatusEmai
 import { SendOrderConfirmationArgs, SendOrderStatusArgs } from "@/types/order";
 
 import { render } from "@react-email/render";
-import { Resend } from "resend";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import { getResend } from "@/lib/resend";
 
 export const sendOrderConfirmationEmail = async (
   args: SendOrderConfirmationArgs,
@@ -32,7 +30,7 @@ export const sendOrderConfirmationEmail = async (
     />,
   );
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: fromEmail,
     to: args.toEmail,
     subject: `Order Confirmed: ${args.orderNumber}`,
@@ -54,7 +52,7 @@ export const sendOrderStatusEmail = async (args: SendOrderStatusArgs) => {
     />,
   );
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: fromEmail,
     to: args.toEmail,
     subject: `Order Update: ${args.orderNumber}`,

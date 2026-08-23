@@ -1,7 +1,12 @@
 import { z } from "zod";
 
 /** Where the visitor signed up from, so the admin can see which empty state converts. */
-export const SUBSCRIBER_SOURCES = ["workshops", "shop"] as const;
+export const SUBSCRIBER_SOURCES = [
+  "workshops",
+  "shop",
+  "home",
+  "videos",
+] as const;
 
 export const SubscribeSchema = z.object({
   // Lowercased so the unique constraint on `email` treats casing variants as
