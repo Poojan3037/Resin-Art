@@ -1,17 +1,60 @@
 "use client";
 
 import Button from "@/components/Button";
+import { sendContactInquiry } from "@/actions/email/contact";
+import { ContactSchema, type ContactFormValues } from "@/schema/contact";
+import { zodResolver } from "@hookform/resolvers/zod";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { useGSAP } from "@gsap/react";
-import { useState, useRef } from "react";
+import { useEffect, useRef } from "react";
+import { useForm } from "react-hook-form";
+import { useSearchParams } from "next/navigation";
+import { INQUIRY_MESSAGES } from "@/constants/workshops";
+import { toast } from "sonner";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
 const ContactSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const searchParams = useSearchParams();
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<ContactFormValues>({
+    resolver: zodResolver(ContactSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      message: "",
+    },
+  });
+
+  // Pre-fill message when coming from inquiry redirect
+  useEffect(() => {
+    const messageType = searchParams.get("messageType");
+    if (messageType && INQUIRY_MESSAGES[messageType]) {
+      reset({ message: INQUIRY_MESSAGES[messageType].message });
+    }
+  }, [searchParams, reset]);
+
+  const onSubmit = async (data: ContactFormValues) => {
+    const messageType = searchParams.get("messageType");
+    const subject = messageType
+      ? (INQUIRY_MESSAGES[messageType]?.subject ?? undefined)
+      : undefined;
+    const result = await sendContactInquiry({ ...data, subject });
+    if (result.success) {
+      toast.success(result.message);
+      reset();
+    } else {
+      toast.error(result.message);
+    }
+  };
 
   useGSAP(
     () => {
@@ -96,36 +139,77 @@ const ContactSection = () => {
           <h2 className="text-4xl font-semibold text-charcoal mb-6">
             Send Us a Message
           </h2>
-          {[
-            ["Full Name", "name", "text"],
-            ["Email Address", "email", "email"],
-          ].map(([label, field, type]) => (
-            <div key={field} className="mb-6">
-              <label className="block text-[11px] tracking-[0.14em] uppercase text-gray mb-2">
-                {label}
+          <form onSubmit={handleSubmit(onSubmit)} noValidate>
+            <div className="mb-6">
+              <label
+                htmlFor="contact-name"
+                className="block text-[11px] tracking-[0.14em] uppercase text-gray mb-2"
+              >
+                Full Name
               </label>
               <input
-                type={type}
-                value={form[field as keyof typeof form]}
-                onChange={(e) => setForm({ ...form, [field]: e.target.value })}
+                id="contact-name"
+                type="text"
+                {...register("name")}
                 className="w-full py-3.5 px-4.5 border border-light-gray text-[15px] outline-none box-border"
               />
+              {errors.name && (
+                <p className="text-red-500 text-[12px] mt-1.5">
+                  {errors.name.message}
+                </p>
+              )}
             </div>
-          ))}
-          <div className="mb-8">
-            <label className="block text-[11px] tracking-[0.14em] uppercase text-gray mb-2">
-              Message
-            </label>
-            <textarea
-              value={form.message}
-              onChange={(e) => setForm({ ...form, message: e.target.value })}
-              rows={6}
-              className="w-full py-3.5 px-4.5 border border-light-gray text-[15px] outline-none box-border resize-y"
-            />
-          </div>
-          <Button variant="primary" size="md" className="font-bold">
-            Send Message
-          </Button>
+
+            <div className="mb-6">
+              <label
+                htmlFor="contact-email"
+                className="block text-[11px] tracking-[0.14em] uppercase text-gray mb-2"
+              >
+                Email Address
+              </label>
+              <input
+                id="contact-email"
+                type="email"
+                {...register("email")}
+                className="w-full py-3.5 px-4.5 border border-light-gray text-[15px] outline-none box-border"
+              />
+              {errors.email && (
+                <p className="text-red-500 text-[12px] mt-1.5">
+                  {errors.email.message}
+                </p>
+              )}
+            </div>
+
+            <div className="mb-8">
+              <label
+                htmlFor="contact-message"
+                className="block text-[11px] tracking-[0.14em] uppercase text-gray mb-2"
+              >
+                Message
+              </label>
+              <textarea
+                id="contact-message"
+                {...register("message")}
+                rows={6}
+                className="w-full py-3.5 px-4.5 border border-light-gray text-[15px] outline-none box-border resize-y"
+              />
+              {errors.message && (
+                <p className="text-red-500 text-[12px] mt-1.5">
+                  {errors.message.message}
+                </p>
+              )}
+            </div>
+
+            <Button
+              type="submit"
+              variant="primary"
+              size="md"
+              className="font-bold"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Sending…" : "Send Message"}
+            </Button>
+          </form>
         </div>
 
         <div className="contact-info-col">
@@ -134,7 +218,7 @@ const ContactSection = () => {
           </h2>
           {[
             ["📍", "Location", "Calgary, High River & surrounding area"],
-            ["📸", "Instagram", "@resinartbytanvi"],
+            ["📸", "Instagram", "@resin_by_tanvi"],
             ["📧", "Email", "hello@resinartbytanvi.com"],
           ].map(([icon, label, val]) => (
             <div
@@ -160,7 +244,7 @@ const ContactSection = () => {
               student artwork, and upcoming events.
             </p>
             <a
-              href="https://instagram.com"
+              href="https://instagram.com/resin_by_tanvi"
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2.5 bg-charcoal text-gold-light py-3 px-6 text-[13px] tracking-[0.12em] uppercase no-underline font-bold transition-all duration-300 hover:bg-gold hover:text-white"

@@ -131,7 +131,7 @@ const HeroContent = () => {
         </Link>
       </div>
 
-      <div className="flex flex-nowrap overflow-x-auto gap-4 sm:gap-10 mt-10 sm:mt-14">
+      <div className="flex flex-nowrap overflow-hidden gap-4 sm:gap-10 mt-10 sm:mt-14">
         {HERO_SECTION_DATA.map(([n, l], idx) => (
           <div
             key={l}

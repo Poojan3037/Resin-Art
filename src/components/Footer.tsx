@@ -21,7 +21,7 @@ const Footer = () => {
           {/* Social Links */}
           <div className="flex items-center gap-3 mt-6">
             <a
-              href="https://www.instagram.com/resinbytanvi"
+              href="https://www.instagram.com/resin_by_tanvi"
               target="_blank"
               rel="noreferrer"
               aria-label="Instagram"
@@ -30,7 +30,7 @@ const Footer = () => {
               <InstagramIcon />
             </a>
             <a
-              href="https://www.facebook.com/resinbytanvi"
+              href="https://www.facebook.com/Resin_by_tanvi-100069961746834"
               target="_blank"
               rel="noreferrer"
               aria-label="Facebook"

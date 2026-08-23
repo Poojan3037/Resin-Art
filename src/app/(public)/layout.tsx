@@ -8,8 +8,10 @@ export default function PublicLayout({
   return (
     <SmoothScrollProvider>
       <Navbar />
-      {children}
-      <Footer />
+      <div className="overflow-x-clip flex-1 flex flex-col">
+        {children}
+        <Footer />
+      </div>
     </SmoothScrollProvider>
   );
 }

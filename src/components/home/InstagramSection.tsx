@@ -52,8 +52,8 @@ const POSTS = [
 ];
 
 const STATS = [
-  { value: "12K+", label: "Followers" },
-  { value: "240+", label: "Posts" },
+  { value: "18.5K+", label: "Followers" },
+  { value: "200+", label: "Posts" },
   { value: "98%", label: "Happy Clients" },
 ];
 
@@ -64,117 +64,32 @@ const InstagramGallery = () => {
 
   useGSAP(
     () => {
-      // Force refresh (important for mobile)
-      ScrollTrigger.refresh();
-
-      // ── HEADER ─────────────────────────────
-      gsap
-        .timeline({
-          scrollTrigger: {
-            trigger: ".ig-header",
-            start: "top 85%", // 🔥 earlier trigger
-            once: true,
-            invalidateOnRefresh: true,
-          },
-        })
-        .from(".ig-badge", {
-          opacity: 0,
-          scale: 0.7,
-          y: -10,
-          duration: 0.55,
-          ease: "back.out(2.8)",
-          immediateRender: false,
-        })
-        .from(
-          ".ig-title",
-          {
-            opacity: 0,
-            y: 32,
-            duration: 0.7,
-            ease: "expo.out",
-            immediateRender: false,
-          },
-          "-=0.15",
-        )
-        .from(
-          ".ig-subtitle",
-          {
-            opacity: 0,
-            y: 20,
-            duration: 0.55,
-            ease: "expo.out",
-            immediateRender: false,
-          },
-          "-=0.38",
-        )
-        .from(
-          ".ig-divider-left",
-          {
-            scaleX: 0,
-            transformOrigin: "right center",
-            duration: 0.55,
-            ease: "expo.out",
-          },
-          "-=0.45",
-        )
-        .from(
-          ".ig-divider-right",
-          {
-            scaleX: 0,
-            transformOrigin: "left center",
-            duration: 0.55,
-            ease: "expo.out",
-          },
-          "<",
-        )
-        .from(
-          ".ig-divider-dot",
-          {
-            opacity: 0,
-            scale: 0,
-            duration: 0.3,
-            ease: "back.out(3)",
-          },
-          "-=0.3",
-        )
-        .from(
-          ".ig-stat",
-          {
-            opacity: 0,
-            y: 26,
-            duration: 0.55,
-            stagger: 0.1,
-            ease: "back.out(1.8)",
-          },
-          "-=0.35",
-        )
-        .from(
-          ".ig-bottom-cta",
-          {
-            opacity: 0,
-            scale: 0.88,
-            duration: 0.5,
-            ease: "back.out(2)",
-          },
-          "-=0.25",
-        );
-
-      // ── CARDS ─────────────────────────────
-      ScrollTrigger.batch(".ig-card", {
-        start: "top 90%",
-        once: true,
-        onEnter: (els) => {
-          gsap.from(els, {
-            opacity: 0, // 🔥 important fallback
-            clipPath: "inset(100% 0 0 0 round 3px)",
-            y: 18,
-            duration: 0.88,
-            ease: "expo.out",
-            stagger: { each: 0.08 },
-            clearProps: "all",
-          });
-        },
+      // ── Header: single fade-up ─────────────────────────────────────────────
+      gsap.from(".ig-header", {
+        opacity: 0,
+        y: 36,
+        duration: 0.8,
+        ease: "expo.out",
+        scrollTrigger: { trigger: ".ig-header", start: "top 88%", once: true },
       });
+
+      // ── Cards: simple stagger fade-up ─────────────────────────────────────
+      gsap.fromTo(
+        ".ig-card",
+        { autoAlpha: 0, y: 30 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.65,
+          ease: "expo.out",
+          stagger: { each: 0.07, from: "start" },
+          scrollTrigger: {
+            trigger: ".ig-grid",
+            start: "top bottom",
+            once: true,
+          },
+        },
+      );
     },
     { scope: sectionRef },
   );
@@ -182,7 +97,7 @@ const InstagramGallery = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative bg-[#0d0d0d] py-20 overflow-hidden"
+      className="relative bg-[#0d0d0d] py-20 overflow-hidden w-full"
     >
       {/* ── Subtle gold dot grid texture ────────────────────────────── */}
       <div
@@ -195,24 +110,6 @@ const InstagramGallery = () => {
         }}
       />
 
-      {/* ── Ambient corner glows ────────────────────────────────────── */}
-      <div
-        aria-hidden
-        className="absolute top-0 left-0 w-72 h-72 rounded-full pointer-events-none -translate-x-1/2 -translate-y-1/2"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(201,168,76,0.07) 0%, transparent 70%)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="absolute bottom-0 right-0 w-96 h-96 rounded-full pointer-events-none translate-x-1/3 translate-y-1/3"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(42,124,116,0.07) 0%, transparent 70%)",
-        }}
-      />
-
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* ══════════════════════════════════════════════════════════════
             HEADER
@@ -220,13 +117,13 @@ const InstagramGallery = () => {
         <div className="ig-header text-center mb-12 sm:mb-16 lg:mb-20">
           {/* Badge ── Instagram handle pill */}
           <Link
-            href="https://www.instagram.com/resinbytanvi"
+            href="https://www.instagram.com/resin_by_tanvi"
             target="_blank"
             rel="noreferrer"
             className="ig-badge inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[rgba(201,168,76,0.28)] text-gold text-[11px] tracking-[0.28em] uppercase font-medium mb-6 sm:mb-7 hover:border-gold hover:bg-[rgba(201,168,76,0.06)] transition-all duration-300"
           >
             <InstagramIcon />
-            @resinbytanvi
+            @resin_by_tanvi
           </Link>
 
           {/* Title */}
@@ -235,7 +132,7 @@ const InstagramGallery = () => {
           </h2>
 
           {/* Subtitle */}
-          <p className="ig-subtitle text-[rgba(255,255,255,0.36)] text-[13px] sm:text-[14px] tracking-[0.1em] max-w-[22rem] mx-auto leading-relaxed">
+          <p className="ig-subtitle text-[rgba(255,255,255,0.36)] text-[13px] sm:text-[14px] tracking-widest max-w-88 mx-auto leading-relaxed">
             Every pour is unique. Every piece tells a story.
           </p>
 
@@ -280,15 +177,15 @@ const InstagramGallery = () => {
             • lg      — 4 cols
             All cards use aspect-[3/4] — fully fluid, no fixed heights.
         ══════════════════════════════════════════════════════════════ */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-3 lg:gap-4">
+        <div className="ig-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-3 lg:gap-4">
           {/* Photo cards */}
           {POSTS.map((post) => (
             <Link
               key={post.src}
-              href="https://www.instagram.com/resinbytanvi"
+              href="https://www.instagram.com/resin_by_tanvi"
               target="_blank"
               rel="noreferrer"
-              className="ig-card group relative aspect-[3/4] overflow-hidden rounded-[3px]"
+              className="ig-card group relative aspect-3/4 overflow-hidden rounded-[3px]"
             >
               {/* Photo */}
               <Image
@@ -307,9 +204,6 @@ const InstagramGallery = () => {
                     "linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.42) 48%, rgba(0,0,0,0.04) 100%)",
                 }}
               />
-
-              {/* ── Shimmer light sweep on hover — same as original ── */}
-              <div className="absolute inset-y-0 left-0 w-2/3 -skew-x-12 -translate-x-full group-hover:translate-x-[220%] transition-transform duration-700 ease-in-out pointer-events-none bg-gradient-to-r from-transparent via-white/[0.07] to-transparent" />
 
               {/* Gold border glow on hover */}
               <div
@@ -342,10 +236,10 @@ const InstagramGallery = () => {
 
           {/* ── CTA tile ──────────────────────────────────────────── */}
           <Link
-            href="https://www.instagram.com/resinbytanvi"
+            href="https://www.instagram.com/resin_by_tanvi"
             target="_blank"
             rel="noreferrer"
-            className="ig-card group relative aspect-[3/4] flex flex-col items-center justify-center gap-3 sm:gap-4 rounded-[3px] border border-[rgba(201,168,76,0.15)] hover:border-[rgba(201,168,76,0.5)] transition-all duration-500 overflow-hidden"
+            className="ig-card group relative aspect-3/4 flex flex-col items-center justify-center gap-3 sm:gap-4 rounded-[3px] border border-[rgba(201,168,76,0.15)] hover:border-[rgba(201,168,76,0.5)] transition-all duration-500 overflow-hidden"
             style={{
               background:
                 "linear-gradient(160deg, rgba(201,168,76,0.05) 0%, rgba(42,124,116,0.05) 100%)",
@@ -366,7 +260,7 @@ const InstagramGallery = () => {
                 Instagram
               </p>
               <p className="text-gold text-[10px] sm:text-[11px] tracking-[0.18em] mt-1.5">
-                @resinbytanvi
+                @resin_by_tanvi
               </p>
             </div>
 
@@ -379,7 +273,7 @@ const InstagramGallery = () => {
         {/* ── Bottom CTA button ──────────────────────────────────── */}
         <div className="ig-bottom-cta text-center mt-10 sm:mt-14">
           <Link
-            href="https://www.instagram.com/resinbytanvi"
+            href="https://www.instagram.com/resin_by_tanvi"
             target="_blank"
             rel="noreferrer"
             className="inline-flex items-center gap-2.5 px-6 sm:px-8 py-3 sm:py-3.5 rounded-full border border-[rgba(201,168,76,0.32)] text-[rgba(255,255,255,0.5)] text-[11px] sm:text-[12px] tracking-[0.22em] uppercase hover:bg-gold hover:text-[#0d0d0d] hover:border-gold transition-all duration-300"

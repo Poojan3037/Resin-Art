@@ -10,9 +10,15 @@ type PropsType = {
   workshop: Workshop;
   onEdit: () => void;
   onDelete: () => void;
+  onNotify: () => void;
 };
 
-const WorkshopCard = ({ workshop, onEdit, onDelete }: PropsType) => {
+const WorkshopCard = ({
+  workshop,
+  onEdit,
+  onDelete,
+  onNotify,
+}: PropsType) => {
   const timeLabel = formatWorkshopTime({
     startTime: workshop.startTime,
     startPeriod: workshop.startPeriod,
@@ -20,6 +26,10 @@ const WorkshopCard = ({ workshop, onEdit, onDelete }: PropsType) => {
     endPeriod: workshop.endPeriod,
   });
   const dateLabel = formatWorkshopDate(workshop.date);
+
+  // Announcing a workshop the public cannot see would link subscribers to a
+  // page that does not list it, so the action is hidden until it is live.
+  const canNotify = workshop.showToUsers && workshop.status === "UPCOMING";
 
   return (
     <div className="bg-white border border-light-gray hover:border-gold transition-all duration-300 p-7 flex flex-col">
@@ -68,6 +78,11 @@ const WorkshopCard = ({ workshop, onEdit, onDelete }: PropsType) => {
         >
           View Registrations
         </Link>
+        {canNotify && (
+          <Button variant="outline" size="sm" onClick={onNotify}>
+            {workshop.lastNotifiedAt ? "Notify Again" : "Notify Subscribers"}
+          </Button>
+        )}
         <div className="flex gap-2">
           <Button
             variant="primary"

@@ -37,6 +37,7 @@ export type WorkshopPaymentSumAggregateOutputType = {
 export type WorkshopPaymentMinAggregateOutputType = {
   id: string | null
   registrationId: string | null
+  idempotencyKey: string | null
   squarePaymentId: string | null
   amountCents: number | null
   currency: string | null
@@ -50,6 +51,7 @@ export type WorkshopPaymentMinAggregateOutputType = {
 export type WorkshopPaymentMaxAggregateOutputType = {
   id: string | null
   registrationId: string | null
+  idempotencyKey: string | null
   squarePaymentId: string | null
   amountCents: number | null
   currency: string | null
@@ -63,6 +65,7 @@ export type WorkshopPaymentMaxAggregateOutputType = {
 export type WorkshopPaymentCountAggregateOutputType = {
   id: number
   registrationId: number
+  idempotencyKey: number
   squarePaymentId: number
   amountCents: number
   currency: number
@@ -86,6 +89,7 @@ export type WorkshopPaymentSumAggregateInputType = {
 export type WorkshopPaymentMinAggregateInputType = {
   id?: true
   registrationId?: true
+  idempotencyKey?: true
   squarePaymentId?: true
   amountCents?: true
   currency?: true
@@ -99,6 +103,7 @@ export type WorkshopPaymentMinAggregateInputType = {
 export type WorkshopPaymentMaxAggregateInputType = {
   id?: true
   registrationId?: true
+  idempotencyKey?: true
   squarePaymentId?: true
   amountCents?: true
   currency?: true
@@ -112,6 +117,7 @@ export type WorkshopPaymentMaxAggregateInputType = {
 export type WorkshopPaymentCountAggregateInputType = {
   id?: true
   registrationId?: true
+  idempotencyKey?: true
   squarePaymentId?: true
   amountCents?: true
   currency?: true
@@ -212,6 +218,7 @@ export type WorkshopPaymentGroupByArgs<ExtArgs extends runtime.Types.Extensions.
 export type WorkshopPaymentGroupByOutputType = {
   id: string
   registrationId: string
+  idempotencyKey: string
   squarePaymentId: string | null
   amountCents: number
   currency: string
@@ -248,6 +255,7 @@ export type WorkshopPaymentWhereInput = {
   NOT?: Prisma.WorkshopPaymentWhereInput | Prisma.WorkshopPaymentWhereInput[]
   id?: Prisma.StringFilter<"WorkshopPayment"> | string
   registrationId?: Prisma.StringFilter<"WorkshopPayment"> | string
+  idempotencyKey?: Prisma.StringFilter<"WorkshopPayment"> | string
   squarePaymentId?: Prisma.StringNullableFilter<"WorkshopPayment"> | string | null
   amountCents?: Prisma.IntFilter<"WorkshopPayment"> | number
   currency?: Prisma.StringFilter<"WorkshopPayment"> | string
@@ -262,6 +270,7 @@ export type WorkshopPaymentWhereInput = {
 export type WorkshopPaymentOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   registrationId?: Prisma.SortOrder
+  idempotencyKey?: Prisma.SortOrder
   squarePaymentId?: Prisma.SortOrderInput | Prisma.SortOrder
   amountCents?: Prisma.SortOrder
   currency?: Prisma.SortOrder
@@ -276,6 +285,7 @@ export type WorkshopPaymentOrderByWithRelationInput = {
 export type WorkshopPaymentWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   registrationId?: string
+  idempotencyKey?: string
   squarePaymentId?: string
   AND?: Prisma.WorkshopPaymentWhereInput | Prisma.WorkshopPaymentWhereInput[]
   OR?: Prisma.WorkshopPaymentWhereInput[]
@@ -288,11 +298,12 @@ export type WorkshopPaymentWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"WorkshopPayment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"WorkshopPayment"> | Date | string
   registration?: Prisma.XOR<Prisma.RegistrationScalarRelationFilter, Prisma.RegistrationWhereInput>
-}, "id" | "registrationId" | "squarePaymentId">
+}, "id" | "registrationId" | "idempotencyKey" | "squarePaymentId">
 
 export type WorkshopPaymentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   registrationId?: Prisma.SortOrder
+  idempotencyKey?: Prisma.SortOrder
   squarePaymentId?: Prisma.SortOrderInput | Prisma.SortOrder
   amountCents?: Prisma.SortOrder
   currency?: Prisma.SortOrder
@@ -314,6 +325,7 @@ export type WorkshopPaymentScalarWhereWithAggregatesInput = {
   NOT?: Prisma.WorkshopPaymentScalarWhereWithAggregatesInput | Prisma.WorkshopPaymentScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"WorkshopPayment"> | string
   registrationId?: Prisma.StringWithAggregatesFilter<"WorkshopPayment"> | string
+  idempotencyKey?: Prisma.StringWithAggregatesFilter<"WorkshopPayment"> | string
   squarePaymentId?: Prisma.StringNullableWithAggregatesFilter<"WorkshopPayment"> | string | null
   amountCents?: Prisma.IntWithAggregatesFilter<"WorkshopPayment"> | number
   currency?: Prisma.StringWithAggregatesFilter<"WorkshopPayment"> | string
@@ -326,6 +338,7 @@ export type WorkshopPaymentScalarWhereWithAggregatesInput = {
 
 export type WorkshopPaymentCreateInput = {
   id?: string
+  idempotencyKey: string
   squarePaymentId?: string | null
   amountCents: number
   currency?: string
@@ -340,6 +353,7 @@ export type WorkshopPaymentCreateInput = {
 export type WorkshopPaymentUncheckedCreateInput = {
   id?: string
   registrationId: string
+  idempotencyKey: string
   squarePaymentId?: string | null
   amountCents: number
   currency?: string
@@ -352,6 +366,7 @@ export type WorkshopPaymentUncheckedCreateInput = {
 
 export type WorkshopPaymentUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string
   squarePaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amountCents?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -366,6 +381,7 @@ export type WorkshopPaymentUpdateInput = {
 export type WorkshopPaymentUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   registrationId?: Prisma.StringFieldUpdateOperationsInput | string
+  idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string
   squarePaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amountCents?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -379,6 +395,7 @@ export type WorkshopPaymentUncheckedUpdateInput = {
 export type WorkshopPaymentCreateManyInput = {
   id?: string
   registrationId: string
+  idempotencyKey: string
   squarePaymentId?: string | null
   amountCents: number
   currency?: string
@@ -391,6 +408,7 @@ export type WorkshopPaymentCreateManyInput = {
 
 export type WorkshopPaymentUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string
   squarePaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amountCents?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -404,6 +422,7 @@ export type WorkshopPaymentUpdateManyMutationInput = {
 export type WorkshopPaymentUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   registrationId?: Prisma.StringFieldUpdateOperationsInput | string
+  idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string
   squarePaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amountCents?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -422,6 +441,7 @@ export type WorkshopPaymentNullableScalarRelationFilter = {
 export type WorkshopPaymentCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   registrationId?: Prisma.SortOrder
+  idempotencyKey?: Prisma.SortOrder
   squarePaymentId?: Prisma.SortOrder
   amountCents?: Prisma.SortOrder
   currency?: Prisma.SortOrder
@@ -439,6 +459,7 @@ export type WorkshopPaymentAvgOrderByAggregateInput = {
 export type WorkshopPaymentMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   registrationId?: Prisma.SortOrder
+  idempotencyKey?: Prisma.SortOrder
   squarePaymentId?: Prisma.SortOrder
   amountCents?: Prisma.SortOrder
   currency?: Prisma.SortOrder
@@ -452,6 +473,7 @@ export type WorkshopPaymentMaxOrderByAggregateInput = {
 export type WorkshopPaymentMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   registrationId?: Prisma.SortOrder
+  idempotencyKey?: Prisma.SortOrder
   squarePaymentId?: Prisma.SortOrder
   amountCents?: Prisma.SortOrder
   currency?: Prisma.SortOrder
@@ -500,6 +522,7 @@ export type WorkshopPaymentUncheckedUpdateOneWithoutRegistrationNestedInput = {
 
 export type WorkshopPaymentCreateWithoutRegistrationInput = {
   id?: string
+  idempotencyKey: string
   squarePaymentId?: string | null
   amountCents: number
   currency?: string
@@ -512,6 +535,7 @@ export type WorkshopPaymentCreateWithoutRegistrationInput = {
 
 export type WorkshopPaymentUncheckedCreateWithoutRegistrationInput = {
   id?: string
+  idempotencyKey: string
   squarePaymentId?: string | null
   amountCents: number
   currency?: string
@@ -540,6 +564,7 @@ export type WorkshopPaymentUpdateToOneWithWhereWithoutRegistrationInput = {
 
 export type WorkshopPaymentUpdateWithoutRegistrationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string
   squarePaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amountCents?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -552,6 +577,7 @@ export type WorkshopPaymentUpdateWithoutRegistrationInput = {
 
 export type WorkshopPaymentUncheckedUpdateWithoutRegistrationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string
   squarePaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amountCents?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -567,6 +593,7 @@ export type WorkshopPaymentUncheckedUpdateWithoutRegistrationInput = {
 export type WorkshopPaymentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   registrationId?: boolean
+  idempotencyKey?: boolean
   squarePaymentId?: boolean
   amountCents?: boolean
   currency?: boolean
@@ -581,6 +608,7 @@ export type WorkshopPaymentSelect<ExtArgs extends runtime.Types.Extensions.Inter
 export type WorkshopPaymentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   registrationId?: boolean
+  idempotencyKey?: boolean
   squarePaymentId?: boolean
   amountCents?: boolean
   currency?: boolean
@@ -595,6 +623,7 @@ export type WorkshopPaymentSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
 export type WorkshopPaymentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   registrationId?: boolean
+  idempotencyKey?: boolean
   squarePaymentId?: boolean
   amountCents?: boolean
   currency?: boolean
@@ -609,6 +638,7 @@ export type WorkshopPaymentSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
 export type WorkshopPaymentSelectScalar = {
   id?: boolean
   registrationId?: boolean
+  idempotencyKey?: boolean
   squarePaymentId?: boolean
   amountCents?: boolean
   currency?: boolean
@@ -619,7 +649,7 @@ export type WorkshopPaymentSelectScalar = {
   updatedAt?: boolean
 }
 
-export type WorkshopPaymentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "registrationId" | "squarePaymentId" | "amountCents" | "currency" | "status" | "receiptUrl" | "paidAt" | "createdAt" | "updatedAt", ExtArgs["result"]["workshopPayment"]>
+export type WorkshopPaymentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "registrationId" | "idempotencyKey" | "squarePaymentId" | "amountCents" | "currency" | "status" | "receiptUrl" | "paidAt" | "createdAt" | "updatedAt", ExtArgs["result"]["workshopPayment"]>
 export type WorkshopPaymentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   registration?: boolean | Prisma.RegistrationDefaultArgs<ExtArgs>
 }
@@ -638,6 +668,7 @@ export type $WorkshopPaymentPayload<ExtArgs extends runtime.Types.Extensions.Int
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     registrationId: string
+    idempotencyKey: string
     squarePaymentId: string | null
     amountCents: number
     currency: string
@@ -1072,6 +1103,7 @@ export interface Prisma__WorkshopPaymentClient<T, Null = never, ExtArgs extends 
 export interface WorkshopPaymentFieldRefs {
   readonly id: Prisma.FieldRef<"WorkshopPayment", 'String'>
   readonly registrationId: Prisma.FieldRef<"WorkshopPayment", 'String'>
+  readonly idempotencyKey: Prisma.FieldRef<"WorkshopPayment", 'String'>
   readonly squarePaymentId: Prisma.FieldRef<"WorkshopPayment", 'String'>
   readonly amountCents: Prisma.FieldRef<"WorkshopPayment", 'Int'>
   readonly currency: Prisma.FieldRef<"WorkshopPayment", 'String'>

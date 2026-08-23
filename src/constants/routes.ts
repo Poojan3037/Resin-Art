@@ -31,4 +31,5 @@ export const ADMIN_NAV_LINKS = [
   { title: "Products", path: "/admin/products" },
   { title: "Orders", path: "/admin/orders" },
   { title: "Workshops", path: "/admin/workshops" },
+  { title: "Subscribers", path: "/admin/subscribers" },
 ];

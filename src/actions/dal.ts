@@ -3,6 +3,7 @@
 import prisma from "@/lib/prisma";
 import jwt from "jsonwebtoken";
 import { getAuthToken } from "./cookie";
+import { JWT_SECRET, JWT_VERIFY_OPTIONS } from "@/lib/jwt";
 
 type InputParamsType = {
   isAdmin: boolean;
@@ -31,7 +32,7 @@ export const verifySession = async (
       };
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
+    const decoded = jwt.verify(token, JWT_SECRET, JWT_VERIFY_OPTIONS) as unknown as {
       userId: string;
     };
 

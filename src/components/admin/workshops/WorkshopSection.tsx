@@ -10,12 +10,16 @@ import WorkshopDialog from "./WorkshopDialog";
 import { DialogMode } from "@/types/dialog";
 import { Workshop } from "@/types/workshop";
 import WorkshopDeleteDialog from "./WorkshopDeleteDialog";
+import NotifyDialog from "@/components/admin/NotifyDialog";
+import { useRouter } from "next/navigation";
 
 type PropsType = {
   data: Workshop[];
+  subscriberCount: number;
 };
 
-const WorkshopSection = ({ data }: PropsType) => {
+const WorkshopSection = ({ data, subscriberCount }: PropsType) => {
+  const router = useRouter();
   const [search, setSearch] = useQueryState("search", {
     defaultValue: "",
     limitUrlUpdates: debounce(500),
@@ -36,6 +40,13 @@ const WorkshopSection = ({ data }: PropsType) => {
     id: editWorkshopId,
     onOpen: handleOpenEditWorkshopDialog,
     onClose: handleCloseEditWorkshopDialog,
+  } = useDisclosure();
+
+  const {
+    isOpen: isNotifyOpen,
+    id: notifyWorkshopId,
+    onOpen: handleOpenNotifyDialog,
+    onClose: handleCloseNotifyDialog,
   } = useDisclosure();
 
   const {
@@ -66,6 +77,10 @@ const WorkshopSection = ({ data }: PropsType) => {
     handleOpenDeleteAlert(workshopId);
   };
 
+  const notifyWorkshop = notifyWorkshopId
+    ? data.find((w) => w.id === notifyWorkshopId)
+    : undefined;
+
   const closeDialog = () => {
     handleCloseAddWorkshopDialog();
     handleCloseEditWorkshopDialog();
@@ -93,6 +108,7 @@ const WorkshopSection = ({ data }: PropsType) => {
                 workshop={workshop}
                 onEdit={() => handleEditWorkshop(workshop.id)}
                 onDelete={() => handleDeleteWorkshop(workshop.id)}
+                onNotify={() => handleOpenNotifyDialog(workshop.id)}
               />
             );
           })}
@@ -105,6 +121,17 @@ const WorkshopSection = ({ data }: PropsType) => {
           editWorkshopId={editWorkshopId}
           initialData={editWorkshop}
           onClose={closeDialog}
+        />
+      )}
+
+      {isNotifyOpen && notifyWorkshop && (
+        <NotifyDialog
+          target={{ type: "workshop", id: notifyWorkshop.id }}
+          itemTitle={notifyWorkshop.title}
+          subscriberCount={subscriberCount}
+          lastNotifiedAt={notifyWorkshop.lastNotifiedAt}
+          onClose={handleCloseNotifyDialog}
+          onSent={router.refresh}
         />
       )}
 

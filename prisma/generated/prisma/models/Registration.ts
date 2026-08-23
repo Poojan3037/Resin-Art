@@ -28,10 +28,16 @@ export type AggregateRegistration = {
 
 export type RegistrationAvgAggregateOutputType = {
   seatsBooked: number | null
+  subtotalCents: number | null
+  taxCents: number | null
+  totalCents: number | null
 }
 
 export type RegistrationSumAggregateOutputType = {
   seatsBooked: number | null
+  subtotalCents: number | null
+  taxCents: number | null
+  totalCents: number | null
 }
 
 export type RegistrationMinAggregateOutputType = {
@@ -41,6 +47,10 @@ export type RegistrationMinAggregateOutputType = {
   email: string | null
   phone: string | null
   seatsBooked: number | null
+  subtotalCents: number | null
+  taxCents: number | null
+  totalCents: number | null
+  taxProvince: $Enums.Province | null
   paymentStatus: $Enums.PaymentStatus | null
   registeredAt: Date | null
   updatedAt: Date | null
@@ -53,6 +63,10 @@ export type RegistrationMaxAggregateOutputType = {
   email: string | null
   phone: string | null
   seatsBooked: number | null
+  subtotalCents: number | null
+  taxCents: number | null
+  totalCents: number | null
+  taxProvince: $Enums.Province | null
   paymentStatus: $Enums.PaymentStatus | null
   registeredAt: Date | null
   updatedAt: Date | null
@@ -65,6 +79,11 @@ export type RegistrationCountAggregateOutputType = {
   email: number
   phone: number
   seatsBooked: number
+  subtotalCents: number
+  taxCents: number
+  totalCents: number
+  taxProvince: number
+  taxBreakdown: number
   paymentStatus: number
   registeredAt: number
   updatedAt: number
@@ -74,10 +93,16 @@ export type RegistrationCountAggregateOutputType = {
 
 export type RegistrationAvgAggregateInputType = {
   seatsBooked?: true
+  subtotalCents?: true
+  taxCents?: true
+  totalCents?: true
 }
 
 export type RegistrationSumAggregateInputType = {
   seatsBooked?: true
+  subtotalCents?: true
+  taxCents?: true
+  totalCents?: true
 }
 
 export type RegistrationMinAggregateInputType = {
@@ -87,6 +112,10 @@ export type RegistrationMinAggregateInputType = {
   email?: true
   phone?: true
   seatsBooked?: true
+  subtotalCents?: true
+  taxCents?: true
+  totalCents?: true
+  taxProvince?: true
   paymentStatus?: true
   registeredAt?: true
   updatedAt?: true
@@ -99,6 +128,10 @@ export type RegistrationMaxAggregateInputType = {
   email?: true
   phone?: true
   seatsBooked?: true
+  subtotalCents?: true
+  taxCents?: true
+  totalCents?: true
+  taxProvince?: true
   paymentStatus?: true
   registeredAt?: true
   updatedAt?: true
@@ -111,6 +144,11 @@ export type RegistrationCountAggregateInputType = {
   email?: true
   phone?: true
   seatsBooked?: true
+  subtotalCents?: true
+  taxCents?: true
+  totalCents?: true
+  taxProvince?: true
+  taxBreakdown?: true
   paymentStatus?: true
   registeredAt?: true
   updatedAt?: true
@@ -210,6 +248,11 @@ export type RegistrationGroupByOutputType = {
   email: string
   phone: string
   seatsBooked: number
+  subtotalCents: number
+  taxCents: number
+  totalCents: number
+  taxProvince: $Enums.Province | null
+  taxBreakdown: runtime.JsonValue | null
   paymentStatus: $Enums.PaymentStatus
   registeredAt: Date
   updatedAt: Date
@@ -245,6 +288,11 @@ export type RegistrationWhereInput = {
   email?: Prisma.StringFilter<"Registration"> | string
   phone?: Prisma.StringFilter<"Registration"> | string
   seatsBooked?: Prisma.IntFilter<"Registration"> | number
+  subtotalCents?: Prisma.IntFilter<"Registration"> | number
+  taxCents?: Prisma.IntFilter<"Registration"> | number
+  totalCents?: Prisma.IntFilter<"Registration"> | number
+  taxProvince?: Prisma.EnumProvinceNullableFilter<"Registration"> | $Enums.Province | null
+  taxBreakdown?: Prisma.JsonNullableFilter<"Registration">
   paymentStatus?: Prisma.EnumPaymentStatusFilter<"Registration"> | $Enums.PaymentStatus
   registeredAt?: Prisma.DateTimeFilter<"Registration"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Registration"> | Date | string
@@ -259,6 +307,11 @@ export type RegistrationOrderByWithRelationInput = {
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   seatsBooked?: Prisma.SortOrder
+  subtotalCents?: Prisma.SortOrder
+  taxCents?: Prisma.SortOrder
+  totalCents?: Prisma.SortOrder
+  taxProvince?: Prisma.SortOrderInput | Prisma.SortOrder
+  taxBreakdown?: Prisma.SortOrderInput | Prisma.SortOrder
   paymentStatus?: Prisma.SortOrder
   registeredAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -276,6 +329,11 @@ export type RegistrationWhereUniqueInput = Prisma.AtLeast<{
   email?: Prisma.StringFilter<"Registration"> | string
   phone?: Prisma.StringFilter<"Registration"> | string
   seatsBooked?: Prisma.IntFilter<"Registration"> | number
+  subtotalCents?: Prisma.IntFilter<"Registration"> | number
+  taxCents?: Prisma.IntFilter<"Registration"> | number
+  totalCents?: Prisma.IntFilter<"Registration"> | number
+  taxProvince?: Prisma.EnumProvinceNullableFilter<"Registration"> | $Enums.Province | null
+  taxBreakdown?: Prisma.JsonNullableFilter<"Registration">
   paymentStatus?: Prisma.EnumPaymentStatusFilter<"Registration"> | $Enums.PaymentStatus
   registeredAt?: Prisma.DateTimeFilter<"Registration"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Registration"> | Date | string
@@ -290,6 +348,11 @@ export type RegistrationOrderByWithAggregationInput = {
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   seatsBooked?: Prisma.SortOrder
+  subtotalCents?: Prisma.SortOrder
+  taxCents?: Prisma.SortOrder
+  totalCents?: Prisma.SortOrder
+  taxProvince?: Prisma.SortOrderInput | Prisma.SortOrder
+  taxBreakdown?: Prisma.SortOrderInput | Prisma.SortOrder
   paymentStatus?: Prisma.SortOrder
   registeredAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -310,6 +373,11 @@ export type RegistrationScalarWhereWithAggregatesInput = {
   email?: Prisma.StringWithAggregatesFilter<"Registration"> | string
   phone?: Prisma.StringWithAggregatesFilter<"Registration"> | string
   seatsBooked?: Prisma.IntWithAggregatesFilter<"Registration"> | number
+  subtotalCents?: Prisma.IntWithAggregatesFilter<"Registration"> | number
+  taxCents?: Prisma.IntWithAggregatesFilter<"Registration"> | number
+  totalCents?: Prisma.IntWithAggregatesFilter<"Registration"> | number
+  taxProvince?: Prisma.EnumProvinceNullableWithAggregatesFilter<"Registration"> | $Enums.Province | null
+  taxBreakdown?: Prisma.JsonNullableWithAggregatesFilter<"Registration">
   paymentStatus?: Prisma.EnumPaymentStatusWithAggregatesFilter<"Registration"> | $Enums.PaymentStatus
   registeredAt?: Prisma.DateTimeWithAggregatesFilter<"Registration"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Registration"> | Date | string
@@ -321,6 +389,11 @@ export type RegistrationCreateInput = {
   email: string
   phone: string
   seatsBooked?: number
+  subtotalCents?: number
+  taxCents?: number
+  totalCents?: number
+  taxProvince?: $Enums.Province | null
+  taxBreakdown?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentStatus?: $Enums.PaymentStatus
   registeredAt?: Date | string
   updatedAt?: Date | string
@@ -335,6 +408,11 @@ export type RegistrationUncheckedCreateInput = {
   email: string
   phone: string
   seatsBooked?: number
+  subtotalCents?: number
+  taxCents?: number
+  totalCents?: number
+  taxProvince?: $Enums.Province | null
+  taxBreakdown?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentStatus?: $Enums.PaymentStatus
   registeredAt?: Date | string
   updatedAt?: Date | string
@@ -347,6 +425,11 @@ export type RegistrationUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   seatsBooked?: Prisma.IntFieldUpdateOperationsInput | number
+  subtotalCents?: Prisma.IntFieldUpdateOperationsInput | number
+  taxCents?: Prisma.IntFieldUpdateOperationsInput | number
+  totalCents?: Prisma.IntFieldUpdateOperationsInput | number
+  taxProvince?: Prisma.NullableEnumProvinceFieldUpdateOperationsInput | $Enums.Province | null
+  taxBreakdown?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   registeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -361,6 +444,11 @@ export type RegistrationUncheckedUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   seatsBooked?: Prisma.IntFieldUpdateOperationsInput | number
+  subtotalCents?: Prisma.IntFieldUpdateOperationsInput | number
+  taxCents?: Prisma.IntFieldUpdateOperationsInput | number
+  totalCents?: Prisma.IntFieldUpdateOperationsInput | number
+  taxProvince?: Prisma.NullableEnumProvinceFieldUpdateOperationsInput | $Enums.Province | null
+  taxBreakdown?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   registeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -374,6 +462,11 @@ export type RegistrationCreateManyInput = {
   email: string
   phone: string
   seatsBooked?: number
+  subtotalCents?: number
+  taxCents?: number
+  totalCents?: number
+  taxProvince?: $Enums.Province | null
+  taxBreakdown?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentStatus?: $Enums.PaymentStatus
   registeredAt?: Date | string
   updatedAt?: Date | string
@@ -385,6 +478,11 @@ export type RegistrationUpdateManyMutationInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   seatsBooked?: Prisma.IntFieldUpdateOperationsInput | number
+  subtotalCents?: Prisma.IntFieldUpdateOperationsInput | number
+  taxCents?: Prisma.IntFieldUpdateOperationsInput | number
+  totalCents?: Prisma.IntFieldUpdateOperationsInput | number
+  taxProvince?: Prisma.NullableEnumProvinceFieldUpdateOperationsInput | $Enums.Province | null
+  taxBreakdown?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   registeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -397,6 +495,11 @@ export type RegistrationUncheckedUpdateManyInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   seatsBooked?: Prisma.IntFieldUpdateOperationsInput | number
+  subtotalCents?: Prisma.IntFieldUpdateOperationsInput | number
+  taxCents?: Prisma.IntFieldUpdateOperationsInput | number
+  totalCents?: Prisma.IntFieldUpdateOperationsInput | number
+  taxProvince?: Prisma.NullableEnumProvinceFieldUpdateOperationsInput | $Enums.Province | null
+  taxBreakdown?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   registeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -419,6 +522,11 @@ export type RegistrationCountOrderByAggregateInput = {
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   seatsBooked?: Prisma.SortOrder
+  subtotalCents?: Prisma.SortOrder
+  taxCents?: Prisma.SortOrder
+  totalCents?: Prisma.SortOrder
+  taxProvince?: Prisma.SortOrder
+  taxBreakdown?: Prisma.SortOrder
   paymentStatus?: Prisma.SortOrder
   registeredAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -426,6 +534,9 @@ export type RegistrationCountOrderByAggregateInput = {
 
 export type RegistrationAvgOrderByAggregateInput = {
   seatsBooked?: Prisma.SortOrder
+  subtotalCents?: Prisma.SortOrder
+  taxCents?: Prisma.SortOrder
+  totalCents?: Prisma.SortOrder
 }
 
 export type RegistrationMaxOrderByAggregateInput = {
@@ -435,6 +546,10 @@ export type RegistrationMaxOrderByAggregateInput = {
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   seatsBooked?: Prisma.SortOrder
+  subtotalCents?: Prisma.SortOrder
+  taxCents?: Prisma.SortOrder
+  totalCents?: Prisma.SortOrder
+  taxProvince?: Prisma.SortOrder
   paymentStatus?: Prisma.SortOrder
   registeredAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -447,6 +562,10 @@ export type RegistrationMinOrderByAggregateInput = {
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   seatsBooked?: Prisma.SortOrder
+  subtotalCents?: Prisma.SortOrder
+  taxCents?: Prisma.SortOrder
+  totalCents?: Prisma.SortOrder
+  taxProvince?: Prisma.SortOrder
   paymentStatus?: Prisma.SortOrder
   registeredAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -454,6 +573,9 @@ export type RegistrationMinOrderByAggregateInput = {
 
 export type RegistrationSumOrderByAggregateInput = {
   seatsBooked?: Prisma.SortOrder
+  subtotalCents?: Prisma.SortOrder
+  taxCents?: Prisma.SortOrder
+  totalCents?: Prisma.SortOrder
 }
 
 export type RegistrationScalarRelationFilter = {
@@ -527,6 +649,11 @@ export type RegistrationCreateWithoutWorkshopInput = {
   email: string
   phone: string
   seatsBooked?: number
+  subtotalCents?: number
+  taxCents?: number
+  totalCents?: number
+  taxProvince?: $Enums.Province | null
+  taxBreakdown?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentStatus?: $Enums.PaymentStatus
   registeredAt?: Date | string
   updatedAt?: Date | string
@@ -539,6 +666,11 @@ export type RegistrationUncheckedCreateWithoutWorkshopInput = {
   email: string
   phone: string
   seatsBooked?: number
+  subtotalCents?: number
+  taxCents?: number
+  totalCents?: number
+  taxProvince?: $Enums.Province | null
+  taxBreakdown?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentStatus?: $Enums.PaymentStatus
   registeredAt?: Date | string
   updatedAt?: Date | string
@@ -581,6 +713,11 @@ export type RegistrationScalarWhereInput = {
   email?: Prisma.StringFilter<"Registration"> | string
   phone?: Prisma.StringFilter<"Registration"> | string
   seatsBooked?: Prisma.IntFilter<"Registration"> | number
+  subtotalCents?: Prisma.IntFilter<"Registration"> | number
+  taxCents?: Prisma.IntFilter<"Registration"> | number
+  totalCents?: Prisma.IntFilter<"Registration"> | number
+  taxProvince?: Prisma.EnumProvinceNullableFilter<"Registration"> | $Enums.Province | null
+  taxBreakdown?: Prisma.JsonNullableFilter<"Registration">
   paymentStatus?: Prisma.EnumPaymentStatusFilter<"Registration"> | $Enums.PaymentStatus
   registeredAt?: Prisma.DateTimeFilter<"Registration"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Registration"> | Date | string
@@ -592,6 +729,11 @@ export type RegistrationCreateWithoutPaymentInput = {
   email: string
   phone: string
   seatsBooked?: number
+  subtotalCents?: number
+  taxCents?: number
+  totalCents?: number
+  taxProvince?: $Enums.Province | null
+  taxBreakdown?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentStatus?: $Enums.PaymentStatus
   registeredAt?: Date | string
   updatedAt?: Date | string
@@ -605,6 +747,11 @@ export type RegistrationUncheckedCreateWithoutPaymentInput = {
   email: string
   phone: string
   seatsBooked?: number
+  subtotalCents?: number
+  taxCents?: number
+  totalCents?: number
+  taxProvince?: $Enums.Province | null
+  taxBreakdown?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentStatus?: $Enums.PaymentStatus
   registeredAt?: Date | string
   updatedAt?: Date | string
@@ -632,6 +779,11 @@ export type RegistrationUpdateWithoutPaymentInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   seatsBooked?: Prisma.IntFieldUpdateOperationsInput | number
+  subtotalCents?: Prisma.IntFieldUpdateOperationsInput | number
+  taxCents?: Prisma.IntFieldUpdateOperationsInput | number
+  totalCents?: Prisma.IntFieldUpdateOperationsInput | number
+  taxProvince?: Prisma.NullableEnumProvinceFieldUpdateOperationsInput | $Enums.Province | null
+  taxBreakdown?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   registeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -645,6 +797,11 @@ export type RegistrationUncheckedUpdateWithoutPaymentInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   seatsBooked?: Prisma.IntFieldUpdateOperationsInput | number
+  subtotalCents?: Prisma.IntFieldUpdateOperationsInput | number
+  taxCents?: Prisma.IntFieldUpdateOperationsInput | number
+  totalCents?: Prisma.IntFieldUpdateOperationsInput | number
+  taxProvince?: Prisma.NullableEnumProvinceFieldUpdateOperationsInput | $Enums.Province | null
+  taxBreakdown?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   registeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -656,6 +813,11 @@ export type RegistrationCreateManyWorkshopInput = {
   email: string
   phone: string
   seatsBooked?: number
+  subtotalCents?: number
+  taxCents?: number
+  totalCents?: number
+  taxProvince?: $Enums.Province | null
+  taxBreakdown?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentStatus?: $Enums.PaymentStatus
   registeredAt?: Date | string
   updatedAt?: Date | string
@@ -667,6 +829,11 @@ export type RegistrationUpdateWithoutWorkshopInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   seatsBooked?: Prisma.IntFieldUpdateOperationsInput | number
+  subtotalCents?: Prisma.IntFieldUpdateOperationsInput | number
+  taxCents?: Prisma.IntFieldUpdateOperationsInput | number
+  totalCents?: Prisma.IntFieldUpdateOperationsInput | number
+  taxProvince?: Prisma.NullableEnumProvinceFieldUpdateOperationsInput | $Enums.Province | null
+  taxBreakdown?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   registeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -679,6 +846,11 @@ export type RegistrationUncheckedUpdateWithoutWorkshopInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   seatsBooked?: Prisma.IntFieldUpdateOperationsInput | number
+  subtotalCents?: Prisma.IntFieldUpdateOperationsInput | number
+  taxCents?: Prisma.IntFieldUpdateOperationsInput | number
+  totalCents?: Prisma.IntFieldUpdateOperationsInput | number
+  taxProvince?: Prisma.NullableEnumProvinceFieldUpdateOperationsInput | $Enums.Province | null
+  taxBreakdown?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   registeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -691,6 +863,11 @@ export type RegistrationUncheckedUpdateManyWithoutWorkshopInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   seatsBooked?: Prisma.IntFieldUpdateOperationsInput | number
+  subtotalCents?: Prisma.IntFieldUpdateOperationsInput | number
+  taxCents?: Prisma.IntFieldUpdateOperationsInput | number
+  totalCents?: Prisma.IntFieldUpdateOperationsInput | number
+  taxProvince?: Prisma.NullableEnumProvinceFieldUpdateOperationsInput | $Enums.Province | null
+  taxBreakdown?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   registeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -705,6 +882,11 @@ export type RegistrationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   email?: boolean
   phone?: boolean
   seatsBooked?: boolean
+  subtotalCents?: boolean
+  taxCents?: boolean
+  totalCents?: boolean
+  taxProvince?: boolean
+  taxBreakdown?: boolean
   paymentStatus?: boolean
   registeredAt?: boolean
   updatedAt?: boolean
@@ -719,6 +901,11 @@ export type RegistrationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   email?: boolean
   phone?: boolean
   seatsBooked?: boolean
+  subtotalCents?: boolean
+  taxCents?: boolean
+  totalCents?: boolean
+  taxProvince?: boolean
+  taxBreakdown?: boolean
   paymentStatus?: boolean
   registeredAt?: boolean
   updatedAt?: boolean
@@ -732,6 +919,11 @@ export type RegistrationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   email?: boolean
   phone?: boolean
   seatsBooked?: boolean
+  subtotalCents?: boolean
+  taxCents?: boolean
+  totalCents?: boolean
+  taxProvince?: boolean
+  taxBreakdown?: boolean
   paymentStatus?: boolean
   registeredAt?: boolean
   updatedAt?: boolean
@@ -745,12 +937,17 @@ export type RegistrationSelectScalar = {
   email?: boolean
   phone?: boolean
   seatsBooked?: boolean
+  subtotalCents?: boolean
+  taxCents?: boolean
+  totalCents?: boolean
+  taxProvince?: boolean
+  taxBreakdown?: boolean
   paymentStatus?: boolean
   registeredAt?: boolean
   updatedAt?: boolean
 }
 
-export type RegistrationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "workshopId" | "name" | "email" | "phone" | "seatsBooked" | "paymentStatus" | "registeredAt" | "updatedAt", ExtArgs["result"]["registration"]>
+export type RegistrationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "workshopId" | "name" | "email" | "phone" | "seatsBooked" | "subtotalCents" | "taxCents" | "totalCents" | "taxProvince" | "taxBreakdown" | "paymentStatus" | "registeredAt" | "updatedAt", ExtArgs["result"]["registration"]>
 export type RegistrationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   workshop?: boolean | Prisma.WorkshopDefaultArgs<ExtArgs>
   payment?: boolean | Prisma.Registration$paymentArgs<ExtArgs>
@@ -775,6 +972,11 @@ export type $RegistrationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     email: string
     phone: string
     seatsBooked: number
+    subtotalCents: number
+    taxCents: number
+    totalCents: number
+    taxProvince: $Enums.Province | null
+    taxBreakdown: runtime.JsonValue | null
     paymentStatus: $Enums.PaymentStatus
     registeredAt: Date
     updatedAt: Date
@@ -1209,6 +1411,11 @@ export interface RegistrationFieldRefs {
   readonly email: Prisma.FieldRef<"Registration", 'String'>
   readonly phone: Prisma.FieldRef<"Registration", 'String'>
   readonly seatsBooked: Prisma.FieldRef<"Registration", 'Int'>
+  readonly subtotalCents: Prisma.FieldRef<"Registration", 'Int'>
+  readonly taxCents: Prisma.FieldRef<"Registration", 'Int'>
+  readonly totalCents: Prisma.FieldRef<"Registration", 'Int'>
+  readonly taxProvince: Prisma.FieldRef<"Registration", 'Province'>
+  readonly taxBreakdown: Prisma.FieldRef<"Registration", 'Json'>
   readonly paymentStatus: Prisma.FieldRef<"Registration", 'PaymentStatus'>
   readonly registeredAt: Prisma.FieldRef<"Registration", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Registration", 'DateTime'>

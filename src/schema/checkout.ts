@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { CANADIAN_PROVINCES } from "@/lib/tax/canada";
 
 // Canadian postal code: A1A 1A1 or A1A-1A1 or A1A1A1
 // First letter cannot be D, F, I, O, Q, or U (not used by Canada Post)
@@ -14,22 +15,6 @@ const canadianPostalCodeRegex =
 // Separators: spaces, dashes, dots, or parentheses around area code
 export const canadianPhoneRegex =
   /^(?:\+?1[-.\s]?)?\(?([2-9]\d{2})\)?[-.\s]?([2-9]\d{2})[-.\s]?(\d{4})$/;
-
-const CANADIAN_PROVINCES = [
-  "AB",
-  "BC",
-  "MB",
-  "NB",
-  "NL",
-  "NS",
-  "NT",
-  "NU",
-  "ON",
-  "PE",
-  "QC",
-  "SK",
-  "YT",
-] as const;
 
 export const CheckoutSchema = z.object({
   customerName: z.string().trim().min(2, "Name must be at least 2 characters"),
@@ -58,5 +43,28 @@ export const CheckoutSchema = z.object({
   country: z.literal("CA"),
   customerNotes: z.string().trim().optional(),
 });
+
+/**
+ * Cart items as submitted by the client. `unitPrice` is deliberately NOT
+ * accepted here — the server re-reads every price from the database.
+ */
+export const CheckoutItemSchema = z.object({
+  productId: z.string().min(1, "Invalid product"),
+  quantity: z
+    .number()
+    .int("Quantity must be a whole number")
+    .min(1, "Quantity must be at least 1")
+    .max(100, "Quantity is too large"),
+});
+
+export const CheckoutPayloadSchema = CheckoutSchema.extend({
+  items: z
+    .array(CheckoutItemSchema)
+    .min(1, "Your cart is empty.")
+    .max(50, "Too many items in cart."),
+  sourceId: z.string().min(1, "Payment token is missing."),
+});
+
+export type CheckoutPayloadType = z.infer<typeof CheckoutPayloadSchema>;
 
 export type CheckoutFormDataType = z.infer<typeof CheckoutSchema>;

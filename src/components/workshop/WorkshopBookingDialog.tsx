@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "@/components/Button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,7 +10,7 @@ import {
   formatWorkshopTime,
 } from "@/lib/workshop-time-formatter";
 import { createBookingSchema, BookingFormValues } from "@/schema/booking";
-import { bookWorkshop } from "@/actions/workshop";
+import { bookWorkshop, getWorkshopQuote } from "@/actions/workshop";
 import { toast } from "sonner";
 import { PaymentForm, CreditCard } from "react-square-web-payments-sdk";
 import { formatCanadianPhone } from "@/lib/phone-formatter";
@@ -57,7 +57,36 @@ const WorkshopBookingDialog = ({ workshop, onClose }: PropsType) => {
   });
 
   const selectedSeats = watch("seats");
-  const totalPrice = workshop.price * selectedSeats;
+
+  // Totals come from the server so the amount shown is the amount charged.
+  const [quote, setQuote] = useState<{
+    subtotalCents: number;
+    taxCents: number;
+    totalCents: number;
+    taxLines: Array<{ type: string; rateMicros: number; amountCents: number }>;
+  } | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    getWorkshopQuote(workshop.id, Number(selectedSeats))
+      .then((result) => {
+        if (!cancelled) setQuote(result);
+      })
+      .catch(() => {
+        if (!cancelled) setQuote(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [workshop.id, selectedSeats]);
+
+  const money = (cents: number) =>
+    new Intl.NumberFormat("en-CA", {
+      style: "currency",
+      currency: "CAD",
+    }).format(cents / 100);
+
+  const totalLabel = quote ? money(quote.totalCents) : "—";
 
   const onStep1Submit = () => {
     setStep(2);
@@ -199,9 +228,12 @@ const WorkshopBookingDialog = ({ workshop, onClose }: PropsType) => {
               variant="gold"
               fullWidth
               isLoading={isSubmitting}
+              disabled={!quote}
               className="py-4 font-extrabold"
             >
-              {`Continue to Payment — $${totalPrice}`}
+              {quote
+                ? `Continue to Payment — ${totalLabel}`
+                : "Booking unavailable"}
             </Button>
           </form>
         )}
@@ -223,14 +255,35 @@ const WorkshopBookingDialog = ({ workshop, onClose }: PropsType) => {
               <p className="text-[13px] text-gray mt-0.5">
                 {workshop.location}
               </p>
-              <div className="flex justify-between items-center mt-4 pt-4 border-t border-light-gray">
-                <span className="text-[13px] text-gray">
-                  {selectedSeats} seat{selectedSeats > 1 ? "s" : ""} × $
-                  {workshop.price}
-                </span>
-                <span className="text-[17px] font-bold text-charcoal">
-                  ${totalPrice}
-                </span>
+              <div className="mt-4 pt-4 border-t border-light-gray space-y-1.5">
+                <div className="flex justify-between items-center">
+                  <span className="text-[13px] text-gray">
+                    {selectedSeats} seat{selectedSeats > 1 ? "s" : ""} ×{" "}
+                    {money(Math.round(workshop.price * 100))}
+                  </span>
+                  <span className="text-[13px] text-charcoal">
+                    {quote ? money(quote.subtotalCents) : "—"}
+                  </span>
+                </div>
+                {quote?.taxLines.map((line) => (
+                  <div
+                    key={line.type}
+                    className="flex justify-between items-center"
+                  >
+                    <span className="text-[13px] text-gray">
+                      {line.type} ({line.rateMicros / 10_000}%)
+                    </span>
+                    <span className="text-[13px] text-charcoal">
+                      {money(line.amountCents)}
+                    </span>
+                  </div>
+                ))}
+                <div className="flex justify-between items-center pt-1.5 border-t border-light-gray">
+                  <span className="text-[13px] text-gray">Total</span>
+                  <span className="text-[17px] font-bold text-charcoal">
+                    {totalLabel}
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -266,7 +319,7 @@ const WorkshopBookingDialog = ({ workshop, onClose }: PropsType) => {
                   },
                 }}
               >
-                {isPaymentLoading ? "Processing…" : `Pay $${totalPrice}`}
+                {isPaymentLoading ? "Processing…" : `Pay ${totalLabel}`}
               </CreditCard>
             </PaymentForm>
 

@@ -59,7 +59,10 @@ export const ModelName = {
   ProductImage: 'ProductImage',
   Order: 'Order',
   OrderItem: 'OrderItem',
-  OrderPayment: 'OrderPayment'
+  OrderPayment: 'OrderPayment',
+  RateLimit: 'RateLimit',
+  OrderCounter: 'OrderCounter',
+  Subscriber: 'Subscriber'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -101,11 +104,13 @@ export const WorkshopScalarFieldEnum = {
   endTime: 'endTime',
   endPeriod: 'endPeriod',
   location: 'location',
-  price: 'price',
+  province: 'province',
+  priceCents: 'priceCents',
   totalSeats: 'totalSeats',
   availableSeats: 'availableSeats',
   showToUsers: 'showToUsers',
   status: 'status',
+  lastNotifiedAt: 'lastNotifiedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -120,6 +125,11 @@ export const RegistrationScalarFieldEnum = {
   email: 'email',
   phone: 'phone',
   seatsBooked: 'seatsBooked',
+  subtotalCents: 'subtotalCents',
+  taxCents: 'taxCents',
+  totalCents: 'totalCents',
+  taxProvince: 'taxProvince',
+  taxBreakdown: 'taxBreakdown',
   paymentStatus: 'paymentStatus',
   registeredAt: 'registeredAt',
   updatedAt: 'updatedAt'
@@ -131,6 +141,7 @@ export type RegistrationScalarFieldEnum = (typeof RegistrationScalarFieldEnum)[k
 export const WorkshopPaymentScalarFieldEnum = {
   id: 'id',
   registrationId: 'registrationId',
+  idempotencyKey: 'idempotencyKey',
   squarePaymentId: 'squarePaymentId',
   amountCents: 'amountCents',
   currency: 'currency',
@@ -155,6 +166,7 @@ export const ProductScalarFieldEnum = {
   quantity: 'quantity',
   isFeatured: 'isFeatured',
   status: 'status',
+  lastNotifiedAt: 'lastNotifiedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -189,7 +201,10 @@ export const OrderScalarFieldEnum = {
   country: 'country',
   subtotal: 'subtotal',
   shippingCost: 'shippingCost',
+  taxAmount: 'taxAmount',
   totalAmount: 'totalAmount',
+  taxProvince: 'taxProvince',
+  taxBreakdown: 'taxBreakdown',
   status: 'status',
   customerNotes: 'customerNotes',
   adminNotes: 'adminNotes',
@@ -218,6 +233,7 @@ export type OrderItemScalarFieldEnum = (typeof OrderItemScalarFieldEnum)[keyof t
 export const OrderPaymentScalarFieldEnum = {
   id: 'id',
   orderId: 'orderId',
+  idempotencyKey: 'idempotencyKey',
   squarePaymentId: 'squarePaymentId',
   amountCents: 'amountCents',
   currency: 'currency',
@@ -231,12 +247,48 @@ export const OrderPaymentScalarFieldEnum = {
 export type OrderPaymentScalarFieldEnum = (typeof OrderPaymentScalarFieldEnum)[keyof typeof OrderPaymentScalarFieldEnum]
 
 
+export const RateLimitScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  windowStart: 'windowStart',
+  count: 'count'
+} as const
+
+export type RateLimitScalarFieldEnum = (typeof RateLimitScalarFieldEnum)[keyof typeof RateLimitScalarFieldEnum]
+
+
+export const OrderCounterScalarFieldEnum = {
+  year: 'year',
+  last: 'last'
+} as const
+
+export type OrderCounterScalarFieldEnum = (typeof OrderCounterScalarFieldEnum)[keyof typeof OrderCounterScalarFieldEnum]
+
+
+export const SubscriberScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  source: 'source',
+  createdAt: 'createdAt'
+} as const
+
+export type SubscriberScalarFieldEnum = (typeof SubscriberScalarFieldEnum)[keyof typeof SubscriberScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -253,4 +305,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

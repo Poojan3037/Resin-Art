@@ -12,6 +12,22 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Province {
+  AB
+  BC
+  MB
+  NB
+  NL
+  NS
+  NT
+  NU
+  ON
+  PE
+  QC
+  SK
+  YT
+}
+
 enum WorkshopStatus {
   UPCOMING
   ONGOING
@@ -34,12 +50,13 @@ enum ProductStatus {
 }
 
 enum OrderStatus {
-  PENDING // Order placed by user
+  PENDING // Reserved, awaiting successful payment
   CONFIRMED // Admin confirmed the order
   PROCESSING // Being prepared/packed
   SHIPPED // Handed to courier
   DELIVERED // Delivered to customer
   CANCELLED // Cancelled by admin
+  FAILED // Payment did not complete; stock released
 }
 
 model User {
@@ -67,11 +84,17 @@ model Workshop {
   endTime        String
   endPeriod      String
   location       String
-  price          Int
+  // Place of supply for an in-person service is where it is HELD,
+  // not where the attendee lives. Required for correct tax.
+  province       Province?
+  priceCents     Int
   totalSeats     Int
   availableSeats Int
   showToUsers    Boolean        @default(false)
   status         WorkshopStatus @default(UPCOMING)
+  /// Last time an announcement about this workshop went out to subscribers.
+  /// Guards the admin against blasting the list twice for the same workshop.
+  lastNotifiedAt DateTime?
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
 
@@ -87,6 +110,11 @@ model Registration {
   email         String
   phone         String
   seatsBooked   Int           @default(1)
+  subtotalCents Int           @default(0)
+  taxCents      Int           @default(0)
+  totalCents    Int           @default(0)
+  taxProvince   Province?
+  taxBreakdown  Json?
   paymentStatus PaymentStatus @default(PENDING)
   registeredAt  DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
@@ -100,6 +128,7 @@ model Registration {
 model WorkshopPayment {
   id              String        @id @default(cuid())
   registrationId  String        @unique
+  idempotencyKey  String        @unique
   squarePaymentId String?       @unique
   amountCents     Int
   currency        String        @default("CAD")
@@ -128,6 +157,9 @@ model Product {
 
   isFeatured Boolean       @default(false)
   status     ProductStatus @default(DRAFT)
+
+  /// Last time an announcement about this product went out to subscribers.
+  lastNotifiedAt DateTime?
 
   images     ProductImage[]
   orderItems OrderItem[]
@@ -172,12 +204,18 @@ model Order {
   city         String
   state        String
   postalCode   String
-  country      String  @default("US")
+  country      String  @default("CA")
 
   // Pricing
   subtotal     Decimal @db.Decimal(10, 2)
   shippingCost Decimal @default(0) @db.Decimal(10, 2)
+  taxAmount    Decimal @default(0) @db.Decimal(10, 2)
   totalAmount  Decimal @db.Decimal(10, 2)
+
+  // Frozen snapshot of the province and rates used, so a later rate change
+  // never alters what a historical order says it charged.
+  taxProvince  Province?
+  taxBreakdown Json?
 
   // Status — only field admin changes
   status OrderStatus @default(PENDING)
@@ -225,6 +263,7 @@ model OrderPayment {
   id      String @id @default(cuid())
   orderId String @unique
 
+  idempotencyKey  String        @unique
   squarePaymentId String?       @unique
   amountCents     Int
   currency        String        @default("CAD")
@@ -239,4 +278,37 @@ model OrderPayment {
 
   @@index([squarePaymentId])
   @@map("order_payments")
+}
+
+model RateLimit {
+  id          String   @id @default(cuid())
+  key         String
+  windowStart DateTime
+  count       Int      @default(0)
+
+  @@unique([key, windowStart])
+  @@index([windowStart])
+  @@map("rate_limits")
+}
+
+/// Atomic source of order numbers. Replaces the previous read-then-increment,
+/// which could hand the same number to two concurrent checkouts.
+model OrderCounter {
+  year Int @id
+  last Int @default(0)
+
+  @@map("order_counters")
+}
+
+/// Visitors who asked to be told when new workshops or products land.
+/// One combined list: every announcement goes to everyone.
+model Subscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  /// Which empty state they signed up from ("workshops" | "shop").
+  source    String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@map("subscribers")
 }

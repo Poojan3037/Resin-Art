@@ -29,6 +29,7 @@ type ProductListingPropsType = {
   onAdd: () => void;
   onEdit: (product: ProductWithImagesType) => void;
   onDeleteRequest: (product: ProductWithImagesType) => void;
+  onNotifyRequest: (product: ProductWithImagesType) => void;
 };
 
 const currencyFormatter = new Intl.NumberFormat("en-CA", {
@@ -43,6 +44,7 @@ const ProductListing = ({
   onAdd,
   onEdit,
   onDeleteRequest,
+  onNotifyRequest,
 }: ProductListingPropsType) => {
   return (
     <div className="bg-white border border-light-gray p-5 sm:p-6">
@@ -97,6 +99,15 @@ const ProductListing = ({
                   </p>
                 </div>
                 <div className="flex gap-2">
+                  {/* Only a published product has a public page to link to. */}
+                  {product.status === "PUBLISHED" && (
+                    <Button
+                      variant="outline"
+                      onClick={() => onNotifyRequest(product)}
+                    >
+                      {product.lastNotifiedAt ? "Notify Again" : "Notify"}
+                    </Button>
+                  )}
                   <Button variant="soft" onClick={() => onEdit(product)}>
                     Edit
                   </Button>

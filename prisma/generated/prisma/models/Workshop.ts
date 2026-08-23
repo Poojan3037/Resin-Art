@@ -27,13 +27,13 @@ export type AggregateWorkshop = {
 }
 
 export type WorkshopAvgAggregateOutputType = {
-  price: number | null
+  priceCents: number | null
   totalSeats: number | null
   availableSeats: number | null
 }
 
 export type WorkshopSumAggregateOutputType = {
-  price: number | null
+  priceCents: number | null
   totalSeats: number | null
   availableSeats: number | null
 }
@@ -48,11 +48,13 @@ export type WorkshopMinAggregateOutputType = {
   endTime: string | null
   endPeriod: string | null
   location: string | null
-  price: number | null
+  province: $Enums.Province | null
+  priceCents: number | null
   totalSeats: number | null
   availableSeats: number | null
   showToUsers: boolean | null
   status: $Enums.WorkshopStatus | null
+  lastNotifiedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -67,11 +69,13 @@ export type WorkshopMaxAggregateOutputType = {
   endTime: string | null
   endPeriod: string | null
   location: string | null
-  price: number | null
+  province: $Enums.Province | null
+  priceCents: number | null
   totalSeats: number | null
   availableSeats: number | null
   showToUsers: boolean | null
   status: $Enums.WorkshopStatus | null
+  lastNotifiedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -86,11 +90,13 @@ export type WorkshopCountAggregateOutputType = {
   endTime: number
   endPeriod: number
   location: number
-  price: number
+  province: number
+  priceCents: number
   totalSeats: number
   availableSeats: number
   showToUsers: number
   status: number
+  lastNotifiedAt: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -98,13 +104,13 @@ export type WorkshopCountAggregateOutputType = {
 
 
 export type WorkshopAvgAggregateInputType = {
-  price?: true
+  priceCents?: true
   totalSeats?: true
   availableSeats?: true
 }
 
 export type WorkshopSumAggregateInputType = {
-  price?: true
+  priceCents?: true
   totalSeats?: true
   availableSeats?: true
 }
@@ -119,11 +125,13 @@ export type WorkshopMinAggregateInputType = {
   endTime?: true
   endPeriod?: true
   location?: true
-  price?: true
+  province?: true
+  priceCents?: true
   totalSeats?: true
   availableSeats?: true
   showToUsers?: true
   status?: true
+  lastNotifiedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -138,11 +146,13 @@ export type WorkshopMaxAggregateInputType = {
   endTime?: true
   endPeriod?: true
   location?: true
-  price?: true
+  province?: true
+  priceCents?: true
   totalSeats?: true
   availableSeats?: true
   showToUsers?: true
   status?: true
+  lastNotifiedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -157,11 +167,13 @@ export type WorkshopCountAggregateInputType = {
   endTime?: true
   endPeriod?: true
   location?: true
-  price?: true
+  province?: true
+  priceCents?: true
   totalSeats?: true
   availableSeats?: true
   showToUsers?: true
   status?: true
+  lastNotifiedAt?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -263,11 +275,13 @@ export type WorkshopGroupByOutputType = {
   endTime: string
   endPeriod: string
   location: string
-  price: number
+  province: $Enums.Province | null
+  priceCents: number
   totalSeats: number
   availableSeats: number
   showToUsers: boolean
   status: $Enums.WorkshopStatus
+  lastNotifiedAt: Date | null
   createdAt: Date
   updatedAt: Date
   _count: WorkshopCountAggregateOutputType | null
@@ -305,11 +319,13 @@ export type WorkshopWhereInput = {
   endTime?: Prisma.StringFilter<"Workshop"> | string
   endPeriod?: Prisma.StringFilter<"Workshop"> | string
   location?: Prisma.StringFilter<"Workshop"> | string
-  price?: Prisma.IntFilter<"Workshop"> | number
+  province?: Prisma.EnumProvinceNullableFilter<"Workshop"> | $Enums.Province | null
+  priceCents?: Prisma.IntFilter<"Workshop"> | number
   totalSeats?: Prisma.IntFilter<"Workshop"> | number
   availableSeats?: Prisma.IntFilter<"Workshop"> | number
   showToUsers?: Prisma.BoolFilter<"Workshop"> | boolean
   status?: Prisma.EnumWorkshopStatusFilter<"Workshop"> | $Enums.WorkshopStatus
+  lastNotifiedAt?: Prisma.DateTimeNullableFilter<"Workshop"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Workshop"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Workshop"> | Date | string
   registrations?: Prisma.RegistrationListRelationFilter
@@ -325,11 +341,13 @@ export type WorkshopOrderByWithRelationInput = {
   endTime?: Prisma.SortOrder
   endPeriod?: Prisma.SortOrder
   location?: Prisma.SortOrder
-  price?: Prisma.SortOrder
+  province?: Prisma.SortOrderInput | Prisma.SortOrder
+  priceCents?: Prisma.SortOrder
   totalSeats?: Prisma.SortOrder
   availableSeats?: Prisma.SortOrder
   showToUsers?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  lastNotifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   registrations?: Prisma.RegistrationOrderByRelationAggregateInput
@@ -348,11 +366,13 @@ export type WorkshopWhereUniqueInput = Prisma.AtLeast<{
   endTime?: Prisma.StringFilter<"Workshop"> | string
   endPeriod?: Prisma.StringFilter<"Workshop"> | string
   location?: Prisma.StringFilter<"Workshop"> | string
-  price?: Prisma.IntFilter<"Workshop"> | number
+  province?: Prisma.EnumProvinceNullableFilter<"Workshop"> | $Enums.Province | null
+  priceCents?: Prisma.IntFilter<"Workshop"> | number
   totalSeats?: Prisma.IntFilter<"Workshop"> | number
   availableSeats?: Prisma.IntFilter<"Workshop"> | number
   showToUsers?: Prisma.BoolFilter<"Workshop"> | boolean
   status?: Prisma.EnumWorkshopStatusFilter<"Workshop"> | $Enums.WorkshopStatus
+  lastNotifiedAt?: Prisma.DateTimeNullableFilter<"Workshop"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Workshop"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Workshop"> | Date | string
   registrations?: Prisma.RegistrationListRelationFilter
@@ -368,11 +388,13 @@ export type WorkshopOrderByWithAggregationInput = {
   endTime?: Prisma.SortOrder
   endPeriod?: Prisma.SortOrder
   location?: Prisma.SortOrder
-  price?: Prisma.SortOrder
+  province?: Prisma.SortOrderInput | Prisma.SortOrder
+  priceCents?: Prisma.SortOrder
   totalSeats?: Prisma.SortOrder
   availableSeats?: Prisma.SortOrder
   showToUsers?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  lastNotifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.WorkshopCountOrderByAggregateInput
@@ -395,11 +417,13 @@ export type WorkshopScalarWhereWithAggregatesInput = {
   endTime?: Prisma.StringWithAggregatesFilter<"Workshop"> | string
   endPeriod?: Prisma.StringWithAggregatesFilter<"Workshop"> | string
   location?: Prisma.StringWithAggregatesFilter<"Workshop"> | string
-  price?: Prisma.IntWithAggregatesFilter<"Workshop"> | number
+  province?: Prisma.EnumProvinceNullableWithAggregatesFilter<"Workshop"> | $Enums.Province | null
+  priceCents?: Prisma.IntWithAggregatesFilter<"Workshop"> | number
   totalSeats?: Prisma.IntWithAggregatesFilter<"Workshop"> | number
   availableSeats?: Prisma.IntWithAggregatesFilter<"Workshop"> | number
   showToUsers?: Prisma.BoolWithAggregatesFilter<"Workshop"> | boolean
   status?: Prisma.EnumWorkshopStatusWithAggregatesFilter<"Workshop"> | $Enums.WorkshopStatus
+  lastNotifiedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Workshop"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Workshop"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Workshop"> | Date | string
 }
@@ -414,11 +438,13 @@ export type WorkshopCreateInput = {
   endTime: string
   endPeriod: string
   location: string
-  price: number
+  province?: $Enums.Province | null
+  priceCents: number
   totalSeats: number
   availableSeats: number
   showToUsers?: boolean
   status?: $Enums.WorkshopStatus
+  lastNotifiedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   registrations?: Prisma.RegistrationCreateNestedManyWithoutWorkshopInput
@@ -434,11 +460,13 @@ export type WorkshopUncheckedCreateInput = {
   endTime: string
   endPeriod: string
   location: string
-  price: number
+  province?: $Enums.Province | null
+  priceCents: number
   totalSeats: number
   availableSeats: number
   showToUsers?: boolean
   status?: $Enums.WorkshopStatus
+  lastNotifiedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   registrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutWorkshopInput
@@ -454,11 +482,13 @@ export type WorkshopUpdateInput = {
   endTime?: Prisma.StringFieldUpdateOperationsInput | string
   endPeriod?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  province?: Prisma.NullableEnumProvinceFieldUpdateOperationsInput | $Enums.Province | null
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   availableSeats?: Prisma.IntFieldUpdateOperationsInput | number
   showToUsers?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumWorkshopStatusFieldUpdateOperationsInput | $Enums.WorkshopStatus
+  lastNotifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registrations?: Prisma.RegistrationUpdateManyWithoutWorkshopNestedInput
@@ -474,11 +504,13 @@ export type WorkshopUncheckedUpdateInput = {
   endTime?: Prisma.StringFieldUpdateOperationsInput | string
   endPeriod?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  province?: Prisma.NullableEnumProvinceFieldUpdateOperationsInput | $Enums.Province | null
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   availableSeats?: Prisma.IntFieldUpdateOperationsInput | number
   showToUsers?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumWorkshopStatusFieldUpdateOperationsInput | $Enums.WorkshopStatus
+  lastNotifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registrations?: Prisma.RegistrationUncheckedUpdateManyWithoutWorkshopNestedInput
@@ -494,11 +526,13 @@ export type WorkshopCreateManyInput = {
   endTime: string
   endPeriod: string
   location: string
-  price: number
+  province?: $Enums.Province | null
+  priceCents: number
   totalSeats: number
   availableSeats: number
   showToUsers?: boolean
   status?: $Enums.WorkshopStatus
+  lastNotifiedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -513,11 +547,13 @@ export type WorkshopUpdateManyMutationInput = {
   endTime?: Prisma.StringFieldUpdateOperationsInput | string
   endPeriod?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  province?: Prisma.NullableEnumProvinceFieldUpdateOperationsInput | $Enums.Province | null
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   availableSeats?: Prisma.IntFieldUpdateOperationsInput | number
   showToUsers?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumWorkshopStatusFieldUpdateOperationsInput | $Enums.WorkshopStatus
+  lastNotifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -532,11 +568,13 @@ export type WorkshopUncheckedUpdateManyInput = {
   endTime?: Prisma.StringFieldUpdateOperationsInput | string
   endPeriod?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  province?: Prisma.NullableEnumProvinceFieldUpdateOperationsInput | $Enums.Province | null
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   availableSeats?: Prisma.IntFieldUpdateOperationsInput | number
   showToUsers?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumWorkshopStatusFieldUpdateOperationsInput | $Enums.WorkshopStatus
+  lastNotifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -551,17 +589,19 @@ export type WorkshopCountOrderByAggregateInput = {
   endTime?: Prisma.SortOrder
   endPeriod?: Prisma.SortOrder
   location?: Prisma.SortOrder
-  price?: Prisma.SortOrder
+  province?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrder
   totalSeats?: Prisma.SortOrder
   availableSeats?: Prisma.SortOrder
   showToUsers?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  lastNotifiedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type WorkshopAvgOrderByAggregateInput = {
-  price?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrder
   totalSeats?: Prisma.SortOrder
   availableSeats?: Prisma.SortOrder
 }
@@ -576,11 +616,13 @@ export type WorkshopMaxOrderByAggregateInput = {
   endTime?: Prisma.SortOrder
   endPeriod?: Prisma.SortOrder
   location?: Prisma.SortOrder
-  price?: Prisma.SortOrder
+  province?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrder
   totalSeats?: Prisma.SortOrder
   availableSeats?: Prisma.SortOrder
   showToUsers?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  lastNotifiedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -595,17 +637,19 @@ export type WorkshopMinOrderByAggregateInput = {
   endTime?: Prisma.SortOrder
   endPeriod?: Prisma.SortOrder
   location?: Prisma.SortOrder
-  price?: Prisma.SortOrder
+  province?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrder
   totalSeats?: Prisma.SortOrder
   availableSeats?: Prisma.SortOrder
   showToUsers?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  lastNotifiedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type WorkshopSumOrderByAggregateInput = {
-  price?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrder
   totalSeats?: Prisma.SortOrder
   availableSeats?: Prisma.SortOrder
 }
@@ -619,6 +663,10 @@ export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
 
+export type NullableEnumProvinceFieldUpdateOperationsInput = {
+  set?: $Enums.Province | null
+}
+
 export type IntFieldUpdateOperationsInput = {
   set?: number
   increment?: number
@@ -629,6 +677,10 @@ export type IntFieldUpdateOperationsInput = {
 
 export type EnumWorkshopStatusFieldUpdateOperationsInput = {
   set?: $Enums.WorkshopStatus
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
 }
 
 export type WorkshopCreateNestedOneWithoutRegistrationsInput = {
@@ -655,11 +707,13 @@ export type WorkshopCreateWithoutRegistrationsInput = {
   endTime: string
   endPeriod: string
   location: string
-  price: number
+  province?: $Enums.Province | null
+  priceCents: number
   totalSeats: number
   availableSeats: number
   showToUsers?: boolean
   status?: $Enums.WorkshopStatus
+  lastNotifiedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -674,11 +728,13 @@ export type WorkshopUncheckedCreateWithoutRegistrationsInput = {
   endTime: string
   endPeriod: string
   location: string
-  price: number
+  province?: $Enums.Province | null
+  priceCents: number
   totalSeats: number
   availableSeats: number
   showToUsers?: boolean
   status?: $Enums.WorkshopStatus
+  lastNotifiedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -709,11 +765,13 @@ export type WorkshopUpdateWithoutRegistrationsInput = {
   endTime?: Prisma.StringFieldUpdateOperationsInput | string
   endPeriod?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  province?: Prisma.NullableEnumProvinceFieldUpdateOperationsInput | $Enums.Province | null
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   availableSeats?: Prisma.IntFieldUpdateOperationsInput | number
   showToUsers?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumWorkshopStatusFieldUpdateOperationsInput | $Enums.WorkshopStatus
+  lastNotifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -728,11 +786,13 @@ export type WorkshopUncheckedUpdateWithoutRegistrationsInput = {
   endTime?: Prisma.StringFieldUpdateOperationsInput | string
   endPeriod?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  province?: Prisma.NullableEnumProvinceFieldUpdateOperationsInput | $Enums.Province | null
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   availableSeats?: Prisma.IntFieldUpdateOperationsInput | number
   showToUsers?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumWorkshopStatusFieldUpdateOperationsInput | $Enums.WorkshopStatus
+  lastNotifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -778,11 +838,13 @@ export type WorkshopSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   endTime?: boolean
   endPeriod?: boolean
   location?: boolean
-  price?: boolean
+  province?: boolean
+  priceCents?: boolean
   totalSeats?: boolean
   availableSeats?: boolean
   showToUsers?: boolean
   status?: boolean
+  lastNotifiedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   registrations?: boolean | Prisma.Workshop$registrationsArgs<ExtArgs>
@@ -799,11 +861,13 @@ export type WorkshopSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   endTime?: boolean
   endPeriod?: boolean
   location?: boolean
-  price?: boolean
+  province?: boolean
+  priceCents?: boolean
   totalSeats?: boolean
   availableSeats?: boolean
   showToUsers?: boolean
   status?: boolean
+  lastNotifiedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["workshop"]>
@@ -818,11 +882,13 @@ export type WorkshopSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   endTime?: boolean
   endPeriod?: boolean
   location?: boolean
-  price?: boolean
+  province?: boolean
+  priceCents?: boolean
   totalSeats?: boolean
   availableSeats?: boolean
   showToUsers?: boolean
   status?: boolean
+  lastNotifiedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["workshop"]>
@@ -837,16 +903,18 @@ export type WorkshopSelectScalar = {
   endTime?: boolean
   endPeriod?: boolean
   location?: boolean
-  price?: boolean
+  province?: boolean
+  priceCents?: boolean
   totalSeats?: boolean
   availableSeats?: boolean
   showToUsers?: boolean
   status?: boolean
+  lastNotifiedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type WorkshopOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "date" | "startTime" | "startPeriod" | "endTime" | "endPeriod" | "location" | "price" | "totalSeats" | "availableSeats" | "showToUsers" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["workshop"]>
+export type WorkshopOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "date" | "startTime" | "startPeriod" | "endTime" | "endPeriod" | "location" | "province" | "priceCents" | "totalSeats" | "availableSeats" | "showToUsers" | "status" | "lastNotifiedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["workshop"]>
 export type WorkshopInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   registrations?: boolean | Prisma.Workshop$registrationsArgs<ExtArgs>
   _count?: boolean | Prisma.WorkshopCountOutputTypeDefaultArgs<ExtArgs>
@@ -869,11 +937,17 @@ export type $WorkshopPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     endTime: string
     endPeriod: string
     location: string
-    price: number
+    province: $Enums.Province | null
+    priceCents: number
     totalSeats: number
     availableSeats: number
     showToUsers: boolean
     status: $Enums.WorkshopStatus
+    /**
+     * Last time an announcement about this workshop went out to subscribers.
+     * Guards the admin against blasting the list twice for the same workshop.
+     */
+    lastNotifiedAt: Date | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["workshop"]>
@@ -1309,11 +1383,13 @@ export interface WorkshopFieldRefs {
   readonly endTime: Prisma.FieldRef<"Workshop", 'String'>
   readonly endPeriod: Prisma.FieldRef<"Workshop", 'String'>
   readonly location: Prisma.FieldRef<"Workshop", 'String'>
-  readonly price: Prisma.FieldRef<"Workshop", 'Int'>
+  readonly province: Prisma.FieldRef<"Workshop", 'Province'>
+  readonly priceCents: Prisma.FieldRef<"Workshop", 'Int'>
   readonly totalSeats: Prisma.FieldRef<"Workshop", 'Int'>
   readonly availableSeats: Prisma.FieldRef<"Workshop", 'Int'>
   readonly showToUsers: Prisma.FieldRef<"Workshop", 'Boolean'>
   readonly status: Prisma.FieldRef<"Workshop", 'WorkshopStatus'>
+  readonly lastNotifiedAt: Prisma.FieldRef<"Workshop", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Workshop", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Workshop", 'DateTime'>
 }

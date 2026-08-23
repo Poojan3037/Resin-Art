@@ -10,6 +10,7 @@ const statusClassMap: Record<OrderStatus, string> = {
   PROCESSING: "bg-teal-50 text-teal border-teal-200",
   SHIPPED: "bg-indigo-50 text-indigo-700 border-indigo-200",
   DELIVERED: "bg-emerald-50 text-emerald-700 border-emerald-200",
+  FAILED: "bg-neutral-100 text-neutral-600 border border-neutral-300",
   CANCELLED: "bg-blush-light text-pink border-blush",
 };
 

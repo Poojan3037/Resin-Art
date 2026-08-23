@@ -6,7 +6,7 @@ import { useCartStore } from "@/store/cartStore";
 import { CheckoutSchema, type CheckoutFormDataType } from "@/schema/checkout";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { PaymentForm, CreditCard } from "react-square-web-payments-sdk";
@@ -18,7 +18,11 @@ const inputClassName =
 const fieldLabelClassName =
   "text-[11px] tracking-[0.18em] uppercase text-charcoal font-semibold";
 
-const CheckoutForm = () => {
+type CheckoutFormPropsType = {
+  onProvinceChange?: (province: string | null) => void;
+};
+
+const CheckoutForm = ({ onProvinceChange }: CheckoutFormPropsType) => {
   const cartItems = useCartStore((state) => state.cartItems);
   const clearCart = useCartStore((state) => state.clearCart);
   const router = useRouter();
@@ -29,6 +33,7 @@ const CheckoutForm = () => {
     register,
     handleSubmit,
     getValues,
+    watch,
     formState: { errors },
   } = useForm<CheckoutFormDataType>({
     resolver: zodResolver(CheckoutSchema),
@@ -36,6 +41,13 @@ const CheckoutForm = () => {
       country: "CA",
     },
   });
+
+  // Surface the selected province so the order summary can quote the same
+  // tax the server will charge.
+  const selectedProvince = watch("state");
+  useEffect(() => {
+    onProvinceChange?.(selectedProvince ?? null);
+  }, [selectedProvince, onProvinceChange]);
 
   const orderableItems = cartItems.filter((item) => item.availableStock > 0);
   const outOfStockItems = cartItems.filter((item) => item.availableStock === 0);

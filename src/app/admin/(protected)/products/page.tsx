@@ -1,4 +1,5 @@
 import { getProducts } from "@/actions/product";
+import { getSubscriberCount } from "@/actions/subscriber";
 import AdminProductsManager from "@/components/admin/products/AdminProductsManager";
 
 type PagePropsType = {
@@ -7,9 +8,17 @@ type PagePropsType = {
 
 const AdminProductsPage = async ({ searchParams }: PagePropsType) => {
   const { search = "" } = await searchParams;
-  const products = await getProducts({ search });
+  const [products, subscriberCount] = await Promise.all([
+    getProducts({ search }),
+    getSubscriberCount(),
+  ]);
 
-  return <AdminProductsManager products={products} />;
+  return (
+    <AdminProductsManager
+      products={products}
+      subscriberCount={subscriberCount}
+    />
+  );
 };
 
 export default AdminProductsPage;

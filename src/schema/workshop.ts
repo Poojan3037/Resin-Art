@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { CANADIAN_PROVINCES } from "@/lib/tax/canada";
 
 // HH:MM in 24-hour format (00:00 - 23:59) for native time inputs.
 const timeRegex = /^([01]\d|2[0-3]):[0-5]\d$/;
@@ -34,6 +35,10 @@ export const WorkshopSchema = z
     startTime: z.string().regex(timeRegex, "Select a valid start time"),
     endTime: z.string().regex(timeRegex, "Select a valid end time"),
     location: z.string(),
+    // Place of supply for an in-person service: the province where it is held.
+    province: z.enum(CANADIAN_PROVINCES, {
+      error: "Select the province where this workshop is held",
+    }),
     price: z
       .number({ error: "Price must be a number" })
       .refine((value) => !Number.isNaN(value), "Price is required")

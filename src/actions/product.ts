@@ -32,6 +32,7 @@ const toProductWithImages = (product: {
   quantity: number;
   isFeatured: boolean;
   status: ProductStatus;
+  lastNotifiedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
   images: Array<{
@@ -57,6 +58,7 @@ const toProductWithImages = (product: {
     quantity: product.quantity,
     isFeatured: product.isFeatured,
     status: product.status,
+    lastNotifiedAt: product.lastNotifiedAt?.toISOString() ?? null,
     createdAt: product.createdAt.toISOString(),
     updatedAt: product.updatedAt.toISOString(),
     images: product.images

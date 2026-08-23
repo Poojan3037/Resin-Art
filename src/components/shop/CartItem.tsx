@@ -11,9 +11,9 @@ type CartItemPropsType = {
   onRemove: (productId: string) => void;
 };
 
-const currencyFormatter = new Intl.NumberFormat("en-US", {
+const currencyFormatter = new Intl.NumberFormat("en-CA", {
   style: "currency",
-  currency: "USD",
+  currency: "CAD",
 });
 
 const CartItem = ({ item, onQuantityChange, onRemove }: CartItemPropsType) => {

@@ -62,3 +62,20 @@ export type OrderItem = Prisma.OrderItemModel
  * 
  */
 export type OrderPayment = Prisma.OrderPaymentModel
+/**
+ * Model RateLimit
+ * 
+ */
+export type RateLimit = Prisma.RateLimitModel
+/**
+ * Model OrderCounter
+ * Atomic source of order numbers. Replaces the previous read-then-increment,
+ * which could hand the same number to two concurrent checkouts.
+ */
+export type OrderCounter = Prisma.OrderCounterModel
+/**
+ * Model Subscriber
+ * Visitors who asked to be told when new workshops or products land.
+ * One combined list: every announcement goes to everyone.
+ */
+export type Subscriber = Prisma.SubscriberModel

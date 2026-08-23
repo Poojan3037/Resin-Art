@@ -10,6 +10,7 @@ const HeroSection = async () => {
   cacheTag(CACHE.WORKSHOP);
 
   const workshops = await getWorkshops();
+  const hasWorkshops = workshops.length > 0;
 
   return (
     <section className="relative flex items-center overflow-hidden pb-24 sm:pb-32 lg:pb-40 bg-navy min-h-170">
@@ -67,12 +68,19 @@ const HeroSection = async () => {
       />
 
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 lg:pt-28 w-full">
-        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16 xl:gap-24">
+        <div
+          className={`flex flex-col items-center gap-12 lg:gap-16 xl:gap-24 ${
+            hasWorkshops ? "lg:flex-row" : ""
+          }`}
+        >
           {/* ── LEFT: text content ────────────────────────────────────── */}
           <HeroContent />
 
-          {/* ── RIGHT: 3-D workshop card carousel ─────────────────────── */}
-          <WorkshopCardCarousel data={workshops} />
+          {/* ── RIGHT: 3-D workshop card carousel ─────────────────────────
+              Omitted entirely when nothing is scheduled: the carousel indexes
+              modulo the item count, so an empty list would render a blank
+              viewport with dots pointing at nothing. */}
+          {hasWorkshops && <WorkshopCardCarousel data={workshops} />}
         </div>
       </div>
     </section>

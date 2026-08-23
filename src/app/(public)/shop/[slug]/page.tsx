@@ -10,9 +10,9 @@ type ProductDetailPagePropsType = {
   }>;
 };
 
-const currencyFormatter = new Intl.NumberFormat("en-US", {
+const currencyFormatter = new Intl.NumberFormat("en-CA", {
   style: "currency",
-  currency: "USD",
+  currency: "CAD",
 });
 
 const ProductDetailPage = async ({ params }: ProductDetailPagePropsType) => {

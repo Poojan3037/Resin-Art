@@ -49,6 +49,7 @@ export type ProductMinAggregateOutputType = {
   quantity: number | null
   isFeatured: boolean | null
   status: $Enums.ProductStatus | null
+  lastNotifiedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -64,6 +65,7 @@ export type ProductMaxAggregateOutputType = {
   quantity: number | null
   isFeatured: boolean | null
   status: $Enums.ProductStatus | null
+  lastNotifiedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -79,6 +81,7 @@ export type ProductCountAggregateOutputType = {
   quantity: number
   isFeatured: number
   status: number
+  lastNotifiedAt: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -108,6 +111,7 @@ export type ProductMinAggregateInputType = {
   quantity?: true
   isFeatured?: true
   status?: true
+  lastNotifiedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -123,6 +127,7 @@ export type ProductMaxAggregateInputType = {
   quantity?: true
   isFeatured?: true
   status?: true
+  lastNotifiedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -138,6 +143,7 @@ export type ProductCountAggregateInputType = {
   quantity?: true
   isFeatured?: true
   status?: true
+  lastNotifiedAt?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -240,6 +246,7 @@ export type ProductGroupByOutputType = {
   quantity: number
   isFeatured: boolean
   status: $Enums.ProductStatus
+  lastNotifiedAt: Date | null
   createdAt: Date
   updatedAt: Date
   _count: ProductCountAggregateOutputType | null
@@ -278,6 +285,7 @@ export type ProductWhereInput = {
   quantity?: Prisma.IntFilter<"Product"> | number
   isFeatured?: Prisma.BoolFilter<"Product"> | boolean
   status?: Prisma.EnumProductStatusFilter<"Product"> | $Enums.ProductStatus
+  lastNotifiedAt?: Prisma.DateTimeNullableFilter<"Product"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Product"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Product"> | Date | string
   images?: Prisma.ProductImageListRelationFilter
@@ -295,6 +303,7 @@ export type ProductOrderByWithRelationInput = {
   quantity?: Prisma.SortOrder
   isFeatured?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  lastNotifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   images?: Prisma.ProductImageOrderByRelationAggregateInput
@@ -315,6 +324,7 @@ export type ProductWhereUniqueInput = Prisma.AtLeast<{
   quantity?: Prisma.IntFilter<"Product"> | number
   isFeatured?: Prisma.BoolFilter<"Product"> | boolean
   status?: Prisma.EnumProductStatusFilter<"Product"> | $Enums.ProductStatus
+  lastNotifiedAt?: Prisma.DateTimeNullableFilter<"Product"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Product"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Product"> | Date | string
   images?: Prisma.ProductImageListRelationFilter
@@ -332,6 +342,7 @@ export type ProductOrderByWithAggregationInput = {
   quantity?: Prisma.SortOrder
   isFeatured?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  lastNotifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ProductCountOrderByAggregateInput
@@ -355,6 +366,7 @@ export type ProductScalarWhereWithAggregatesInput = {
   quantity?: Prisma.IntWithAggregatesFilter<"Product"> | number
   isFeatured?: Prisma.BoolWithAggregatesFilter<"Product"> | boolean
   status?: Prisma.EnumProductStatusWithAggregatesFilter<"Product"> | $Enums.ProductStatus
+  lastNotifiedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Product"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Product"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Product"> | Date | string
 }
@@ -370,6 +382,7 @@ export type ProductCreateInput = {
   quantity?: number
   isFeatured?: boolean
   status?: $Enums.ProductStatus
+  lastNotifiedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   images?: Prisma.ProductImageCreateNestedManyWithoutProductInput
@@ -387,6 +400,7 @@ export type ProductUncheckedCreateInput = {
   quantity?: number
   isFeatured?: boolean
   status?: $Enums.ProductStatus
+  lastNotifiedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   images?: Prisma.ProductImageUncheckedCreateNestedManyWithoutProductInput
@@ -404,6 +418,7 @@ export type ProductUpdateInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+  lastNotifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   images?: Prisma.ProductImageUpdateManyWithoutProductNestedInput
@@ -421,6 +436,7 @@ export type ProductUncheckedUpdateInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+  lastNotifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   images?: Prisma.ProductImageUncheckedUpdateManyWithoutProductNestedInput
@@ -438,6 +454,7 @@ export type ProductCreateManyInput = {
   quantity?: number
   isFeatured?: boolean
   status?: $Enums.ProductStatus
+  lastNotifiedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -453,6 +470,7 @@ export type ProductUpdateManyMutationInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+  lastNotifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -468,6 +486,7 @@ export type ProductUncheckedUpdateManyInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+  lastNotifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -483,6 +502,7 @@ export type ProductCountOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
   isFeatured?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  lastNotifiedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -504,6 +524,7 @@ export type ProductMaxOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
   isFeatured?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  lastNotifiedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -519,6 +540,7 @@ export type ProductMinOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
   isFeatured?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  lastNotifiedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -593,6 +615,7 @@ export type ProductCreateWithoutImagesInput = {
   quantity?: number
   isFeatured?: boolean
   status?: $Enums.ProductStatus
+  lastNotifiedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   orderItems?: Prisma.OrderItemCreateNestedManyWithoutProductInput
@@ -609,6 +632,7 @@ export type ProductUncheckedCreateWithoutImagesInput = {
   quantity?: number
   isFeatured?: boolean
   status?: $Enums.ProductStatus
+  lastNotifiedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   orderItems?: Prisma.OrderItemUncheckedCreateNestedManyWithoutProductInput
@@ -641,6 +665,7 @@ export type ProductUpdateWithoutImagesInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+  lastNotifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orderItems?: Prisma.OrderItemUpdateManyWithoutProductNestedInput
@@ -657,6 +682,7 @@ export type ProductUncheckedUpdateWithoutImagesInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+  lastNotifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orderItems?: Prisma.OrderItemUncheckedUpdateManyWithoutProductNestedInput
@@ -673,6 +699,7 @@ export type ProductCreateWithoutOrderItemsInput = {
   quantity?: number
   isFeatured?: boolean
   status?: $Enums.ProductStatus
+  lastNotifiedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   images?: Prisma.ProductImageCreateNestedManyWithoutProductInput
@@ -689,6 +716,7 @@ export type ProductUncheckedCreateWithoutOrderItemsInput = {
   quantity?: number
   isFeatured?: boolean
   status?: $Enums.ProductStatus
+  lastNotifiedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   images?: Prisma.ProductImageUncheckedCreateNestedManyWithoutProductInput
@@ -721,6 +749,7 @@ export type ProductUpdateWithoutOrderItemsInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+  lastNotifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   images?: Prisma.ProductImageUpdateManyWithoutProductNestedInput
@@ -737,6 +766,7 @@ export type ProductUncheckedUpdateWithoutOrderItemsInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+  lastNotifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   images?: Prisma.ProductImageUncheckedUpdateManyWithoutProductNestedInput
@@ -793,6 +823,7 @@ export type ProductSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   quantity?: boolean
   isFeatured?: boolean
   status?: boolean
+  lastNotifiedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   images?: boolean | Prisma.Product$imagesArgs<ExtArgs>
@@ -811,6 +842,7 @@ export type ProductSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   quantity?: boolean
   isFeatured?: boolean
   status?: boolean
+  lastNotifiedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["product"]>
@@ -826,6 +858,7 @@ export type ProductSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   quantity?: boolean
   isFeatured?: boolean
   status?: boolean
+  lastNotifiedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["product"]>
@@ -841,11 +874,12 @@ export type ProductSelectScalar = {
   quantity?: boolean
   isFeatured?: boolean
   status?: boolean
+  lastNotifiedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "description" | "artistName" | "price" | "discountPrice" | "quantity" | "isFeatured" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
+export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "description" | "artistName" | "price" | "discountPrice" | "quantity" | "isFeatured" | "status" | "lastNotifiedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
 export type ProductInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   images?: boolean | Prisma.Product$imagesArgs<ExtArgs>
   orderItems?: boolean | Prisma.Product$orderItemsArgs<ExtArgs>
@@ -871,6 +905,10 @@ export type $ProductPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     quantity: number
     isFeatured: boolean
     status: $Enums.ProductStatus
+    /**
+     * Last time an announcement about this product went out to subscribers.
+     */
+    lastNotifiedAt: Date | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["product"]>
@@ -1308,6 +1346,7 @@ export interface ProductFieldRefs {
   readonly quantity: Prisma.FieldRef<"Product", 'Int'>
   readonly isFeatured: Prisma.FieldRef<"Product", 'Boolean'>
   readonly status: Prisma.FieldRef<"Product", 'ProductStatus'>
+  readonly lastNotifiedAt: Prisma.FieldRef<"Product", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Product", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Product", 'DateTime'>
 }

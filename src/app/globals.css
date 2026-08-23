@@ -39,6 +39,12 @@
 }
 
 @layer {
+  html,
+  body {
+    overflow-x: clip;
+    max-width: 100%;
+  }
+
   button {
     @apply transition-all duration-400 disabled:opacity-50;
   }

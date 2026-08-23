@@ -6,6 +6,12 @@ import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { verifySession } from "./dal";
+import { JWT_ALGORITHM, JWT_EXPIRES_IN, JWT_SECRET } from "@/lib/jwt";
+import {
+  checkRateLimit,
+  getClientIp,
+  rateLimitMessage,
+} from "@/lib/rate-limit";
 
 export async function loginAction(
   _prevState: LoginActionState,
@@ -18,6 +24,19 @@ export async function loginAction(
         error: "Email and password are required",
         success: false,
       };
+    }
+
+    // Throttle on both axes: per IP stops a single host spraying many
+    // accounts, per email stops a distributed attack on one account.
+    const ip = await getClientIp();
+    for (const identifier of [`ip:${ip}`, `email:${email.toLowerCase()}`]) {
+      const limit = await checkRateLimit({ name: "login", identifier });
+      if (!limit.allowed) {
+        return {
+          success: false,
+          error: rateLimitMessage(limit.retryAfterSeconds),
+        };
+      }
     }
 
     const user = await prisma.user.findUnique({
@@ -39,8 +58,9 @@ export async function loginAction(
       };
     }
 
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, {
-      expiresIn: "1h",
+    const token = jwt.sign({ userId: user.id }, JWT_SECRET, {
+      expiresIn: JWT_EXPIRES_IN,
+      algorithm: JWT_ALGORITHM,
     });
 
     await setAuthToken(token);

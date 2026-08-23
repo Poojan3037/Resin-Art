@@ -21,6 +21,8 @@ export type ProductType = {
   quantity: number;
   isFeatured: boolean;
   status: ProductStatus;
+  /** ISO timestamp of the last subscriber announcement, null if never sent. */
+  lastNotifiedAt: string | null;
   createdAt: string;
   updatedAt: string;
 };

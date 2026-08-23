@@ -4,12 +4,14 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { useRef } from "react";
+import { useRouter } from "next/navigation";
 import { INQUIRY_DATA } from "@/constants/workshops";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const WorkshopInquirySection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   useGSAP(
     () => {
@@ -49,7 +51,12 @@ const WorkshopInquirySection = () => {
           <p className="text-gray leading-[1.8] text-[15px] mb-7">
             {item.desc}
           </p>
-          <button className="border border-charcoal bg-transparent px-6 py-3.5 text-[14px] tracking-[0.12em] uppercase cursor-pointer font-semibold hover:bg-charcoal hover:text-gold-light">
+          <button
+            className="border border-charcoal bg-transparent px-6 py-3.5 text-[14px] tracking-[0.12em] uppercase cursor-pointer font-semibold hover:bg-charcoal hover:text-gold-light"
+            onClick={() =>
+              router.push(`/contact?messageType=${item.messageType}`)
+            }
+          >
             Send Inquiry
           </button>
         </div>

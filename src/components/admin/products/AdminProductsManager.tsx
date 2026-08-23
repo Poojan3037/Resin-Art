@@ -3,6 +3,7 @@
 import ProductFormDialog from "@/components/admin/products/ProductFormDialog";
 import ProductListing from "@/components/admin/products/ProductListing";
 import ProductDeleteDialog from "@/components/admin/products/ProductDeleteDialog";
+import NotifyDialog from "@/components/admin/NotifyDialog";
 import type { ProductWithImagesType } from "@/types/product";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -10,9 +11,13 @@ import { useQueryState, debounce } from "nuqs";
 
 type AdminProductsManagerPropsType = {
   products: ProductWithImagesType[];
+  subscriberCount: number;
 };
 
-const AdminProductsManager = ({ products }: AdminProductsManagerPropsType) => {
+const AdminProductsManager = ({
+  products,
+  subscriberCount,
+}: AdminProductsManagerPropsType) => {
   const router = useRouter();
 
   const [search, setSearch] = useQueryState("search", {
@@ -27,6 +32,9 @@ const AdminProductsManager = ({ products }: AdminProductsManagerPropsType) => {
 
   const [deleteProductId, setDeleteProductId] = useState<string | null>(null);
   const [deleteProductTitle, setDeleteProductTitle] = useState("");
+
+  const [notifyProduct, setNotifyProduct] =
+    useState<ProductWithImagesType | null>(null);
 
   const openAddDialog = () => {
     setEditingProduct(null);
@@ -74,6 +82,7 @@ const AdminProductsManager = ({ products }: AdminProductsManagerPropsType) => {
         onAdd={openAddDialog}
         onEdit={handleEdit}
         onDeleteRequest={handleDeleteRequest}
+        onNotifyRequest={setNotifyProduct}
       />
 
       {isFormOpen ? (
@@ -81,6 +90,17 @@ const AdminProductsManager = ({ products }: AdminProductsManagerPropsType) => {
           product={editingProduct}
           onClose={closeFormDialog}
           onSaved={router.refresh}
+        />
+      ) : null}
+
+      {notifyProduct ? (
+        <NotifyDialog
+          target={{ type: "product", id: notifyProduct.id }}
+          itemTitle={notifyProduct.title}
+          subscriberCount={subscriberCount}
+          lastNotifiedAt={notifyProduct.lastNotifiedAt}
+          onClose={() => setNotifyProduct(null)}
+          onSent={router.refresh}
         />
       ) : null}
 

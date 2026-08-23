@@ -9,6 +9,7 @@ import { DialogMode } from "@/types/dialog";
 import { addWorkshop, editWorkshop } from "@/actions/workshop";
 import { toast } from "sonner";
 import { Workshop } from "@/types/workshop";
+import { CANADIAN_PROVINCES } from "@/lib/tax/canada";
 
 type PropsType = {
   mode: DialogMode;
@@ -24,6 +25,7 @@ const defaultValues: WorkshopFormData = {
   startTime: "",
   endTime: "",
   location: "",
+  province: "AB",
   price: 0,
   totalSeats: 10,
   showToUsers: false,
@@ -45,6 +47,7 @@ const toFormValues = (workshop: Workshop): WorkshopFormData => ({
   startTime: to24HourTime(workshop.startTime, workshop.startPeriod),
   endTime: to24HourTime(workshop.endTime, workshop.endPeriod),
   location: workshop.location,
+  province: workshop.province ?? "AB",
   price: workshop.price,
   totalSeats: workshop.totalSeats,
   showToUsers: workshop.showToUsers,
@@ -223,6 +226,28 @@ const WorkshopDialog = ({
               className={inputClass}
               placeholder="Studio 44, Calgary NW"
             />
+          </div>
+
+          {/* Province — determines the sales tax charged on this workshop.
+              For an in-person service the place of supply is where it is HELD. */}
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="ws-province" className={labelClass}>
+              Province (tax)
+            </label>
+            <select
+              id="ws-province"
+              {...register("province")}
+              className={inputClass}
+            >
+              {CANADIAN_PROVINCES.map((code) => (
+                <option key={code} value={code}>
+                  {code}
+                </option>
+              ))}
+            </select>
+            {errors.province && (
+              <p className={errorClass}>{errors.province.message}</p>
+            )}
           </div>
 
           {/* Price & Seats */}

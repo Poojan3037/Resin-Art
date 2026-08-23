@@ -37,6 +37,7 @@ export type OrderPaymentSumAggregateOutputType = {
 export type OrderPaymentMinAggregateOutputType = {
   id: string | null
   orderId: string | null
+  idempotencyKey: string | null
   squarePaymentId: string | null
   amountCents: number | null
   currency: string | null
@@ -50,6 +51,7 @@ export type OrderPaymentMinAggregateOutputType = {
 export type OrderPaymentMaxAggregateOutputType = {
   id: string | null
   orderId: string | null
+  idempotencyKey: string | null
   squarePaymentId: string | null
   amountCents: number | null
   currency: string | null
@@ -63,6 +65,7 @@ export type OrderPaymentMaxAggregateOutputType = {
 export type OrderPaymentCountAggregateOutputType = {
   id: number
   orderId: number
+  idempotencyKey: number
   squarePaymentId: number
   amountCents: number
   currency: number
@@ -86,6 +89,7 @@ export type OrderPaymentSumAggregateInputType = {
 export type OrderPaymentMinAggregateInputType = {
   id?: true
   orderId?: true
+  idempotencyKey?: true
   squarePaymentId?: true
   amountCents?: true
   currency?: true
@@ -99,6 +103,7 @@ export type OrderPaymentMinAggregateInputType = {
 export type OrderPaymentMaxAggregateInputType = {
   id?: true
   orderId?: true
+  idempotencyKey?: true
   squarePaymentId?: true
   amountCents?: true
   currency?: true
@@ -112,6 +117,7 @@ export type OrderPaymentMaxAggregateInputType = {
 export type OrderPaymentCountAggregateInputType = {
   id?: true
   orderId?: true
+  idempotencyKey?: true
   squarePaymentId?: true
   amountCents?: true
   currency?: true
@@ -212,6 +218,7 @@ export type OrderPaymentGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
 export type OrderPaymentGroupByOutputType = {
   id: string
   orderId: string
+  idempotencyKey: string
   squarePaymentId: string | null
   amountCents: number
   currency: string
@@ -248,6 +255,7 @@ export type OrderPaymentWhereInput = {
   NOT?: Prisma.OrderPaymentWhereInput | Prisma.OrderPaymentWhereInput[]
   id?: Prisma.StringFilter<"OrderPayment"> | string
   orderId?: Prisma.StringFilter<"OrderPayment"> | string
+  idempotencyKey?: Prisma.StringFilter<"OrderPayment"> | string
   squarePaymentId?: Prisma.StringNullableFilter<"OrderPayment"> | string | null
   amountCents?: Prisma.IntFilter<"OrderPayment"> | number
   currency?: Prisma.StringFilter<"OrderPayment"> | string
@@ -262,6 +270,7 @@ export type OrderPaymentWhereInput = {
 export type OrderPaymentOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
+  idempotencyKey?: Prisma.SortOrder
   squarePaymentId?: Prisma.SortOrderInput | Prisma.SortOrder
   amountCents?: Prisma.SortOrder
   currency?: Prisma.SortOrder
@@ -276,6 +285,7 @@ export type OrderPaymentOrderByWithRelationInput = {
 export type OrderPaymentWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   orderId?: string
+  idempotencyKey?: string
   squarePaymentId?: string
   AND?: Prisma.OrderPaymentWhereInput | Prisma.OrderPaymentWhereInput[]
   OR?: Prisma.OrderPaymentWhereInput[]
@@ -288,11 +298,12 @@ export type OrderPaymentWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"OrderPayment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"OrderPayment"> | Date | string
   order?: Prisma.XOR<Prisma.OrderScalarRelationFilter, Prisma.OrderWhereInput>
-}, "id" | "orderId" | "squarePaymentId">
+}, "id" | "orderId" | "idempotencyKey" | "squarePaymentId">
 
 export type OrderPaymentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
+  idempotencyKey?: Prisma.SortOrder
   squarePaymentId?: Prisma.SortOrderInput | Prisma.SortOrder
   amountCents?: Prisma.SortOrder
   currency?: Prisma.SortOrder
@@ -314,6 +325,7 @@ export type OrderPaymentScalarWhereWithAggregatesInput = {
   NOT?: Prisma.OrderPaymentScalarWhereWithAggregatesInput | Prisma.OrderPaymentScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"OrderPayment"> | string
   orderId?: Prisma.StringWithAggregatesFilter<"OrderPayment"> | string
+  idempotencyKey?: Prisma.StringWithAggregatesFilter<"OrderPayment"> | string
   squarePaymentId?: Prisma.StringNullableWithAggregatesFilter<"OrderPayment"> | string | null
   amountCents?: Prisma.IntWithAggregatesFilter<"OrderPayment"> | number
   currency?: Prisma.StringWithAggregatesFilter<"OrderPayment"> | string
@@ -326,6 +338,7 @@ export type OrderPaymentScalarWhereWithAggregatesInput = {
 
 export type OrderPaymentCreateInput = {
   id?: string
+  idempotencyKey: string
   squarePaymentId?: string | null
   amountCents: number
   currency?: string
@@ -340,6 +353,7 @@ export type OrderPaymentCreateInput = {
 export type OrderPaymentUncheckedCreateInput = {
   id?: string
   orderId: string
+  idempotencyKey: string
   squarePaymentId?: string | null
   amountCents: number
   currency?: string
@@ -352,6 +366,7 @@ export type OrderPaymentUncheckedCreateInput = {
 
 export type OrderPaymentUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string
   squarePaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amountCents?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -366,6 +381,7 @@ export type OrderPaymentUpdateInput = {
 export type OrderPaymentUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
+  idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string
   squarePaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amountCents?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -379,6 +395,7 @@ export type OrderPaymentUncheckedUpdateInput = {
 export type OrderPaymentCreateManyInput = {
   id?: string
   orderId: string
+  idempotencyKey: string
   squarePaymentId?: string | null
   amountCents: number
   currency?: string
@@ -391,6 +408,7 @@ export type OrderPaymentCreateManyInput = {
 
 export type OrderPaymentUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string
   squarePaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amountCents?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -404,6 +422,7 @@ export type OrderPaymentUpdateManyMutationInput = {
 export type OrderPaymentUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
+  idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string
   squarePaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amountCents?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -422,6 +441,7 @@ export type OrderPaymentNullableScalarRelationFilter = {
 export type OrderPaymentCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
+  idempotencyKey?: Prisma.SortOrder
   squarePaymentId?: Prisma.SortOrder
   amountCents?: Prisma.SortOrder
   currency?: Prisma.SortOrder
@@ -439,6 +459,7 @@ export type OrderPaymentAvgOrderByAggregateInput = {
 export type OrderPaymentMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
+  idempotencyKey?: Prisma.SortOrder
   squarePaymentId?: Prisma.SortOrder
   amountCents?: Prisma.SortOrder
   currency?: Prisma.SortOrder
@@ -452,6 +473,7 @@ export type OrderPaymentMaxOrderByAggregateInput = {
 export type OrderPaymentMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
+  idempotencyKey?: Prisma.SortOrder
   squarePaymentId?: Prisma.SortOrder
   amountCents?: Prisma.SortOrder
   currency?: Prisma.SortOrder
@@ -500,6 +522,7 @@ export type OrderPaymentUncheckedUpdateOneWithoutOrderNestedInput = {
 
 export type OrderPaymentCreateWithoutOrderInput = {
   id?: string
+  idempotencyKey: string
   squarePaymentId?: string | null
   amountCents: number
   currency?: string
@@ -512,6 +535,7 @@ export type OrderPaymentCreateWithoutOrderInput = {
 
 export type OrderPaymentUncheckedCreateWithoutOrderInput = {
   id?: string
+  idempotencyKey: string
   squarePaymentId?: string | null
   amountCents: number
   currency?: string
@@ -540,6 +564,7 @@ export type OrderPaymentUpdateToOneWithWhereWithoutOrderInput = {
 
 export type OrderPaymentUpdateWithoutOrderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string
   squarePaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amountCents?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -552,6 +577,7 @@ export type OrderPaymentUpdateWithoutOrderInput = {
 
 export type OrderPaymentUncheckedUpdateWithoutOrderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string
   squarePaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amountCents?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -567,6 +593,7 @@ export type OrderPaymentUncheckedUpdateWithoutOrderInput = {
 export type OrderPaymentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   orderId?: boolean
+  idempotencyKey?: boolean
   squarePaymentId?: boolean
   amountCents?: boolean
   currency?: boolean
@@ -581,6 +608,7 @@ export type OrderPaymentSelect<ExtArgs extends runtime.Types.Extensions.Internal
 export type OrderPaymentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   orderId?: boolean
+  idempotencyKey?: boolean
   squarePaymentId?: boolean
   amountCents?: boolean
   currency?: boolean
@@ -595,6 +623,7 @@ export type OrderPaymentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
 export type OrderPaymentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   orderId?: boolean
+  idempotencyKey?: boolean
   squarePaymentId?: boolean
   amountCents?: boolean
   currency?: boolean
@@ -609,6 +638,7 @@ export type OrderPaymentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
 export type OrderPaymentSelectScalar = {
   id?: boolean
   orderId?: boolean
+  idempotencyKey?: boolean
   squarePaymentId?: boolean
   amountCents?: boolean
   currency?: boolean
@@ -619,7 +649,7 @@ export type OrderPaymentSelectScalar = {
   updatedAt?: boolean
 }
 
-export type OrderPaymentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "orderId" | "squarePaymentId" | "amountCents" | "currency" | "status" | "receiptUrl" | "paidAt" | "createdAt" | "updatedAt", ExtArgs["result"]["orderPayment"]>
+export type OrderPaymentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "orderId" | "idempotencyKey" | "squarePaymentId" | "amountCents" | "currency" | "status" | "receiptUrl" | "paidAt" | "createdAt" | "updatedAt", ExtArgs["result"]["orderPayment"]>
 export type OrderPaymentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
 }
@@ -638,6 +668,7 @@ export type $OrderPaymentPayload<ExtArgs extends runtime.Types.Extensions.Intern
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     orderId: string
+    idempotencyKey: string
     squarePaymentId: string | null
     amountCents: number
     currency: string
@@ -1072,6 +1103,7 @@ export interface Prisma__OrderPaymentClient<T, Null = never, ExtArgs extends run
 export interface OrderPaymentFieldRefs {
   readonly id: Prisma.FieldRef<"OrderPayment", 'String'>
   readonly orderId: Prisma.FieldRef<"OrderPayment", 'String'>
+  readonly idempotencyKey: Prisma.FieldRef<"OrderPayment", 'String'>
   readonly squarePaymentId: Prisma.FieldRef<"OrderPayment", 'String'>
   readonly amountCents: Prisma.FieldRef<"OrderPayment", 'Int'>
   readonly currency: Prisma.FieldRef<"OrderPayment", 'String'>

@@ -1,4 +1,5 @@
 import { getAdminWorkshops } from "@/actions/workshop";
+import { getSubscriberCount } from "@/actions/subscriber";
 import WorkshopSection from "@/components/admin/workshops/WorkshopSection";
 
 const INITIAL_WORKSHOPS = [
@@ -51,11 +52,14 @@ const INITIAL_WORKSHOPS = [
 const AdminWorkshopsPage = async (props: PageProps<"/admin/workshops">) => {
   const query = await props.searchParams;
 
-  const workshops = await getAdminWorkshops({
-    search: (query?.search as string) ?? "",
-  });
+  const [workshops, subscriberCount] = await Promise.all([
+    getAdminWorkshops({ search: (query?.search as string) ?? "" }),
+    getSubscriberCount(),
+  ]);
 
-  return <WorkshopSection data={workshops} />;
+  return (
+    <WorkshopSection data={workshops} subscriberCount={subscriberCount} />
+  );
 };
 
 export default AdminWorkshopsPage;

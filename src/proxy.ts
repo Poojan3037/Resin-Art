@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { clearAuthToken, getAuthToken } from "./actions/cookie";
 import jwt from "jsonwebtoken";
+import { JWT_SECRET, JWT_VERIFY_OPTIONS } from "./lib/jwt";
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -21,7 +22,7 @@ export async function proxy(request: NextRequest) {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+    const decoded = jwt.verify(token, JWT_SECRET, JWT_VERIFY_OPTIONS);
     if (!decoded) {
       throw new Error("Invalid token");
     }

@@ -9,6 +9,25 @@
 * 🟢 You can import this file directly.
 */
 
+export const Province = {
+  AB: 'AB',
+  BC: 'BC',
+  MB: 'MB',
+  NB: 'NB',
+  NL: 'NL',
+  NS: 'NS',
+  NT: 'NT',
+  NU: 'NU',
+  ON: 'ON',
+  PE: 'PE',
+  QC: 'QC',
+  SK: 'SK',
+  YT: 'YT'
+} as const
+
+export type Province = (typeof Province)[keyof typeof Province]
+
+
 export const WorkshopStatus = {
   UPCOMING: 'UPCOMING',
   ONGOING: 'ONGOING',
@@ -45,7 +64,8 @@ export const OrderStatus = {
   PROCESSING: 'PROCESSING',
   SHIPPED: 'SHIPPED',
   DELIVERED: 'DELIVERED',
-  CANCELLED: 'CANCELLED'
+  CANCELLED: 'CANCELLED',
+  FAILED: 'FAILED'
 } as const
 
 export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]

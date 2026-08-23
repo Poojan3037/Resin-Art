@@ -1,4 +1,5 @@
 import { OrderStatus } from "../../prisma/generated/prisma/client";
+import type { TaxLineType } from "@/lib/tax/canada";
 
 export type OrderItemType = {
   id: string;
@@ -36,7 +37,10 @@ export type OrderType = {
   country: string;
   subtotal: string;
   shippingCost: string;
+  taxAmount: string;
   totalAmount: string;
+  taxProvince: string | null;
+  taxBreakdown: TaxLineType[] | null;
   status: OrderStatus;
   customerNotes: string | null;
   adminNotes: string | null;
@@ -54,3 +58,59 @@ export type OrderActionStateType = {
   message: string;
   orderNumber?: string;
 } | null;
+
+export type OrderItemArgs = {
+  productTitle: string;
+  artistName: string;
+  quantity: number;
+  unitPrice: string | number;
+  lineTotal: string | number;
+};
+
+export type AddressArgs = {
+  addressLine1: string;
+  addressLine2: string | null;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+};
+
+export type SendOrderConfirmationArgs = {
+  toName: string;
+  toEmail: string;
+  orderNumber: string;
+  orderId: string;
+  items: OrderItemArgs[];
+  subtotal: string | number;
+  shippingCost: string | number;
+  taxAmount: string | number;
+  taxLines: TaxLineType[];
+  totalAmount: string | number;
+  address: AddressArgs;
+  receiptUrl: string | null;
+};
+
+export type SendOrderStatusArgs = {
+  toName: string;
+  toEmail: string;
+  orderNumber: string;
+  orderId: string;
+  status: OrderStatus;
+};
+
+export type AddressType = {
+  addressLine1: string;
+  addressLine2: string | null;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+};
+
+export type StatusInfoType = {
+  label: string;
+  description: string;
+  badgeColor: string;
+  badgeTextColor: string;
+};
