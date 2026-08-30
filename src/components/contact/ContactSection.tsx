@@ -234,7 +234,7 @@ const ContactSection = () => {
           </h2>
           {[
             ["📍", "Location", "Calgary, High River & surrounding area"],
-            ["📸", "Instagram", "@resinartbytanvi"],
+            ["📸", "Instagram", "@resin_by_tanvi"],
             ["📧", "Email", "hello@resinartbytanvi.com"],
           ].map(([icon, label, val]) => (
             <div
@@ -260,7 +260,7 @@ const ContactSection = () => {
               student artwork, and upcoming events.
             </p>
             <a
-              href="https://instagram.com"
+              href="https://www.instagram.com/resin_by_tanvi/"
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2.5 bg-charcoal text-gold-light py-3 px-6 text-[13px] tracking-[0.12em] uppercase no-underline font-bold transition-all duration-300 hover:bg-gold hover:text-white"
