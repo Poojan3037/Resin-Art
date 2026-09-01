@@ -103,3 +103,8 @@ export type OrderCounter = Prisma.OrderCounterModel
  * One combined list: every announcement goes to everyone.
  */
 export type Subscriber = Prisma.SubscriberModel
+/**
+ * Model PasswordResetToken
+ * Single-use, time-limited tokens for the customer password reset flow.
+ */
+export type PasswordResetToken = Prisma.PasswordResetTokenModel

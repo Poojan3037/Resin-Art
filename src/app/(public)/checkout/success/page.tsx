@@ -29,7 +29,7 @@ const CheckoutSuccessPage = () => {
           Continue Shopping
         </Link>
         <Link
-          href="/orders"
+          href="/my-orders"
           className="text-[12px] tracking-[0.14em] uppercase text-charcoal"
         >
           Track Order

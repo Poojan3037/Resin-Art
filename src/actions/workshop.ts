@@ -5,7 +5,7 @@ import { WorkshopFormData } from "@/schema/workshop";
 import { PaymentStatus } from "../../prisma/generated/prisma/client";
 import { revalidatePath, updateTag } from "next/cache";
 import { WorkshopActionState } from "@/types/workshop";
-import { verifySession } from "./dal";
+import { verifySession, verifyUserSession } from "./dal";
 import { CACHE } from "@/constants/cache";
 import { chargeSquarePayment, refundSquarePayment } from "./payment";
 import { createBookingSchema } from "@/schema/booking";
@@ -52,7 +52,7 @@ export const getAdminWorkshops = async ({ search }: { search: string }) => {
       endTime: workshop.endTime,
       endPeriod: workshop.endPeriod,
       location: workshop.location,
-    province: workshop.province,
+      province: workshop.province,
       price: workshop.priceCents / 100,
       totalSeats: workshop.totalSeats,
       availableSeats: workshop.availableSeats,
@@ -307,17 +307,27 @@ export const bookWorkshop = async (
   data: unknown,
   sourceId: unknown,
 ): Promise<WorkshopActionState> => {
-  // Unauthenticated action that charges a card: throttle before touching Square.
+  const { isUserVerified, userId } = await verifyUserSession();
+  if (!isUserVerified) {
+    return { success: false, message: "Please sign in to book a workshop." };
+  }
+
+  // Authenticated action that still charges a card: throttle before touching Square.
   const limit = await checkRateLimitByIp("booking");
   if (!limit.allowed) {
-    return { success: false, message: rateLimitMessage(limit.retryAfterSeconds) };
+    return {
+      success: false,
+      message: rateLimitMessage(limit.retryAfterSeconds),
+    };
   }
 
   if (typeof sourceId !== "string" || sourceId.length === 0) {
     return { success: false, message: "Payment token is missing." };
   }
 
-  const workshop = await prisma.workshop.findFirst({ where: { id: workshopId } });
+  const workshop = await prisma.workshop.findFirst({
+    where: { id: workshopId },
+  });
 
   if (!workshop || !workshop.showToUsers) {
     return { success: false, message: "Workshop not found." };
@@ -404,6 +414,7 @@ export const bookWorkshop = async (
       const registration = await tx.registration.create({
         data: {
           workshopId,
+          userId,
           name: booking.name,
           email: booking.email,
           phone: booking.phone,
@@ -425,7 +436,10 @@ export const bookWorkshop = async (
       return { success: false, message: error.message };
     }
     console.error("[booking] Reservation failed:", error);
-    return { success: false, message: "Could not book your seat. Please try again." };
+    return {
+      success: false,
+      message: "Could not book your seat. Please try again.",
+    };
   }
 
   // --- CHARGE, keyed to the reservation so a double submit cannot charge twice.
@@ -506,7 +520,9 @@ export const bookWorkshop = async (
       price: workshop.priceCents / 100,
     },
     receiptUrl: payment.receiptUrl,
-  }).catch((err) => console.error("[email] Workshop confirmation failed:", err));
+  }).catch((err) =>
+    console.error("[email] Workshop confirmation failed:", err),
+  );
 
   return { success: true, message: "Booking successful!" };
 };
@@ -566,7 +582,7 @@ export const getWorkshops = async (todayKey: string) => {
         endTime: workshop.endTime,
         endPeriod: workshop.endPeriod,
         location: workshop.location,
-    province: workshop.province,
+        province: workshop.province,
         price: workshop.priceCents / 100,
         totalSeats: workshop.totalSeats,
         availableSeats: workshop.availableSeats,
@@ -580,6 +596,57 @@ export const getWorkshops = async (todayKey: string) => {
   } catch {
     return [];
   }
+};
+
+const MY_WORKSHOPS_PAGE_SIZE = 10;
+
+/**
+ * Workshop bookings for the signed-in customer. `userId` always comes from
+ * the session — the function accepts no id argument.
+ */
+export const getMyWorkshopBookings = async (page = 1) => {
+  const { isUserVerified, userId } = await verifyUserSession();
+  if (!isUserVerified) return { bookings: [], totalCount: 0 };
+
+  const [registrations, totalCount] = await Promise.all([
+    prisma.registration.findMany({
+      where: { userId },
+      include: {
+        workshop: true,
+        payment: true,
+      },
+      orderBy: { registeredAt: "desc" },
+      skip: (page - 1) * MY_WORKSHOPS_PAGE_SIZE,
+      take: MY_WORKSHOPS_PAGE_SIZE,
+    }),
+    prisma.registration.count({ where: { userId } }),
+  ]);
+
+  const bookings = registrations.map((r) => ({
+    id: r.id,
+    seatsBooked: r.seatsBooked,
+    totalCents: r.totalCents,
+    paymentStatus: r.paymentStatus,
+    registeredAt: r.registeredAt.toISOString(),
+    workshop: {
+      id: r.workshop.id,
+      title: r.workshop.title,
+      date: r.workshop.date.toISOString(),
+      startTime: r.workshop.startTime,
+      startPeriod: r.workshop.startPeriod,
+      endTime: r.workshop.endTime,
+      endPeriod: r.workshop.endPeriod,
+      location: r.workshop.location,
+    },
+    payment: r.payment
+      ? {
+          receiptUrl: r.payment.receiptUrl,
+          status: r.payment.status,
+        }
+      : null,
+  }));
+
+  return { bookings, totalCount };
 };
 
 export const getRegistrations = async ({

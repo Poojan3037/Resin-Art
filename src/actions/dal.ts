@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import jwt from "jsonwebtoken";
-import { getAuthToken } from "./cookie";
+import { getAuthToken, getUserToken } from "./cookie";
 import { JWT_SECRET, JWT_VERIFY_OPTIONS } from "@/lib/jwt";
 
 type InputParamsType = {
@@ -52,6 +52,58 @@ export const verifySession = async (
         userId: user.id,
       };
     }
+  } catch {
+    return {
+      isUserVerified: false,
+      userId: null,
+    };
+  }
+};
+
+/**
+ * Customer-facing counterpart of `verifySession`. Reads the `session`
+ * cookie rather than `token`, and additionally rejects a token issued
+ * before the user's last password reset (`passwordChangedAt`), so a reset
+ * invalidates every outstanding session rather than just the current one.
+ */
+export const verifyUserSession = async (): Promise<
+  SuccessFunctionReturnType | FailureFunctionReturnType
+> => {
+  try {
+    const token = await getUserToken();
+
+    if (!token) {
+      return {
+        isUserVerified: false,
+        userId: null,
+      };
+    }
+
+    const decoded = jwt.verify(token, JWT_SECRET, JWT_VERIFY_OPTIONS) as unknown as {
+      userId: string;
+      iat: number;
+    };
+
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.userId, isAdmin: false },
+      select: { id: true, passwordChangedAt: true },
+    });
+
+    if (
+      user == null ||
+      (user.passwordChangedAt != null &&
+        user.passwordChangedAt.getTime() > decoded.iat * 1000)
+    ) {
+      return {
+        isUserVerified: false,
+        userId: null,
+      };
+    }
+
+    return {
+      isUserVerified: true,
+      userId: user.id,
+    };
   } catch {
     return {
       isUserVerified: false,

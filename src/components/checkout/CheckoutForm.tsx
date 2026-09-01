@@ -20,9 +20,10 @@ const fieldLabelClassName =
 
 type CheckoutFormPropsType = {
   onProvinceChange?: (province: string | null) => void;
+  user?: { firstName: string | null; lastName: string | null; email: string } | null;
 };
 
-const CheckoutForm = ({ onProvinceChange }: CheckoutFormPropsType) => {
+const CheckoutForm = ({ onProvinceChange, user }: CheckoutFormPropsType) => {
   const cartItems = useCartStore((state) => state.cartItems);
   const clearCart = useCartStore((state) => state.clearCart);
   const router = useRouter();
@@ -39,6 +40,8 @@ const CheckoutForm = ({ onProvinceChange }: CheckoutFormPropsType) => {
     resolver: zodResolver(CheckoutSchema),
     defaultValues: {
       country: "CA",
+      customerName: user ? `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim() : "",
+      customerEmail: user?.email ?? "",
     },
   });
 

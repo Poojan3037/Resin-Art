@@ -62,7 +62,8 @@ export const ModelName = {
   OrderPayment: 'OrderPayment',
   RateLimit: 'RateLimit',
   OrderCounter: 'OrderCounter',
-  Subscriber: 'Subscriber'
+  Subscriber: 'Subscriber',
+  PasswordResetToken: 'PasswordResetToken'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -87,6 +88,9 @@ export const UserScalarFieldEnum = {
   email: 'email',
   password: 'password',
   isAdmin: 'isAdmin',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  passwordChangedAt: 'passwordChangedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -121,6 +125,7 @@ export type WorkshopScalarFieldEnum = (typeof WorkshopScalarFieldEnum)[keyof typ
 export const RegistrationScalarFieldEnum = {
   id: 'id',
   workshopId: 'workshopId',
+  userId: 'userId',
   name: 'name',
   email: 'email',
   phone: 'phone',
@@ -190,6 +195,7 @@ export type ProductImageScalarFieldEnum = (typeof ProductImageScalarFieldEnum)[k
 export const OrderScalarFieldEnum = {
   id: 'id',
   orderNumber: 'orderNumber',
+  userId: 'userId',
   customerName: 'customerName',
   customerEmail: 'customerEmail',
   customerPhone: 'customerPhone',
@@ -273,6 +279,18 @@ export const SubscriberScalarFieldEnum = {
 } as const
 
 export type SubscriberScalarFieldEnum = (typeof SubscriberScalarFieldEnum)[keyof typeof SubscriberScalarFieldEnum]
+
+
+export const PasswordResetTokenScalarFieldEnum = {
+  id: 'id',
+  tokenHash: 'tokenHash',
+  userId: 'userId',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type PasswordResetTokenScalarFieldEnum = (typeof PasswordResetTokenScalarFieldEnum)[keyof typeof PasswordResetTokenScalarFieldEnum]
 
 
 export const SortOrder = {

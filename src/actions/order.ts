@@ -3,17 +3,14 @@
 import prisma from "@/lib/prisma";
 import { CheckoutPayloadSchema } from "@/schema/checkout";
 import type { OrderActionStateType, OrderWithItemsType } from "@/types/order";
-import { verifySession } from "./dal";
+import { verifySession, verifyUserSession } from "./dal";
 import { OrderStatus, Prisma } from "../../prisma/generated/prisma/client";
 import { revalidatePath, updateTag } from "next/cache";
 import { CACHE } from "@/constants/cache";
 import { chargeSquarePayment, refundSquarePayment } from "./payment";
 import { calculateCanadianTax, type TaxLineType } from "@/lib/tax/canada";
 import { centsToDecimalString, toCents } from "@/lib/money";
-import {
-  checkRateLimitByIp,
-  rateLimitMessage,
-} from "@/lib/rate-limit";
+import { checkRateLimitByIp, rateLimitMessage } from "@/lib/rate-limit";
 import {
   sendOrderConfirmationEmail,
   sendOrderStatusEmail,
@@ -209,6 +206,36 @@ export const getOrderById = async (id: string) => {
   return getOrderByIdDirect(id);
 };
 
+const MY_ORDERS_PAGE_SIZE = 10;
+
+/**
+ * Orders for the signed-in customer. `userId` always comes from the
+ * session — the function accepts no id argument, so a caller cannot ask
+ * for anyone else's orders.
+ */
+export const getMyOrders = async (
+  page = 1,
+): Promise<{ orders: OrderWithItemsType[]; totalCount: number }> => {
+  const { isUserVerified, userId } = await verifyUserSession();
+  if (!isUserVerified) return { orders: [], totalCount: 0 };
+
+  const [orders, totalCount] = await Promise.all([
+    prisma.order.findMany({
+      where: { userId },
+      include: {
+        items: { orderBy: { createdAt: "asc" } },
+        payment: true,
+      },
+      orderBy: { createdAt: "desc" },
+      skip: (page - 1) * MY_ORDERS_PAGE_SIZE,
+      take: MY_ORDERS_PAGE_SIZE,
+    }),
+    prisma.order.count({ where: { userId } }),
+  ]);
+
+  return { orders: orders.map(toOrderWithItems), totalCount };
+};
+
 export const getOrderByEmailAndNumber = async ({
   email,
   orderNumber,
@@ -282,7 +309,8 @@ export const getCheckoutQuote = async (input: {
   for (const item of items) {
     const product = productMap.get(item.productId);
     if (!product || product.status !== "PUBLISHED") continue;
-    subtotalCents += toCents(product.discountPrice ?? product.price) * item.quantity;
+    subtotalCents +=
+      toCents(product.discountPrice ?? product.price) * item.quantity;
   }
 
   const shippingCents = 0;
@@ -317,6 +345,11 @@ export const createOrder = async (
   prevState: OrderActionStateType,
   payload: unknown,
 ): Promise<OrderActionStateType> => {
+  const { isUserVerified, userId } = await verifyUserSession();
+  if (!isUserVerified) {
+    return { success: false, message: "Please sign in to check out." };
+  }
+
   const parsed = CheckoutPayloadSchema.safeParse(payload);
   if (!parsed.success) {
     const issue = parsed.error.issues[0];
@@ -327,10 +360,13 @@ export const createOrder = async (
   }
   const data = parsed.data;
 
-  // Unauthenticated action that charges a card: throttle before touching Square.
+  // Authenticated action that still charges a card: throttle before touching Square.
   const limit = await checkRateLimitByIp("checkout");
   if (!limit.allowed) {
-    return { success: false, message: rateLimitMessage(limit.retryAfterSeconds) };
+    return {
+      success: false,
+      message: rateLimitMessage(limit.retryAfterSeconds),
+    };
   }
 
   const locationId = process.env.NEXT_PUBLIC_SQUARE_LOCATION_ID;
@@ -374,10 +410,16 @@ export const createOrder = async (
   for (const item of data.items) {
     const product = productMap.get(item.productId);
     if (!product) {
-      return { success: false, message: "One or more products no longer exist." };
+      return {
+        success: false,
+        message: "One or more products no longer exist.",
+      };
     }
     if (product.status !== "PUBLISHED") {
-      return { success: false, message: `${product.title} is currently unavailable.` };
+      return {
+        success: false,
+        message: `${product.title} is currently unavailable.`,
+      };
     }
     const unitPriceCents = toCents(product.discountPrice ?? product.price);
     lineItems.push({
@@ -393,15 +435,24 @@ export const createOrder = async (
   // ---------------------------------------------------------------------
   // 2. Totals, in integer cents throughout.
   // ---------------------------------------------------------------------
-  const subtotalCents = lineItems.reduce((sum, item) => sum + item.lineTotalCents, 0);
+  const subtotalCents = lineItems.reduce(
+    (sum, item) => sum + item.lineTotalCents,
+    0,
+  );
   const shippingCents = 0;
 
   let tax;
   try {
-    tax = calculateCanadianTax({ taxableCents: subtotalCents, province: data.state });
+    tax = calculateCanadianTax({
+      taxableCents: subtotalCents,
+      province: data.state,
+    });
   } catch (error) {
     console.error("[checkout] Tax calculation failed:", error);
-    return { success: false, message: "We could not calculate tax for your address." };
+    return {
+      success: false,
+      message: "We could not calculate tax for your address.",
+    };
   }
 
   const amountCents = subtotalCents + shippingCents + tax.totalTaxCents;
@@ -445,6 +496,7 @@ export const createOrder = async (
       const order = await tx.order.create({
         data: {
           orderNumber,
+          userId,
           customerName: data.customerName,
           customerEmail: data.customerEmail,
           customerPhone: data.customerPhone || null,
@@ -485,7 +537,10 @@ export const createOrder = async (
       return { success: false, message: error.message };
     }
     console.error("[checkout] Reservation failed:", error);
-    return { success: false, message: "Could not place your order. Please try again." };
+    return {
+      success: false,
+      message: "Could not place your order. Please try again.",
+    };
   }
 
   // ---------------------------------------------------------------------

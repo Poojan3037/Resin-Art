@@ -659,10 +659,6 @@ export type WorkshopScalarRelationFilter = {
   isNot?: Prisma.WorkshopWhereInput
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type NullableEnumProvinceFieldUpdateOperationsInput = {
   set?: $Enums.Province | null
 }
@@ -677,10 +673,6 @@ export type IntFieldUpdateOperationsInput = {
 
 export type EnumWorkshopStatusFieldUpdateOperationsInput = {
   set?: $Enums.WorkshopStatus
-}
-
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
 }
 
 export type WorkshopCreateNestedOneWithoutRegistrationsInput = {
