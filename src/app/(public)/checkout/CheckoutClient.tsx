@@ -6,7 +6,11 @@ import { useCartStore } from "@/store/cartStore";
 import Link from "next/link";
 import { useCallback, useState } from "react";
 
-const CheckoutClient = () => {
+type CheckoutClientPropsType = {
+  user: { firstName: string | null; lastName: string | null; email: string } | null;
+};
+
+const CheckoutClient = ({ user }: CheckoutClientPropsType) => {
   const cartItems = useCartStore((state) => state.cartItems);
   const hydrated = useCartStore((state) => state.hydrated);
   const [province, setProvince] = useState<string | null>(null);
@@ -48,7 +52,7 @@ const CheckoutClient = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 ">
         <div className="lg:col-span-3">
-          <CheckoutForm onProvinceChange={handleProvinceChange} />
+          <CheckoutForm onProvinceChange={handleProvinceChange} user={user} />
         </div>
         <div className="lg:col-span-2">
           <OrderSummary province={province} />

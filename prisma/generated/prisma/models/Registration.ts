@@ -43,6 +43,7 @@ export type RegistrationSumAggregateOutputType = {
 export type RegistrationMinAggregateOutputType = {
   id: string | null
   workshopId: string | null
+  userId: string | null
   name: string | null
   email: string | null
   phone: string | null
@@ -59,6 +60,7 @@ export type RegistrationMinAggregateOutputType = {
 export type RegistrationMaxAggregateOutputType = {
   id: string | null
   workshopId: string | null
+  userId: string | null
   name: string | null
   email: string | null
   phone: string | null
@@ -75,6 +77,7 @@ export type RegistrationMaxAggregateOutputType = {
 export type RegistrationCountAggregateOutputType = {
   id: number
   workshopId: number
+  userId: number
   name: number
   email: number
   phone: number
@@ -108,6 +111,7 @@ export type RegistrationSumAggregateInputType = {
 export type RegistrationMinAggregateInputType = {
   id?: true
   workshopId?: true
+  userId?: true
   name?: true
   email?: true
   phone?: true
@@ -124,6 +128,7 @@ export type RegistrationMinAggregateInputType = {
 export type RegistrationMaxAggregateInputType = {
   id?: true
   workshopId?: true
+  userId?: true
   name?: true
   email?: true
   phone?: true
@@ -140,6 +145,7 @@ export type RegistrationMaxAggregateInputType = {
 export type RegistrationCountAggregateInputType = {
   id?: true
   workshopId?: true
+  userId?: true
   name?: true
   email?: true
   phone?: true
@@ -244,6 +250,7 @@ export type RegistrationGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
 export type RegistrationGroupByOutputType = {
   id: string
   workshopId: string
+  userId: string | null
   name: string
   email: string
   phone: string
@@ -284,6 +291,7 @@ export type RegistrationWhereInput = {
   NOT?: Prisma.RegistrationWhereInput | Prisma.RegistrationWhereInput[]
   id?: Prisma.StringFilter<"Registration"> | string
   workshopId?: Prisma.StringFilter<"Registration"> | string
+  userId?: Prisma.StringNullableFilter<"Registration"> | string | null
   name?: Prisma.StringFilter<"Registration"> | string
   email?: Prisma.StringFilter<"Registration"> | string
   phone?: Prisma.StringFilter<"Registration"> | string
@@ -297,12 +305,14 @@ export type RegistrationWhereInput = {
   registeredAt?: Prisma.DateTimeFilter<"Registration"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Registration"> | Date | string
   workshop?: Prisma.XOR<Prisma.WorkshopScalarRelationFilter, Prisma.WorkshopWhereInput>
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   payment?: Prisma.XOR<Prisma.WorkshopPaymentNullableScalarRelationFilter, Prisma.WorkshopPaymentWhereInput> | null
 }
 
 export type RegistrationOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   workshopId?: Prisma.SortOrder
+  userId?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
@@ -316,6 +326,7 @@ export type RegistrationOrderByWithRelationInput = {
   registeredAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   workshop?: Prisma.WorkshopOrderByWithRelationInput
+  user?: Prisma.UserOrderByWithRelationInput
   payment?: Prisma.WorkshopPaymentOrderByWithRelationInput
 }
 
@@ -325,6 +336,7 @@ export type RegistrationWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.RegistrationWhereInput[]
   NOT?: Prisma.RegistrationWhereInput | Prisma.RegistrationWhereInput[]
   workshopId?: Prisma.StringFilter<"Registration"> | string
+  userId?: Prisma.StringNullableFilter<"Registration"> | string | null
   name?: Prisma.StringFilter<"Registration"> | string
   email?: Prisma.StringFilter<"Registration"> | string
   phone?: Prisma.StringFilter<"Registration"> | string
@@ -338,12 +350,14 @@ export type RegistrationWhereUniqueInput = Prisma.AtLeast<{
   registeredAt?: Prisma.DateTimeFilter<"Registration"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Registration"> | Date | string
   workshop?: Prisma.XOR<Prisma.WorkshopScalarRelationFilter, Prisma.WorkshopWhereInput>
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   payment?: Prisma.XOR<Prisma.WorkshopPaymentNullableScalarRelationFilter, Prisma.WorkshopPaymentWhereInput> | null
 }, "id">
 
 export type RegistrationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   workshopId?: Prisma.SortOrder
+  userId?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
@@ -369,6 +383,7 @@ export type RegistrationScalarWhereWithAggregatesInput = {
   NOT?: Prisma.RegistrationScalarWhereWithAggregatesInput | Prisma.RegistrationScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Registration"> | string
   workshopId?: Prisma.StringWithAggregatesFilter<"Registration"> | string
+  userId?: Prisma.StringNullableWithAggregatesFilter<"Registration"> | string | null
   name?: Prisma.StringWithAggregatesFilter<"Registration"> | string
   email?: Prisma.StringWithAggregatesFilter<"Registration"> | string
   phone?: Prisma.StringWithAggregatesFilter<"Registration"> | string
@@ -398,12 +413,14 @@ export type RegistrationCreateInput = {
   registeredAt?: Date | string
   updatedAt?: Date | string
   workshop: Prisma.WorkshopCreateNestedOneWithoutRegistrationsInput
+  user?: Prisma.UserCreateNestedOneWithoutRegistrationsInput
   payment?: Prisma.WorkshopPaymentCreateNestedOneWithoutRegistrationInput
 }
 
 export type RegistrationUncheckedCreateInput = {
   id?: string
   workshopId: string
+  userId?: string | null
   name: string
   email: string
   phone: string
@@ -434,12 +451,14 @@ export type RegistrationUpdateInput = {
   registeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workshop?: Prisma.WorkshopUpdateOneRequiredWithoutRegistrationsNestedInput
+  user?: Prisma.UserUpdateOneWithoutRegistrationsNestedInput
   payment?: Prisma.WorkshopPaymentUpdateOneWithoutRegistrationNestedInput
 }
 
 export type RegistrationUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   workshopId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -458,6 +477,7 @@ export type RegistrationUncheckedUpdateInput = {
 export type RegistrationCreateManyInput = {
   id?: string
   workshopId: string
+  userId?: string | null
   name: string
   email: string
   phone: string
@@ -491,6 +511,7 @@ export type RegistrationUpdateManyMutationInput = {
 export type RegistrationUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   workshopId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -518,6 +539,7 @@ export type RegistrationOrderByRelationAggregateInput = {
 export type RegistrationCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   workshopId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
@@ -542,6 +564,7 @@ export type RegistrationAvgOrderByAggregateInput = {
 export type RegistrationMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   workshopId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
@@ -558,6 +581,7 @@ export type RegistrationMaxOrderByAggregateInput = {
 export type RegistrationMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   workshopId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
@@ -581,6 +605,48 @@ export type RegistrationSumOrderByAggregateInput = {
 export type RegistrationScalarRelationFilter = {
   is?: Prisma.RegistrationWhereInput
   isNot?: Prisma.RegistrationWhereInput
+}
+
+export type RegistrationCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.RegistrationCreateWithoutUserInput, Prisma.RegistrationUncheckedCreateWithoutUserInput> | Prisma.RegistrationCreateWithoutUserInput[] | Prisma.RegistrationUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.RegistrationCreateOrConnectWithoutUserInput | Prisma.RegistrationCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.RegistrationCreateManyUserInputEnvelope
+  connect?: Prisma.RegistrationWhereUniqueInput | Prisma.RegistrationWhereUniqueInput[]
+}
+
+export type RegistrationUncheckedCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.RegistrationCreateWithoutUserInput, Prisma.RegistrationUncheckedCreateWithoutUserInput> | Prisma.RegistrationCreateWithoutUserInput[] | Prisma.RegistrationUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.RegistrationCreateOrConnectWithoutUserInput | Prisma.RegistrationCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.RegistrationCreateManyUserInputEnvelope
+  connect?: Prisma.RegistrationWhereUniqueInput | Prisma.RegistrationWhereUniqueInput[]
+}
+
+export type RegistrationUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.RegistrationCreateWithoutUserInput, Prisma.RegistrationUncheckedCreateWithoutUserInput> | Prisma.RegistrationCreateWithoutUserInput[] | Prisma.RegistrationUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.RegistrationCreateOrConnectWithoutUserInput | Prisma.RegistrationCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.RegistrationUpsertWithWhereUniqueWithoutUserInput | Prisma.RegistrationUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.RegistrationCreateManyUserInputEnvelope
+  set?: Prisma.RegistrationWhereUniqueInput | Prisma.RegistrationWhereUniqueInput[]
+  disconnect?: Prisma.RegistrationWhereUniqueInput | Prisma.RegistrationWhereUniqueInput[]
+  delete?: Prisma.RegistrationWhereUniqueInput | Prisma.RegistrationWhereUniqueInput[]
+  connect?: Prisma.RegistrationWhereUniqueInput | Prisma.RegistrationWhereUniqueInput[]
+  update?: Prisma.RegistrationUpdateWithWhereUniqueWithoutUserInput | Prisma.RegistrationUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.RegistrationUpdateManyWithWhereWithoutUserInput | Prisma.RegistrationUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.RegistrationScalarWhereInput | Prisma.RegistrationScalarWhereInput[]
+}
+
+export type RegistrationUncheckedUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.RegistrationCreateWithoutUserInput, Prisma.RegistrationUncheckedCreateWithoutUserInput> | Prisma.RegistrationCreateWithoutUserInput[] | Prisma.RegistrationUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.RegistrationCreateOrConnectWithoutUserInput | Prisma.RegistrationCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.RegistrationUpsertWithWhereUniqueWithoutUserInput | Prisma.RegistrationUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.RegistrationCreateManyUserInputEnvelope
+  set?: Prisma.RegistrationWhereUniqueInput | Prisma.RegistrationWhereUniqueInput[]
+  disconnect?: Prisma.RegistrationWhereUniqueInput | Prisma.RegistrationWhereUniqueInput[]
+  delete?: Prisma.RegistrationWhereUniqueInput | Prisma.RegistrationWhereUniqueInput[]
+  connect?: Prisma.RegistrationWhereUniqueInput | Prisma.RegistrationWhereUniqueInput[]
+  update?: Prisma.RegistrationUpdateWithWhereUniqueWithoutUserInput | Prisma.RegistrationUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.RegistrationUpdateManyWithWhereWithoutUserInput | Prisma.RegistrationUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.RegistrationScalarWhereInput | Prisma.RegistrationScalarWhereInput[]
 }
 
 export type RegistrationCreateNestedManyWithoutWorkshopInput = {
@@ -643,6 +709,89 @@ export type RegistrationUpdateOneRequiredWithoutPaymentNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.RegistrationUpdateToOneWithWhereWithoutPaymentInput, Prisma.RegistrationUpdateWithoutPaymentInput>, Prisma.RegistrationUncheckedUpdateWithoutPaymentInput>
 }
 
+export type RegistrationCreateWithoutUserInput = {
+  id?: string
+  name: string
+  email: string
+  phone: string
+  seatsBooked?: number
+  subtotalCents?: number
+  taxCents?: number
+  totalCents?: number
+  taxProvince?: $Enums.Province | null
+  taxBreakdown?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentStatus?: $Enums.PaymentStatus
+  registeredAt?: Date | string
+  updatedAt?: Date | string
+  workshop: Prisma.WorkshopCreateNestedOneWithoutRegistrationsInput
+  payment?: Prisma.WorkshopPaymentCreateNestedOneWithoutRegistrationInput
+}
+
+export type RegistrationUncheckedCreateWithoutUserInput = {
+  id?: string
+  workshopId: string
+  name: string
+  email: string
+  phone: string
+  seatsBooked?: number
+  subtotalCents?: number
+  taxCents?: number
+  totalCents?: number
+  taxProvince?: $Enums.Province | null
+  taxBreakdown?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentStatus?: $Enums.PaymentStatus
+  registeredAt?: Date | string
+  updatedAt?: Date | string
+  payment?: Prisma.WorkshopPaymentUncheckedCreateNestedOneWithoutRegistrationInput
+}
+
+export type RegistrationCreateOrConnectWithoutUserInput = {
+  where: Prisma.RegistrationWhereUniqueInput
+  create: Prisma.XOR<Prisma.RegistrationCreateWithoutUserInput, Prisma.RegistrationUncheckedCreateWithoutUserInput>
+}
+
+export type RegistrationCreateManyUserInputEnvelope = {
+  data: Prisma.RegistrationCreateManyUserInput | Prisma.RegistrationCreateManyUserInput[]
+  skipDuplicates?: boolean
+}
+
+export type RegistrationUpsertWithWhereUniqueWithoutUserInput = {
+  where: Prisma.RegistrationWhereUniqueInput
+  update: Prisma.XOR<Prisma.RegistrationUpdateWithoutUserInput, Prisma.RegistrationUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.RegistrationCreateWithoutUserInput, Prisma.RegistrationUncheckedCreateWithoutUserInput>
+}
+
+export type RegistrationUpdateWithWhereUniqueWithoutUserInput = {
+  where: Prisma.RegistrationWhereUniqueInput
+  data: Prisma.XOR<Prisma.RegistrationUpdateWithoutUserInput, Prisma.RegistrationUncheckedUpdateWithoutUserInput>
+}
+
+export type RegistrationUpdateManyWithWhereWithoutUserInput = {
+  where: Prisma.RegistrationScalarWhereInput
+  data: Prisma.XOR<Prisma.RegistrationUpdateManyMutationInput, Prisma.RegistrationUncheckedUpdateManyWithoutUserInput>
+}
+
+export type RegistrationScalarWhereInput = {
+  AND?: Prisma.RegistrationScalarWhereInput | Prisma.RegistrationScalarWhereInput[]
+  OR?: Prisma.RegistrationScalarWhereInput[]
+  NOT?: Prisma.RegistrationScalarWhereInput | Prisma.RegistrationScalarWhereInput[]
+  id?: Prisma.StringFilter<"Registration"> | string
+  workshopId?: Prisma.StringFilter<"Registration"> | string
+  userId?: Prisma.StringNullableFilter<"Registration"> | string | null
+  name?: Prisma.StringFilter<"Registration"> | string
+  email?: Prisma.StringFilter<"Registration"> | string
+  phone?: Prisma.StringFilter<"Registration"> | string
+  seatsBooked?: Prisma.IntFilter<"Registration"> | number
+  subtotalCents?: Prisma.IntFilter<"Registration"> | number
+  taxCents?: Prisma.IntFilter<"Registration"> | number
+  totalCents?: Prisma.IntFilter<"Registration"> | number
+  taxProvince?: Prisma.EnumProvinceNullableFilter<"Registration"> | $Enums.Province | null
+  taxBreakdown?: Prisma.JsonNullableFilter<"Registration">
+  paymentStatus?: Prisma.EnumPaymentStatusFilter<"Registration"> | $Enums.PaymentStatus
+  registeredAt?: Prisma.DateTimeFilter<"Registration"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Registration"> | Date | string
+}
+
 export type RegistrationCreateWithoutWorkshopInput = {
   id?: string
   name: string
@@ -657,11 +806,13 @@ export type RegistrationCreateWithoutWorkshopInput = {
   paymentStatus?: $Enums.PaymentStatus
   registeredAt?: Date | string
   updatedAt?: Date | string
+  user?: Prisma.UserCreateNestedOneWithoutRegistrationsInput
   payment?: Prisma.WorkshopPaymentCreateNestedOneWithoutRegistrationInput
 }
 
 export type RegistrationUncheckedCreateWithoutWorkshopInput = {
   id?: string
+  userId?: string | null
   name: string
   email: string
   phone: string
@@ -703,26 +854,6 @@ export type RegistrationUpdateManyWithWhereWithoutWorkshopInput = {
   data: Prisma.XOR<Prisma.RegistrationUpdateManyMutationInput, Prisma.RegistrationUncheckedUpdateManyWithoutWorkshopInput>
 }
 
-export type RegistrationScalarWhereInput = {
-  AND?: Prisma.RegistrationScalarWhereInput | Prisma.RegistrationScalarWhereInput[]
-  OR?: Prisma.RegistrationScalarWhereInput[]
-  NOT?: Prisma.RegistrationScalarWhereInput | Prisma.RegistrationScalarWhereInput[]
-  id?: Prisma.StringFilter<"Registration"> | string
-  workshopId?: Prisma.StringFilter<"Registration"> | string
-  name?: Prisma.StringFilter<"Registration"> | string
-  email?: Prisma.StringFilter<"Registration"> | string
-  phone?: Prisma.StringFilter<"Registration"> | string
-  seatsBooked?: Prisma.IntFilter<"Registration"> | number
-  subtotalCents?: Prisma.IntFilter<"Registration"> | number
-  taxCents?: Prisma.IntFilter<"Registration"> | number
-  totalCents?: Prisma.IntFilter<"Registration"> | number
-  taxProvince?: Prisma.EnumProvinceNullableFilter<"Registration"> | $Enums.Province | null
-  taxBreakdown?: Prisma.JsonNullableFilter<"Registration">
-  paymentStatus?: Prisma.EnumPaymentStatusFilter<"Registration"> | $Enums.PaymentStatus
-  registeredAt?: Prisma.DateTimeFilter<"Registration"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Registration"> | Date | string
-}
-
 export type RegistrationCreateWithoutPaymentInput = {
   id?: string
   name: string
@@ -738,11 +869,13 @@ export type RegistrationCreateWithoutPaymentInput = {
   registeredAt?: Date | string
   updatedAt?: Date | string
   workshop: Prisma.WorkshopCreateNestedOneWithoutRegistrationsInput
+  user?: Prisma.UserCreateNestedOneWithoutRegistrationsInput
 }
 
 export type RegistrationUncheckedCreateWithoutPaymentInput = {
   id?: string
   workshopId: string
+  userId?: string | null
   name: string
   email: string
   phone: string
@@ -788,9 +921,81 @@ export type RegistrationUpdateWithoutPaymentInput = {
   registeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workshop?: Prisma.WorkshopUpdateOneRequiredWithoutRegistrationsNestedInput
+  user?: Prisma.UserUpdateOneWithoutRegistrationsNestedInput
 }
 
 export type RegistrationUncheckedUpdateWithoutPaymentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  workshopId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  seatsBooked?: Prisma.IntFieldUpdateOperationsInput | number
+  subtotalCents?: Prisma.IntFieldUpdateOperationsInput | number
+  taxCents?: Prisma.IntFieldUpdateOperationsInput | number
+  totalCents?: Prisma.IntFieldUpdateOperationsInput | number
+  taxProvince?: Prisma.NullableEnumProvinceFieldUpdateOperationsInput | $Enums.Province | null
+  taxBreakdown?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  registeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type RegistrationCreateManyUserInput = {
+  id?: string
+  workshopId: string
+  name: string
+  email: string
+  phone: string
+  seatsBooked?: number
+  subtotalCents?: number
+  taxCents?: number
+  totalCents?: number
+  taxProvince?: $Enums.Province | null
+  taxBreakdown?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentStatus?: $Enums.PaymentStatus
+  registeredAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type RegistrationUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  seatsBooked?: Prisma.IntFieldUpdateOperationsInput | number
+  subtotalCents?: Prisma.IntFieldUpdateOperationsInput | number
+  taxCents?: Prisma.IntFieldUpdateOperationsInput | number
+  totalCents?: Prisma.IntFieldUpdateOperationsInput | number
+  taxProvince?: Prisma.NullableEnumProvinceFieldUpdateOperationsInput | $Enums.Province | null
+  taxBreakdown?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  registeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  workshop?: Prisma.WorkshopUpdateOneRequiredWithoutRegistrationsNestedInput
+  payment?: Prisma.WorkshopPaymentUpdateOneWithoutRegistrationNestedInput
+}
+
+export type RegistrationUncheckedUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  workshopId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  seatsBooked?: Prisma.IntFieldUpdateOperationsInput | number
+  subtotalCents?: Prisma.IntFieldUpdateOperationsInput | number
+  taxCents?: Prisma.IntFieldUpdateOperationsInput | number
+  totalCents?: Prisma.IntFieldUpdateOperationsInput | number
+  taxProvince?: Prisma.NullableEnumProvinceFieldUpdateOperationsInput | $Enums.Province | null
+  taxBreakdown?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  registeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  payment?: Prisma.WorkshopPaymentUncheckedUpdateOneWithoutRegistrationNestedInput
+}
+
+export type RegistrationUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   workshopId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -809,6 +1014,7 @@ export type RegistrationUncheckedUpdateWithoutPaymentInput = {
 
 export type RegistrationCreateManyWorkshopInput = {
   id?: string
+  userId?: string | null
   name: string
   email: string
   phone: string
@@ -837,11 +1043,13 @@ export type RegistrationUpdateWithoutWorkshopInput = {
   paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   registeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneWithoutRegistrationsNestedInput
   payment?: Prisma.WorkshopPaymentUpdateOneWithoutRegistrationNestedInput
 }
 
 export type RegistrationUncheckedUpdateWithoutWorkshopInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -859,6 +1067,7 @@ export type RegistrationUncheckedUpdateWithoutWorkshopInput = {
 
 export type RegistrationUncheckedUpdateManyWithoutWorkshopInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -878,6 +1087,7 @@ export type RegistrationUncheckedUpdateManyWithoutWorkshopInput = {
 export type RegistrationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   workshopId?: boolean
+  userId?: boolean
   name?: boolean
   email?: boolean
   phone?: boolean
@@ -891,12 +1101,14 @@ export type RegistrationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   registeredAt?: boolean
   updatedAt?: boolean
   workshop?: boolean | Prisma.WorkshopDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.Registration$userArgs<ExtArgs>
   payment?: boolean | Prisma.Registration$paymentArgs<ExtArgs>
 }, ExtArgs["result"]["registration"]>
 
 export type RegistrationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   workshopId?: boolean
+  userId?: boolean
   name?: boolean
   email?: boolean
   phone?: boolean
@@ -910,11 +1122,13 @@ export type RegistrationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   registeredAt?: boolean
   updatedAt?: boolean
   workshop?: boolean | Prisma.WorkshopDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.Registration$userArgs<ExtArgs>
 }, ExtArgs["result"]["registration"]>
 
 export type RegistrationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   workshopId?: boolean
+  userId?: boolean
   name?: boolean
   email?: boolean
   phone?: boolean
@@ -928,11 +1142,13 @@ export type RegistrationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   registeredAt?: boolean
   updatedAt?: boolean
   workshop?: boolean | Prisma.WorkshopDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.Registration$userArgs<ExtArgs>
 }, ExtArgs["result"]["registration"]>
 
 export type RegistrationSelectScalar = {
   id?: boolean
   workshopId?: boolean
+  userId?: boolean
   name?: boolean
   email?: boolean
   phone?: boolean
@@ -947,27 +1163,32 @@ export type RegistrationSelectScalar = {
   updatedAt?: boolean
 }
 
-export type RegistrationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "workshopId" | "name" | "email" | "phone" | "seatsBooked" | "subtotalCents" | "taxCents" | "totalCents" | "taxProvince" | "taxBreakdown" | "paymentStatus" | "registeredAt" | "updatedAt", ExtArgs["result"]["registration"]>
+export type RegistrationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "workshopId" | "userId" | "name" | "email" | "phone" | "seatsBooked" | "subtotalCents" | "taxCents" | "totalCents" | "taxProvince" | "taxBreakdown" | "paymentStatus" | "registeredAt" | "updatedAt", ExtArgs["result"]["registration"]>
 export type RegistrationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   workshop?: boolean | Prisma.WorkshopDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.Registration$userArgs<ExtArgs>
   payment?: boolean | Prisma.Registration$paymentArgs<ExtArgs>
 }
 export type RegistrationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   workshop?: boolean | Prisma.WorkshopDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.Registration$userArgs<ExtArgs>
 }
 export type RegistrationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   workshop?: boolean | Prisma.WorkshopDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.Registration$userArgs<ExtArgs>
 }
 
 export type $RegistrationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Registration"
   objects: {
     workshop: Prisma.$WorkshopPayload<ExtArgs>
+    user: Prisma.$UserPayload<ExtArgs> | null
     payment: Prisma.$WorkshopPaymentPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     workshopId: string
+    userId: string | null
     name: string
     email: string
     phone: string
@@ -1375,6 +1596,7 @@ readonly fields: RegistrationFieldRefs;
 export interface Prisma__RegistrationClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   workshop<T extends Prisma.WorkshopDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WorkshopDefaultArgs<ExtArgs>>): Prisma.Prisma__WorkshopClient<runtime.Types.Result.GetResult<Prisma.$WorkshopPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.Registration$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Registration$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   payment<T extends Prisma.Registration$paymentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Registration$paymentArgs<ExtArgs>>): Prisma.Prisma__WorkshopPaymentClient<runtime.Types.Result.GetResult<Prisma.$WorkshopPaymentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1407,6 +1629,7 @@ export interface Prisma__RegistrationClient<T, Null = never, ExtArgs extends run
 export interface RegistrationFieldRefs {
   readonly id: Prisma.FieldRef<"Registration", 'String'>
   readonly workshopId: Prisma.FieldRef<"Registration", 'String'>
+  readonly userId: Prisma.FieldRef<"Registration", 'String'>
   readonly name: Prisma.FieldRef<"Registration", 'String'>
   readonly email: Prisma.FieldRef<"Registration", 'String'>
   readonly phone: Prisma.FieldRef<"Registration", 'String'>
@@ -1817,6 +2040,25 @@ export type RegistrationDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Limit how many Registrations to delete.
    */
   limit?: number
+}
+
+/**
+ * Registration.user
+ */
+export type Registration$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

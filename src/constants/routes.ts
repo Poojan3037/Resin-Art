@@ -11,10 +11,6 @@ export const NAV_LINKS = [
     title: "Shop",
     path: "/shop",
   },
-  {
-    title: "Orders",
-    path: "/orders",
-  },
   { title: "Videos", path: "/videos" },
   {
     title: "About",
@@ -24,6 +20,11 @@ export const NAV_LINKS = [
     title: "Contact",
     path: "/contact",
   },
+];
+
+export const USER_MENU_LINKS = [
+  { title: "My Orders", path: "/my-orders" },
+  { title: "My Workshops", path: "/my-workshops" },
 ];
 
 export const ADMIN_NAV_LINKS = [

@@ -14,6 +14,7 @@ import { bookWorkshop, getWorkshopQuote } from "@/actions/workshop";
 import { toast } from "sonner";
 import { PaymentForm, CreditCard } from "react-square-web-payments-sdk";
 import { formatCanadianPhone } from "@/lib/phone-formatter";
+import { useAuth } from "@/context/AuthContext";
 
 type PropsType = {
   workshop: Workshop;
@@ -33,6 +34,7 @@ const inputFields: InputField[] = [
 ];
 
 const WorkshopBookingDialog = ({ workshop, onClose }: PropsType) => {
+  const { user } = useAuth();
   const [step, setStep] = useState<1 | 2>(1);
   const [isPaymentLoading, setIsPaymentLoading] = useState(false);
 
@@ -53,7 +55,12 @@ const WorkshopBookingDialog = ({ workshop, onClose }: PropsType) => {
     getValues,
   } = useForm<BookingFormValues>({
     resolver: zodResolver(createBookingSchema(availableSeats)),
-    defaultValues: { name: "", email: "", phone: "", seats: 1 },
+    defaultValues: {
+      name: user ? `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim() : "",
+      email: user?.email ?? "",
+      phone: "",
+      seats: 1,
+    },
   });
 
   const selectedSeats = watch("seats");

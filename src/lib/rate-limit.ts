@@ -21,6 +21,10 @@ export const RATE_LIMITS = {
   contact: { limit: 3, windowSeconds: 60 * 60 },
   orderLookup: { limit: 10, windowSeconds: 60 * 60 },
   subscribe: { limit: 5, windowSeconds: 60 * 60 },
+  signup: { limit: 5, windowSeconds: 60 * 60 },
+  userLogin: { limit: 5, windowSeconds: 15 * 60 },
+  forgotPassword: { limit: 5, windowSeconds: 60 * 60 },
+  resetPassword: { limit: 10, windowSeconds: 60 * 60 },
 } satisfies Record<string, RateLimitRuleType>;
 
 export type RateLimitNameType = keyof typeof RATE_LIMITS;

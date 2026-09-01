@@ -21,3 +21,4 @@ export const JWT_VERIFY_OPTIONS: jwt.VerifyOptions = {
   algorithms: [JWT_ALGORITHM],
 };
 export const JWT_EXPIRES_IN = "1h" as const;
+export const USER_JWT_EXPIRES_IN = "30d" as const;

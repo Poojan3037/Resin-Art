@@ -60,13 +60,22 @@ enum OrderStatus {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  username  String   @unique
-  email     String   @unique
-  password  String
-  isAdmin   Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                String    @id @default(cuid())
+  username          String?   @unique
+  email             String    @unique
+  password          String
+  isAdmin           Boolean   @default(false)
+  firstName         String?
+  lastName          String?
+  /// Compared against a JWT's `iat` to invalidate outstanding tokens after
+  /// a password reset.
+  passwordChangedAt DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  orders        Order[]
+  registrations Registration[]
+  resetTokens   PasswordResetToken[]
 
   @@index([email])
   @@index([username])
@@ -108,6 +117,7 @@ model Workshop {
 model Registration {
   id            String        @id @default(cuid())
   workshopId    String
+  userId        String?
   name          String
   email         String
   phone         String
@@ -122,8 +132,10 @@ model Registration {
   updatedAt     DateTime      @updatedAt
 
   workshop Workshop         @relation(fields: [workshopId], references: [id], onDelete: Cascade)
+  user     User?            @relation(fields: [userId], references: [id], onDelete: SetNull)
   payment  WorkshopPayment?
 
+  @@index([userId, registeredAt])
   @@map("registrations")
 }
 
@@ -192,8 +204,9 @@ model ProductImage {
 }
 
 model Order {
-  id          String @id @default(cuid())
-  orderNumber String @unique // e.g. "ART-2025-00001"
+  id          String  @id @default(cuid())
+  orderNumber String  @unique // e.g. "ART-2025-00001"
+  userId      String?
 
   // Customer info captured at checkout
   customerName  String
@@ -227,6 +240,7 @@ model Order {
 
   items   OrderItem[]
   payment OrderPayment?
+  user    User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -235,6 +249,7 @@ model Order {
   @@index([customerEmail])
   @@index([status])
   @@index([createdAt])
+  @@index([userId, createdAt])
   @@map("orders")
 }
 
@@ -313,4 +328,22 @@ model Subscriber {
 
   @@index([createdAt])
   @@map("subscribers")
+}
+
+/// Single-use, time-limited tokens for the customer password reset flow.
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  /// SHA-256 of the emailed token — never the raw value, so a DB read
+  /// cannot be replayed to hijack accounts.
+  tokenHash String    @unique
+  userId    String
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("password_reset_tokens")
 }

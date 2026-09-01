@@ -2,16 +2,28 @@
 
 import Button from "@/components/Button";
 import CartButton from "@/components/shop/CartButton";
-import { NAV_LINKS } from "@/constants/routes";
+import UserMenu from "@/components/auth/UserMenu";
+import { NAV_LINKS, USER_MENU_LINKS } from "@/constants/routes";
+import { useAuth } from "@/context/AuthContext";
+import { userLogoutAction } from "@/actions/user-auth";
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
 const Navbar = () => {
   const pathName = usePathname();
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  const { user, setUser } = useAuth();
+
+  const handleMobileLogout = async () => {
+    await userLogoutAction();
+    setUser(null);
+    setMenuOpen(false);
+    router.refresh();
+  };
 
   return (
     <nav className="sticky top-0 left-0 right-0 z-50 transition-all duration-300 bg-white shadow-xl border-b border-light-gray">
@@ -62,6 +74,7 @@ const Navbar = () => {
             </Button>
           </Link>
           <CartButton />
+          <UserMenu />
         </div>
 
         {/* Hamburger button */}
@@ -98,7 +111,7 @@ const Navbar = () => {
       <div
         className={clsx(
           "lg:hidden overflow-hidden transition-all duration-300",
-          menuOpen ? "max-h-125 border-t border-light-gray" : "max-h-0",
+          menuOpen ? "max-h-175 border-t border-light-gray" : "max-h-0",
         )}
       >
         <div className="flex flex-col px-4 sm:px-6 py-4 gap-1 bg-white">
@@ -115,6 +128,39 @@ const Navbar = () => {
               {link.title}
             </Link>
           ))}
+
+          {user ? (
+            <>
+              {USER_MENU_LINKS.map((link) => (
+                <Link
+                  href={link.path}
+                  key={link.path}
+                  onClick={() => setMenuOpen(false)}
+                  className={clsx(
+                    "text-[14px] tracking-widest uppercase cursor-pointer py-3 px-2 border-b border-light-gray font-medium transition-colors duration-200 hover:text-gold",
+                    pathName === link.path ? "text-gold" : "text-charcoal",
+                  )}
+                >
+                  {link.title}
+                </Link>
+              ))}
+              <button
+                type="button"
+                onClick={handleMobileLogout}
+                className="text-left text-[14px] tracking-widest uppercase cursor-pointer py-3 px-2 font-medium transition-colors duration-200 hover:text-gold text-charcoal border-none bg-none"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <div className="py-3 px-2">
+              <Link href="/login" onClick={() => setMenuOpen(false)}>
+                <Button variant="outline" size="sm" fullWidth>
+                  Login
+                </Button>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </nav>

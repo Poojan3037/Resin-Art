@@ -10,6 +10,9 @@ import {
   formatWorkshopTime,
 } from "@/lib/workshop-time-formatter";
 import { useState, useRef } from "react";
+import { useQueryState } from "nuqs";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 import WorkshopBookingDialog from "./WorkshopBookingDialog";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -21,9 +24,33 @@ type PropsType = {
 
 const WorkshopCard = ({ workshop, index }: PropsType) => {
   const cardRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const { user, loading } = useAuth();
   const [selectedWorkshop, setSelectedWorkshop] = useState<Workshop | null>(
     null,
   );
+  const [bookParam, setBookParam] = useQueryState("book");
+
+  // Returning from the login detour with `?book=<workshopId>` re-opens the
+  // dialog for the workshop the visitor originally tried to book.
+  const isAutoOpenTarget = bookParam === workshop.id;
+  const dialogWorkshop = selectedWorkshop ?? (isAutoOpenTarget ? workshop : null);
+
+  const closeDialog = () => {
+    setSelectedWorkshop(null);
+    if (isAutoOpenTarget) setBookParam(null);
+  };
+
+  const handleBookNow = () => {
+    if (loading) return;
+    if (!user) {
+      router.push(
+        `/login?redirect=${encodeURIComponent(`/workshops?book=${workshop.id}`)}`,
+      );
+      return;
+    }
+    setSelectedWorkshop(workshop);
+  };
 
   useGSAP(
     () => {
@@ -53,11 +80,8 @@ const WorkshopCard = ({ workshop, index }: PropsType) => {
 
   return (
     <>
-      {selectedWorkshop && (
-        <WorkshopBookingDialog
-          workshop={selectedWorkshop}
-          onClose={() => setSelectedWorkshop(null)}
-        />
+      {dialogWorkshop && (
+        <WorkshopBookingDialog workshop={dialogWorkshop} onClose={closeDialog} />
       )}
       <div ref={cardRef}>
         <div className="wcard border border-light-gray bg-white p-8 transition-all hover:border-gold h-full">
@@ -108,7 +132,7 @@ const WorkshopCard = ({ workshop, index }: PropsType) => {
           <Button
             variant="primary"
             fullWidth
-            onClick={() => setSelectedWorkshop(workshop)}
+            onClick={handleBookNow}
             className="font-extrabold"
             disabled={workshop.availableSeats === 0}
           >
