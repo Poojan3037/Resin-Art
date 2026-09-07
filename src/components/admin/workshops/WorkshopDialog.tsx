@@ -1,15 +1,16 @@
 "use client";
 
 import Button from "@/components/Button";
-import { useRef, useEffect, useActionState, startTransition } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useEffect, useActionState, startTransition } from "react";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { WorkshopSchema, WorkshopFormData } from "@/schema/workshop";
 import { DialogMode } from "@/types/dialog";
-import { addWorkshop, editWorkshop } from "@/actions/workshop";
+import { addWorkshop, editWorkshop, getWorkShopById } from "@/actions/workshop";
 import { toast } from "sonner";
 import { Workshop } from "@/types/workshop";
 import { CANADIAN_PROVINCES } from "@/lib/tax/canada";
+import MultiImageUploader from "@/components/media/MultiImageUploader";
 
 type PropsType = {
   mode: DialogMode;
@@ -18,7 +19,7 @@ type PropsType = {
   onClose: () => void;
 };
 
-const defaultValues: WorkshopFormData = {
+const defaultValues: Partial<WorkshopFormData> = {
   title: "",
   description: "",
   date: "",
@@ -30,6 +31,7 @@ const defaultValues: WorkshopFormData = {
   totalSeats: 10,
   showToUsers: false,
   status: "UPCOMING",
+  galleryImages: [],
 };
 
 const to24HourTime = (time: string, period: string): string => {
@@ -40,7 +42,7 @@ const to24HourTime = (time: string, period: string): string => {
   return `${String(hour).padStart(2, "0")}:${minuteStr}`;
 };
 
-const toFormValues = (workshop: Workshop): WorkshopFormData => ({
+const toFormValues = (workshop: Workshop): Partial<WorkshopFormData> => ({
   title: workshop.title,
   description: workshop.description,
   date: workshop.date.slice(0, 10),
@@ -52,6 +54,7 @@ const toFormValues = (workshop: Workshop): WorkshopFormData => ({
   totalSeats: workshop.totalSeats,
   showToUsers: workshop.showToUsers,
   status: workshop.status,
+  galleryImages: [],
 });
 
 const inputClass =
@@ -66,8 +69,6 @@ const WorkshopDialog = ({
   onClose,
   initialData,
 }: PropsType) => {
-  const dialogRef = useRef<HTMLDialogElement>(null);
-
   const [addState, addDispatch, isAddPending] = useActionState(
     addWorkshop,
     null,
@@ -83,11 +84,37 @@ const WorkshopDialog = ({
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = useForm<WorkshopFormData>({
     resolver: zodResolver(WorkshopSchema),
     defaultValues: initialData ? toFormValues(initialData) : defaultValues,
   });
+
+  const bannerImage = useWatch({ control, name: "bannerImage" });
+  const galleryImages = useWatch({ control, name: "galleryImages" });
+
+  useEffect(() => {
+    if (!editWorkshopId) return;
+    startTransition(async () => {
+      const workshop = await getWorkShopById(editWorkshopId);
+      if (!workshop) return;
+      const bannerImg = workshop.images[0];
+      setValue(
+        "bannerImage",
+        bannerImg
+          ? { url: bannerImg.url, altText: bannerImg.altText ?? "" }
+          : undefined as unknown as WorkshopFormData["bannerImage"],
+      );
+      setValue(
+        "galleryImages",
+        workshop.images.slice(1).map((image) => ({
+          url: image.url,
+          altText: image.altText ?? "",
+        })),
+      );
+    });
+  }, [editWorkshopId, setValue]);
 
   const onSubmit = (data: WorkshopFormData) => {
     startTransition(() => {
@@ -100,8 +127,12 @@ const WorkshopDialog = ({
   };
 
   useEffect(() => {
-    dialogRef.current?.showModal();
-  }, []);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
 
   useEffect(() => {
     const state = editWorkshopId ? editState : addState;
@@ -117,15 +148,10 @@ const WorkshopDialog = ({
   const submitLabel = mode === DialogMode.ADD ? "Add Workshop" : "Save Changes";
 
   return (
-    <dialog
-      ref={dialogRef}
-      onCancel={(e) => {
-        e.preventDefault();
-        onClose();
-      }}
-      className="m-auto w-[calc(100%-2rem)] max-w-lg p-0 border-0 bg-transparent backdrop:bg-charcoal/60"
-    >
-      <div className="bg-white p-8 sm:p-10 overflow-y-auto max-h-[90vh]">
+    <>
+      <div className="fixed inset-0 bg-charcoal/60 z-40" onClick={onClose} />
+      <div className="fixed inset-0 flex items-center justify-center z-50 p-4 pointer-events-none">
+        <div className="bg-white p-8 sm:p-10 max-h-[90vh] overflow-y-auto w-full max-w-lg pointer-events-auto">
         <h2 className="text-[20px] font-semibold text-charcoal mb-1">
           {mode === DialogMode.ADD ? "Add Workshop" : "Edit Workshop"}
         </h2>
@@ -304,6 +330,29 @@ const WorkshopDialog = ({
             />
           </div>
 
+          {/* Images */}
+          <div className="flex flex-col gap-1.5">
+            <MultiImageUploader
+              folder="resin-art/workshops"
+              bannerImage={bannerImage ?? null}
+              galleryImages={galleryImages ?? []}
+              onBannerChange={(image) =>
+                setValue(
+                  "bannerImage",
+                  image as WorkshopFormData["bannerImage"],
+                )
+              }
+              onGalleryChange={(imgs) => setValue("galleryImages", imgs)}
+              bannerError={
+                (errors.bannerImage?.message as string | undefined) ??
+                errors.bannerImage?.url?.message
+              }
+              galleryError={
+                errors.galleryImages?.message as string | undefined
+              }
+            />
+          </div>
+
           {/* Show to Users */}
           <div className="flex items-center gap-3">
             <input
@@ -339,8 +388,9 @@ const WorkshopDialog = ({
             </Button>
           </div>
         </form>
+        </div>
       </div>
-    </dialog>
+    </>
   );
 };
 

@@ -53,6 +53,7 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   Workshop: 'Workshop',
+  WorkshopImage: 'WorkshopImage',
   Registration: 'Registration',
   WorkshopPayment: 'WorkshopPayment',
   Product: 'Product',
@@ -116,6 +117,19 @@ export const WorkshopScalarFieldEnum = {
 } as const
 
 export type WorkshopScalarFieldEnum = (typeof WorkshopScalarFieldEnum)[keyof typeof WorkshopScalarFieldEnum]
+
+
+export const WorkshopImageScalarFieldEnum = {
+  id: 'id',
+  workshopId: 'workshopId',
+  url: 'url',
+  altText: 'altText',
+  isPrimary: 'isPrimary',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt'
+} as const
+
+export type WorkshopImageScalarFieldEnum = (typeof WorkshopImageScalarFieldEnum)[keyof typeof WorkshopImageScalarFieldEnum]
 
 
 export const RegistrationScalarFieldEnum = {

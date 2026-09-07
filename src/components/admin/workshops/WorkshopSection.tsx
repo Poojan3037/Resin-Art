@@ -3,9 +3,7 @@
 import { useQueryState, debounce } from "nuqs";
 import useDisclosure from "@/hooks/useDisclosure";
 import { useState } from "react";
-import WorkshopHeader from "./WorkshopHeader";
-import WorkshopSearch from "./WorkshopSearch";
-import WorkshopCard from "./WorkshopCard";
+import WorkshopListing from "./WorkshopListing";
 import WorkshopDialog from "./WorkshopDialog";
 import { DialogMode } from "@/types/dialog";
 import { Workshop } from "@/types/workshop";
@@ -91,29 +89,27 @@ const WorkshopSection = ({ data, subscriberCount }: PropsType) => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
-      <WorkshopHeader count={data.length} onAdd={handleOpenAddWorkshopDialog} />
+      <div className="mb-8">
+        <span className="text-[11px] tracking-[0.22em] uppercase text-gold">
+          Manage
+        </span>
+        <h1 className="text-[clamp(28px,4vw,44px)] font-semibold text-charcoal mt-1">
+          Workshops
+        </h1>
+        <p className="text-[13px] text-gray mt-1">
+          {data.length} workshop{data.length === 1 ? "" : "s"} scheduled
+        </p>
+      </div>
 
-      <WorkshopSearch value={search} onChange={setSearch} />
-
-      {data.length === 0 ? (
-        <div className="text-center py-20 text-gray text-[14px] tracking-wide">
-          No workshops found.
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {data.map((workshop) => {
-            return (
-              <WorkshopCard
-                key={workshop.id}
-                workshop={workshop}
-                onEdit={() => handleEditWorkshop(workshop.id)}
-                onDelete={() => handleDeleteWorkshop(workshop.id)}
-                onNotify={() => handleOpenNotifyDialog(workshop.id)}
-              />
-            );
-          })}
-        </div>
-      )}
+      <WorkshopListing
+        workshops={data}
+        search={search}
+        onSearchChange={setSearch}
+        onAdd={handleOpenAddWorkshopDialog}
+        onEdit={(workshop) => handleEditWorkshop(workshop.id)}
+        onDeleteRequest={(workshop) => handleDeleteWorkshop(workshop.id)}
+        onNotifyRequest={(workshop) => handleOpenNotifyDialog(workshop.id)}
+      />
 
       {isFormDialogOpen && (
         <WorkshopDialog

@@ -1,6 +1,7 @@
 "use server";
 
 import { deleteCloudinaryAssetByUrl } from "@/lib/cloudinary";
+import { flattenBannerGallery } from "@/lib/image";
 import prisma from "@/lib/prisma";
 import { ProductSchema, type ProductFormDataType } from "@/schema/product";
 import type {
@@ -181,11 +182,14 @@ export const createProduct = async (
         status: productData.status,
         images: {
           createMany: {
-            data: productData.images.map((image, index) => ({
+            data: flattenBannerGallery(
+              productData.bannerImage,
+              productData.galleryImages,
+            ).map((image) => ({
               url: image.url,
               altText: image.altText?.trim() || null,
-              isPrimary: image.isPrimary ?? index === 0,
-              sortOrder: image.sortOrder ?? index,
+              isPrimary: image.isPrimary,
+              sortOrder: image.sortOrder,
             })),
           },
         },
@@ -226,6 +230,10 @@ export const updateProduct = async (
 
   try {
     const productData = parsed.data;
+    const flatImages = flattenBannerGallery(
+      productData.bannerImage,
+      productData.galleryImages,
+    );
 
     await prisma.$transaction(async (tx) => {
       const existingImages = await tx.productImage.findMany({
@@ -233,9 +241,7 @@ export const updateProduct = async (
         select: { url: true },
       });
 
-      const incomingUrls = new Set(
-        productData.images.map((image) => image.url),
-      );
+      const incomingUrls = new Set(flatImages.map((image) => image.url));
       const removedImages = existingImages.filter(
         (image) => !incomingUrls.has(image.url),
       );
@@ -256,12 +262,12 @@ export const updateProduct = async (
 
       await tx.productImage.deleteMany({ where: { productId: id } });
       await tx.productImage.createMany({
-        data: productData.images.map((image, index) => ({
+        data: flatImages.map((image) => ({
           productId: id,
           url: image.url,
           altText: image.altText?.trim() || null,
-          isPrimary: image.isPrimary ?? index === 0,
-          sortOrder: image.sortOrder ?? index,
+          isPrimary: image.isPrimary,
+          sortOrder: image.sortOrder,
         })),
       });
 

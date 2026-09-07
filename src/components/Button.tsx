@@ -49,9 +49,9 @@ const variantClasses: Record<ButtonVariant, string> = {
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
-  sm: "py-3.5 px-6 text-[14px]",
-  md: "py-3.5 px-6 text-[14px]",
-  lg: "py-3.5 px-6 text-[14px]",
+  sm: "py-2 px-4 text-[12px] sm:py-2.5 sm:px-5 sm:text-[13px]",
+  md: "py-2.5 px-5 text-[13px] sm:py-3 sm:px-6 sm:text-[14px]",
+  lg: "py-3 px-6 text-[13px] sm:py-3.5 sm:px-8 sm:text-[14px] md:py-4 md:px-10 md:text-[15px]",
 };
 
 const Spinner = () => (

@@ -212,7 +212,7 @@ const TestimonialsSection = () => {
           </h3>
           <Link
             href="/workshops"
-            className="ts-cta-link inline-block px-9 py-3.5 bg-gold text-charcoal text-[13px] font-semibold tracking-[0.15em] uppercase hover:bg-gold-light transition-colors duration-300"
+            className="ts-cta-link inline-block px-5 py-2.5 sm:px-9 sm:py-3.5 bg-gold text-charcoal text-[12px] sm:text-[13px] font-semibold tracking-[0.15em] uppercase hover:bg-gold-light transition-colors duration-300"
           >
             Reserve Your Spot
           </Link>

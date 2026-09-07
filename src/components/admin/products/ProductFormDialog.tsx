@@ -2,7 +2,7 @@
 
 import { createProduct, updateProduct } from "@/actions/product";
 import Button from "@/components/Button";
-import ImageUploader from "@/components/admin/products/ImageUploader";
+import MultiImageUploader from "@/components/media/MultiImageUploader";
 import { ProductSchema, type ProductFormDataType } from "@/schema/product";
 import type { ProductWithImagesType } from "@/types/product";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,7 +27,7 @@ const emptyValues: Partial<ProductFormDataType> = {
   quantity: undefined,
   isFeatured: false,
   status: "DRAFT",
-  images: [],
+  galleryImages: [],
 };
 
 const resolveDiscountPrice = ({
@@ -121,11 +121,15 @@ const ProductFormDialog = ({
         quantity: product.quantity,
         isFeatured: product.isFeatured,
         status: product.status,
-        images: product.images.map((image, index) => ({
+        bannerImage: product.images[0]
+          ? {
+              url: product.images[0].url,
+              altText: product.images[0].altText ?? "",
+            }
+          : undefined,
+        galleryImages: product.images.slice(1).map((image) => ({
           url: image.url,
           altText: image.altText ?? "",
-          isPrimary: image.isPrimary,
-          sortOrder: image.sortOrder ?? index,
         })),
       }
     : emptyValues;
@@ -146,7 +150,8 @@ const ProductFormDialog = ({
     defaultValues,
   });
 
-  const images = useWatch({ control, name: "images" });
+  const bannerImage = useWatch({ control, name: "bannerImage" });
+  const galleryImages = useWatch({ control, name: "galleryImages" });
   const currentStatus = useWatch({ control, name: "status" });
 
   const statusOptions = [
@@ -410,54 +415,26 @@ const ProductFormDialog = ({
             </div>
 
             <div className="pt-1">
-              <ImageUploader
-                onUploaded={(url) => {
-                  setValue("images", [
-                    ...(images ?? []),
-                    {
-                      url,
-                      altText: "",
-                      isPrimary: (images ?? []).length === 0,
-                      sortOrder: (images ?? []).length,
-                    },
-                  ]);
-                  toast.success("Image uploaded.");
-                }}
+              <MultiImageUploader
+                folder="resin-art/products"
+                bannerImage={bannerImage ?? null}
+                galleryImages={galleryImages ?? []}
+                onBannerChange={(image) =>
+                  setValue(
+                    "bannerImage",
+                    image as ProductFormDataType["bannerImage"],
+                  )
+                }
+                onGalleryChange={(imgs) => setValue("galleryImages", imgs)}
+                bannerError={
+                  (errors.bannerImage?.message as string | undefined) ??
+                  errors.bannerImage?.url?.message
+                }
+                galleryError={
+                  errors.galleryImages?.message as string | undefined
+                }
               />
             </div>
-
-            {(images ?? []).length > 0 ? (
-              <div className="grid grid-cols-3 gap-2 mt-2">
-                {(images ?? []).map((image, index) => (
-                  <div key={`${image.url}-${index}`} className="relative">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={image.url}
-                      alt={image.altText ?? "Product image"}
-                      className="h-20 w-full object-cover border border-light-gray"
-                    />
-                    <button
-                      type="button"
-                      className="absolute top-1 right-1 bg-white border border-light-gray w-6 h-6 text-[12px]"
-                      onClick={() => {
-                        setValue(
-                          "images",
-                          (images ?? []).filter(
-                            (_, imageIndex) => imageIndex !== index,
-                          ),
-                        );
-                      }}
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))}
-              </div>
-            ) : null}
-
-            <p className="text-red-500 text-[12px]">
-              {errors.images?.message as string | undefined}
-            </p>
 
             <div className="mt-6 flex flex-col sm:flex-row gap-2">
               <Button

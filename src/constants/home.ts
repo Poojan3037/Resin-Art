@@ -20,8 +20,8 @@ export const HOW_IT_WORKS_DATA = [
 ];
 
 export const HERO_SECTION_DATA = [
-  ["200+", "Happy Artists"],
-  ["40+", "Workshops Held"],
+  ["3000+", "Happy Artists"],
+  ["180+", "Workshops Held"],
   ["5★", "Avg Rating"],
 ];
 

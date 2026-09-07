@@ -43,7 +43,9 @@ export { Prisma }
 
 /**
  * Model User
- * 
+ * Admin accounts only. Customer accounts were removed; orders and workshop
+ * registrations identify their buyer by the contact details captured at
+ * checkout, not by a user row.
  */
 export type User = Prisma.UserModel
 /**
@@ -51,6 +53,11 @@ export type User = Prisma.UserModel
  * 
  */
 export type Workshop = Prisma.WorkshopModel
+/**
+ * Model WorkshopImage
+ * 
+ */
+export type WorkshopImage = Prisma.WorkshopImageModel
 /**
  * Model Registration
  * 

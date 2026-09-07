@@ -263,7 +263,7 @@ const ContactSection = () => {
               href="https://www.instagram.com/resin_by_tanvi/"
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2.5 bg-charcoal text-gold-light py-3 px-6 text-[13px] tracking-[0.12em] uppercase no-underline font-bold transition-all duration-300 hover:bg-gold hover:text-white"
+              className="inline-flex items-center gap-2.5 bg-charcoal text-gold-light py-2.5 px-4 text-[12px] sm:py-3 sm:px-6 sm:text-[13px] tracking-[0.12em] uppercase no-underline font-bold transition-all duration-300 hover:bg-gold hover:text-white"
             >
               📸 Follow on Instagram
             </a>

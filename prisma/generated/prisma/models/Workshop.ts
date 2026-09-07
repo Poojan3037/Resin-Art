@@ -329,6 +329,7 @@ export type WorkshopWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Workshop"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Workshop"> | Date | string
   registrations?: Prisma.RegistrationListRelationFilter
+  images?: Prisma.WorkshopImageListRelationFilter
 }
 
 export type WorkshopOrderByWithRelationInput = {
@@ -351,6 +352,7 @@ export type WorkshopOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   registrations?: Prisma.RegistrationOrderByRelationAggregateInput
+  images?: Prisma.WorkshopImageOrderByRelationAggregateInput
 }
 
 export type WorkshopWhereUniqueInput = Prisma.AtLeast<{
@@ -376,6 +378,7 @@ export type WorkshopWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Workshop"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Workshop"> | Date | string
   registrations?: Prisma.RegistrationListRelationFilter
+  images?: Prisma.WorkshopImageListRelationFilter
 }, "id">
 
 export type WorkshopOrderByWithAggregationInput = {
@@ -448,6 +451,7 @@ export type WorkshopCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   registrations?: Prisma.RegistrationCreateNestedManyWithoutWorkshopInput
+  images?: Prisma.WorkshopImageCreateNestedManyWithoutWorkshopInput
 }
 
 export type WorkshopUncheckedCreateInput = {
@@ -470,6 +474,7 @@ export type WorkshopUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   registrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutWorkshopInput
+  images?: Prisma.WorkshopImageUncheckedCreateNestedManyWithoutWorkshopInput
 }
 
 export type WorkshopUpdateInput = {
@@ -492,6 +497,7 @@ export type WorkshopUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registrations?: Prisma.RegistrationUpdateManyWithoutWorkshopNestedInput
+  images?: Prisma.WorkshopImageUpdateManyWithoutWorkshopNestedInput
 }
 
 export type WorkshopUncheckedUpdateInput = {
@@ -514,6 +520,7 @@ export type WorkshopUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registrations?: Prisma.RegistrationUncheckedUpdateManyWithoutWorkshopNestedInput
+  images?: Prisma.WorkshopImageUncheckedUpdateManyWithoutWorkshopNestedInput
 }
 
 export type WorkshopCreateManyInput = {
@@ -659,10 +666,6 @@ export type WorkshopScalarRelationFilter = {
   isNot?: Prisma.WorkshopWhereInput
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type NullableEnumProvinceFieldUpdateOperationsInput = {
   set?: $Enums.Province | null
 }
@@ -683,6 +686,20 @@ export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }
 
+export type WorkshopCreateNestedOneWithoutImagesInput = {
+  create?: Prisma.XOR<Prisma.WorkshopCreateWithoutImagesInput, Prisma.WorkshopUncheckedCreateWithoutImagesInput>
+  connectOrCreate?: Prisma.WorkshopCreateOrConnectWithoutImagesInput
+  connect?: Prisma.WorkshopWhereUniqueInput
+}
+
+export type WorkshopUpdateOneRequiredWithoutImagesNestedInput = {
+  create?: Prisma.XOR<Prisma.WorkshopCreateWithoutImagesInput, Prisma.WorkshopUncheckedCreateWithoutImagesInput>
+  connectOrCreate?: Prisma.WorkshopCreateOrConnectWithoutImagesInput
+  upsert?: Prisma.WorkshopUpsertWithoutImagesInput
+  connect?: Prisma.WorkshopWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.WorkshopUpdateToOneWithWhereWithoutImagesInput, Prisma.WorkshopUpdateWithoutImagesInput>, Prisma.WorkshopUncheckedUpdateWithoutImagesInput>
+}
+
 export type WorkshopCreateNestedOneWithoutRegistrationsInput = {
   create?: Prisma.XOR<Prisma.WorkshopCreateWithoutRegistrationsInput, Prisma.WorkshopUncheckedCreateWithoutRegistrationsInput>
   connectOrCreate?: Prisma.WorkshopCreateOrConnectWithoutRegistrationsInput
@@ -695,6 +712,110 @@ export type WorkshopUpdateOneRequiredWithoutRegistrationsNestedInput = {
   upsert?: Prisma.WorkshopUpsertWithoutRegistrationsInput
   connect?: Prisma.WorkshopWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.WorkshopUpdateToOneWithWhereWithoutRegistrationsInput, Prisma.WorkshopUpdateWithoutRegistrationsInput>, Prisma.WorkshopUncheckedUpdateWithoutRegistrationsInput>
+}
+
+export type WorkshopCreateWithoutImagesInput = {
+  id?: string
+  title: string
+  description?: string | null
+  date: Date | string
+  startTime: string
+  startPeriod: string
+  endTime: string
+  endPeriod: string
+  location: string
+  province?: $Enums.Province | null
+  priceCents: number
+  totalSeats: number
+  availableSeats: number
+  showToUsers?: boolean
+  status?: $Enums.WorkshopStatus
+  lastNotifiedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  registrations?: Prisma.RegistrationCreateNestedManyWithoutWorkshopInput
+}
+
+export type WorkshopUncheckedCreateWithoutImagesInput = {
+  id?: string
+  title: string
+  description?: string | null
+  date: Date | string
+  startTime: string
+  startPeriod: string
+  endTime: string
+  endPeriod: string
+  location: string
+  province?: $Enums.Province | null
+  priceCents: number
+  totalSeats: number
+  availableSeats: number
+  showToUsers?: boolean
+  status?: $Enums.WorkshopStatus
+  lastNotifiedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  registrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutWorkshopInput
+}
+
+export type WorkshopCreateOrConnectWithoutImagesInput = {
+  where: Prisma.WorkshopWhereUniqueInput
+  create: Prisma.XOR<Prisma.WorkshopCreateWithoutImagesInput, Prisma.WorkshopUncheckedCreateWithoutImagesInput>
+}
+
+export type WorkshopUpsertWithoutImagesInput = {
+  update: Prisma.XOR<Prisma.WorkshopUpdateWithoutImagesInput, Prisma.WorkshopUncheckedUpdateWithoutImagesInput>
+  create: Prisma.XOR<Prisma.WorkshopCreateWithoutImagesInput, Prisma.WorkshopUncheckedCreateWithoutImagesInput>
+  where?: Prisma.WorkshopWhereInput
+}
+
+export type WorkshopUpdateToOneWithWhereWithoutImagesInput = {
+  where?: Prisma.WorkshopWhereInput
+  data: Prisma.XOR<Prisma.WorkshopUpdateWithoutImagesInput, Prisma.WorkshopUncheckedUpdateWithoutImagesInput>
+}
+
+export type WorkshopUpdateWithoutImagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startTime?: Prisma.StringFieldUpdateOperationsInput | string
+  startPeriod?: Prisma.StringFieldUpdateOperationsInput | string
+  endTime?: Prisma.StringFieldUpdateOperationsInput | string
+  endPeriod?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.StringFieldUpdateOperationsInput | string
+  province?: Prisma.NullableEnumProvinceFieldUpdateOperationsInput | $Enums.Province | null
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
+  availableSeats?: Prisma.IntFieldUpdateOperationsInput | number
+  showToUsers?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumWorkshopStatusFieldUpdateOperationsInput | $Enums.WorkshopStatus
+  lastNotifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  registrations?: Prisma.RegistrationUpdateManyWithoutWorkshopNestedInput
+}
+
+export type WorkshopUncheckedUpdateWithoutImagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startTime?: Prisma.StringFieldUpdateOperationsInput | string
+  startPeriod?: Prisma.StringFieldUpdateOperationsInput | string
+  endTime?: Prisma.StringFieldUpdateOperationsInput | string
+  endPeriod?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.StringFieldUpdateOperationsInput | string
+  province?: Prisma.NullableEnumProvinceFieldUpdateOperationsInput | $Enums.Province | null
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
+  availableSeats?: Prisma.IntFieldUpdateOperationsInput | number
+  showToUsers?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumWorkshopStatusFieldUpdateOperationsInput | $Enums.WorkshopStatus
+  lastNotifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  registrations?: Prisma.RegistrationUncheckedUpdateManyWithoutWorkshopNestedInput
 }
 
 export type WorkshopCreateWithoutRegistrationsInput = {
@@ -716,6 +837,7 @@ export type WorkshopCreateWithoutRegistrationsInput = {
   lastNotifiedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  images?: Prisma.WorkshopImageCreateNestedManyWithoutWorkshopInput
 }
 
 export type WorkshopUncheckedCreateWithoutRegistrationsInput = {
@@ -737,6 +859,7 @@ export type WorkshopUncheckedCreateWithoutRegistrationsInput = {
   lastNotifiedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  images?: Prisma.WorkshopImageUncheckedCreateNestedManyWithoutWorkshopInput
 }
 
 export type WorkshopCreateOrConnectWithoutRegistrationsInput = {
@@ -774,6 +897,7 @@ export type WorkshopUpdateWithoutRegistrationsInput = {
   lastNotifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  images?: Prisma.WorkshopImageUpdateManyWithoutWorkshopNestedInput
 }
 
 export type WorkshopUncheckedUpdateWithoutRegistrationsInput = {
@@ -795,6 +919,7 @@ export type WorkshopUncheckedUpdateWithoutRegistrationsInput = {
   lastNotifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  images?: Prisma.WorkshopImageUncheckedUpdateManyWithoutWorkshopNestedInput
 }
 
 
@@ -804,10 +929,12 @@ export type WorkshopUncheckedUpdateWithoutRegistrationsInput = {
 
 export type WorkshopCountOutputType = {
   registrations: number
+  images: number
 }
 
 export type WorkshopCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   registrations?: boolean | WorkshopCountOutputTypeCountRegistrationsArgs
+  images?: boolean | WorkshopCountOutputTypeCountImagesArgs
 }
 
 /**
@@ -825,6 +952,13 @@ export type WorkshopCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ext
  */
 export type WorkshopCountOutputTypeCountRegistrationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.RegistrationWhereInput
+}
+
+/**
+ * WorkshopCountOutputType without action
+ */
+export type WorkshopCountOutputTypeCountImagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WorkshopImageWhereInput
 }
 
 
@@ -848,6 +982,7 @@ export type WorkshopSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   createdAt?: boolean
   updatedAt?: boolean
   registrations?: boolean | Prisma.Workshop$registrationsArgs<ExtArgs>
+  images?: boolean | Prisma.Workshop$imagesArgs<ExtArgs>
   _count?: boolean | Prisma.WorkshopCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["workshop"]>
 
@@ -917,6 +1052,7 @@ export type WorkshopSelectScalar = {
 export type WorkshopOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "date" | "startTime" | "startPeriod" | "endTime" | "endPeriod" | "location" | "province" | "priceCents" | "totalSeats" | "availableSeats" | "showToUsers" | "status" | "lastNotifiedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["workshop"]>
 export type WorkshopInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   registrations?: boolean | Prisma.Workshop$registrationsArgs<ExtArgs>
+  images?: boolean | Prisma.Workshop$imagesArgs<ExtArgs>
   _count?: boolean | Prisma.WorkshopCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type WorkshopIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -926,6 +1062,7 @@ export type $WorkshopPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   name: "Workshop"
   objects: {
     registrations: Prisma.$RegistrationPayload<ExtArgs>[]
+    images: Prisma.$WorkshopImagePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1345,6 +1482,7 @@ readonly fields: WorkshopFieldRefs;
 export interface Prisma__WorkshopClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   registrations<T extends Prisma.Workshop$registrationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Workshop$registrationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  images<T extends Prisma.Workshop$imagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Workshop$imagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkshopImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1806,6 +1944,30 @@ export type Workshop$registrationsArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.RegistrationScalarFieldEnum | Prisma.RegistrationScalarFieldEnum[]
+}
+
+/**
+ * Workshop.images
+ */
+export type Workshop$imagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WorkshopImage
+   */
+  select?: Prisma.WorkshopImageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WorkshopImage
+   */
+  omit?: Prisma.WorkshopImageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkshopImageInclude<ExtArgs> | null
+  where?: Prisma.WorkshopImageWhereInput
+  orderBy?: Prisma.WorkshopImageOrderByWithRelationInput | Prisma.WorkshopImageOrderByWithRelationInput[]
+  cursor?: Prisma.WorkshopImageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WorkshopImageScalarFieldEnum | Prisma.WorkshopImageScalarFieldEnum[]
 }
 
 /**

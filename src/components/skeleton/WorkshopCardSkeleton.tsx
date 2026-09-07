@@ -2,7 +2,7 @@ import Skeleton from "./Skeleton";
 
 const WorkshopCardSkeleton = () => {
   return (
-    <div className="bg-white p-8 border border-light-gray h-full">
+    <div className="bg-cream p-8 border border-light-gray h-full">
       <div className="flex justify-between items-center mb-5">
         <Skeleton className="rounded w-16 h-6" />
       </div>

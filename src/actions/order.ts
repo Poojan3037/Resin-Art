@@ -10,10 +10,7 @@ import { CACHE } from "@/constants/cache";
 import { chargeSquarePayment, refundSquarePayment } from "./payment";
 import { calculateCanadianTax, type TaxLineType } from "@/lib/tax/canada";
 import { centsToDecimalString, toCents } from "@/lib/money";
-import {
-  checkRateLimitByIp,
-  rateLimitMessage,
-} from "@/lib/rate-limit";
+import { checkRateLimitByIp, rateLimitMessage } from "@/lib/rate-limit";
 import {
   sendOrderConfirmationEmail,
   sendOrderStatusEmail,
@@ -282,7 +279,8 @@ export const getCheckoutQuote = async (input: {
   for (const item of items) {
     const product = productMap.get(item.productId);
     if (!product || product.status !== "PUBLISHED") continue;
-    subtotalCents += toCents(product.discountPrice ?? product.price) * item.quantity;
+    subtotalCents +=
+      toCents(product.discountPrice ?? product.price) * item.quantity;
   }
 
   const shippingCents = 0;
@@ -330,7 +328,10 @@ export const createOrder = async (
   // Unauthenticated action that charges a card: throttle before touching Square.
   const limit = await checkRateLimitByIp("checkout");
   if (!limit.allowed) {
-    return { success: false, message: rateLimitMessage(limit.retryAfterSeconds) };
+    return {
+      success: false,
+      message: rateLimitMessage(limit.retryAfterSeconds),
+    };
   }
 
   const locationId = process.env.NEXT_PUBLIC_SQUARE_LOCATION_ID;
@@ -374,10 +375,16 @@ export const createOrder = async (
   for (const item of data.items) {
     const product = productMap.get(item.productId);
     if (!product) {
-      return { success: false, message: "One or more products no longer exist." };
+      return {
+        success: false,
+        message: "One or more products no longer exist.",
+      };
     }
     if (product.status !== "PUBLISHED") {
-      return { success: false, message: `${product.title} is currently unavailable.` };
+      return {
+        success: false,
+        message: `${product.title} is currently unavailable.`,
+      };
     }
     const unitPriceCents = toCents(product.discountPrice ?? product.price);
     lineItems.push({
@@ -393,15 +400,24 @@ export const createOrder = async (
   // ---------------------------------------------------------------------
   // 2. Totals, in integer cents throughout.
   // ---------------------------------------------------------------------
-  const subtotalCents = lineItems.reduce((sum, item) => sum + item.lineTotalCents, 0);
+  const subtotalCents = lineItems.reduce(
+    (sum, item) => sum + item.lineTotalCents,
+    0,
+  );
   const shippingCents = 0;
 
   let tax;
   try {
-    tax = calculateCanadianTax({ taxableCents: subtotalCents, province: data.state });
+    tax = calculateCanadianTax({
+      taxableCents: subtotalCents,
+      province: data.state,
+    });
   } catch (error) {
     console.error("[checkout] Tax calculation failed:", error);
-    return { success: false, message: "We could not calculate tax for your address." };
+    return {
+      success: false,
+      message: "We could not calculate tax for your address.",
+    };
   }
 
   const amountCents = subtotalCents + shippingCents + tax.totalTaxCents;
@@ -485,7 +501,10 @@ export const createOrder = async (
       return { success: false, message: error.message };
     }
     console.error("[checkout] Reservation failed:", error);
-    return { success: false, message: "Could not place your order. Please try again." };
+    return {
+      success: false,
+      message: "Could not place your order. Please try again.",
+    };
   }
 
   // ---------------------------------------------------------------------

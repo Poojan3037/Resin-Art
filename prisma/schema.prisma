@@ -59,12 +59,18 @@ enum OrderStatus {
   FAILED // Payment did not complete; stock released
 }
 
+/// Admin accounts only. Customer accounts were removed; orders and workshop
+/// registrations identify their buyer by the contact details captured at
+/// checkout, not by a user row.
 model User {
-  id        String   @id @default(cuid())
-  username  String   @unique
-  email     String   @unique
-  password  String
-  isAdmin   Boolean  @default(false)
+  id       String  @id @default(cuid())
+  /// Nullable only because the removed customer signup never set it. Every
+  /// admin row has one; re-adding NOT NULL would buy nothing.
+  username String? @unique
+  email    String  @unique
+  password String
+  isAdmin  Boolean @default(false)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -99,10 +105,27 @@ model Workshop {
   updatedAt      DateTime       @updatedAt
 
   registrations Registration[]
+  images        WorkshopImage[]
 
   /// Covers the public list query: visible + upcoming + not-yet-past, by date.
   @@index([showToUsers, status, date])
   @@map("workshops")
+}
+
+model WorkshopImage {
+  id         String   @id @default(cuid())
+  workshopId String
+  workshop   Workshop @relation(fields: [workshopId], references: [id], onDelete: Cascade)
+
+  url       String
+  altText   String?
+  isPrimary Boolean @default(false)
+  sortOrder Int     @default(0)
+
+  createdAt DateTime @default(now())
+
+  @@index([workshopId])
+  @@map("workshop_images")
 }
 
 model Registration {

@@ -24,7 +24,7 @@ const ProductGrid = ({ products, search = "" }: ProductGridPropsType) => {
           </p>
           <Link
             href="/shop"
-            className="inline-block bg-charcoal text-gold-light px-6 py-3.5 text-[14px] tracking-[0.12em] uppercase font-semibold hover:bg-gold hover:text-white transition-all duration-300"
+            className="inline-block bg-charcoal text-gold-light px-4 py-2.5 text-[13px] sm:px-6 sm:py-3.5 sm:text-[14px] tracking-[0.12em] uppercase font-semibold hover:bg-gold hover:text-white transition-all duration-300"
           >
             Clear Search
           </Link>
@@ -47,9 +47,9 @@ const ProductGrid = ({ products, search = "" }: ProductGridPropsType) => {
   }
 
   return (
-    <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      {products.map((product) => (
-        <ProductCard key={product.id} product={product} />
+    <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+      {products.map((product, index) => (
+        <ProductCard key={product.id} product={product} index={index} />
       ))}
     </div>
   );

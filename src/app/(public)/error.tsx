@@ -34,7 +34,7 @@ const PublicErrorPage = ({
         <Button onClick={reset}>Try again</Button>
         <a
           href="/contact"
-          className="inline-flex items-center py-3.5 px-6 text-[14px] border border-light-gray text-charcoal no-underline transition-all duration-300 hover:border-gold hover:text-gold"
+          className="inline-flex items-center py-2.5 px-5 text-[13px] sm:py-3 sm:px-6 sm:text-[14px] border border-light-gray text-charcoal no-underline transition-all duration-300 hover:border-gold hover:text-gold"
         >
           Contact us
         </a>

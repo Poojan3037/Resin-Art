@@ -53,7 +53,12 @@ const WorkshopBookingDialog = ({ workshop, onClose }: PropsType) => {
     getValues,
   } = useForm<BookingFormValues>({
     resolver: zodResolver(createBookingSchema(availableSeats)),
-    defaultValues: { name: "", email: "", phone: "", seats: 1 },
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      seats: 1,
+    },
   });
 
   const selectedSeats = watch("seats");
@@ -304,8 +309,8 @@ const WorkshopBookingDialog = ({ workshop, onClose }: PropsType) => {
                     fontWeight: "800", // font-semibold (bump to 800 if needed)
                     letterSpacing: "0.12em", // tracking-[0.12em]
                     textTransform: "uppercase", // uppercase
-                    fontSize: "14px", // text-[14px]
-                    padding: "14px 24px", // py-3.5 px-6
+                    fontSize: "13px", // text-[13px]
+                    padding: "10px 16px", // py-2.5 px-4
                     borderRadius: "0px", // no rounded
                     border: "none", // border-none
                     cursor: "pointer", // cursor-pointer
@@ -315,6 +320,10 @@ const WorkshopBookingDialog = ({ workshop, onClose }: PropsType) => {
                     "&:hover": {
                       backgroundColor: "#2B2B2B", // hover:bg-charcoal
                       color: "#F5E6C8", // hover:text-gold-light
+                    },
+                    "@media (min-width: 640px)": {
+                      fontSize: "14px", // sm:text-[14px]
+                      padding: "14px 24px", // sm:py-3.5 sm:px-6
                     },
                   },
                 }}

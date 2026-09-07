@@ -28,3 +28,4 @@ export const INQUIRY_MESSAGES: Record<
       "Hi, I'm interested in arranging a corporate resin art team-building workshop for our team. I'd love to learn more about pricing, group size, and scheduling options.",
   },
 };
+

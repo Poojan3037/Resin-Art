@@ -187,9 +187,9 @@ const HeroSectionWorkshopCard = ({
         </div>
 
         {/* CTA */}
-        <Link href="/workshops">
+        <Link href={`/workshops/${workshop.id}`}>
           <button
-            className="relative mt-5 w-full px-6 py-3.5 text-[14px] font-bold uppercase tracking-widest rounded-xl transition-all duration-200 hover:opacity-90 active:scale-95"
+            className="relative mt-5 w-full px-4 py-2.5 text-[13px] sm:px-6 sm:py-3.5 sm:text-[14px] font-bold uppercase tracking-widest rounded-xl transition-all duration-200 hover:opacity-90 active:scale-95"
             style={{
               background: `${accent.dot}22`,
               color: accent.tagColor,

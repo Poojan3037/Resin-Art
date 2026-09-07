@@ -28,7 +28,7 @@ const OrdersClient = () => {
       </p>
 
       <form
-        className="mt-8 bg-white border border-light-gray p-6 grid gap-4 sm:grid-cols-2"
+        className="mt-8 bg-cream border border-light-gray p-6 grid gap-4 sm:grid-cols-2"
         onSubmit={(event) => {
           event.preventDefault();
           setError(null);
@@ -89,28 +89,28 @@ const OrdersClient = () => {
       {error ? <p className="mt-4 text-red-500 text-[14px]">{error}</p> : null}
 
       {result ? (
-        <section className="mt-8 bg-white border border-light-gray p-6">
+        <section className="mt-8 bg-cream border border-light-gray p-8 sm:p-10">
           <div className="flex flex-wrap gap-3 justify-between items-center">
-            <h2 className="text-[24px] font-semibold text-charcoal">
+            <h2 className="text-[28px] font-semibold text-charcoal">
               {result.orderNumber}
             </h2>
-            <span className="text-[11px] tracking-[0.15em] uppercase px-3 py-1 border border-gold text-gold">
+            <span className="text-[12px] tracking-[0.15em] uppercase px-3.5 py-1.5 border border-gold text-gold">
               {result.status}
             </span>
           </div>
 
-          <p className="text-[13px] text-gray mt-2">
+          <p className="text-[14px] text-gray mt-2">
             Ordered on {new Date(result.createdAt).toLocaleDateString()}
           </p>
 
-          <div className="mt-6 space-y-4">
+          <div className="mt-8 space-y-5">
             {result.items.map((item) => (
-              <div key={item.id} className="flex justify-between text-[14px]">
+              <div key={item.id} className="flex justify-between text-[16px]">
                 <div>
                   <p className="text-charcoal font-medium">
                     {item.productTitle}
                   </p>
-                  <p className="text-gray text-[12px]">
+                  <p className="text-gray text-[13px]">
                     {item.quantity} ×{" "}
                     {currencyFormatter.format(Number(item.unitPrice))}
                   </p>
@@ -122,7 +122,7 @@ const OrdersClient = () => {
             ))}
           </div>
 
-          <div className="mt-6 pt-4 border-t border-light-gray flex justify-between text-[16px] font-semibold">
+          <div className="mt-8 pt-5 border-t border-light-gray flex justify-between text-[19px] font-semibold">
             <span>Total</span>
             <span className="text-gold">
               {currencyFormatter.format(Number(result.totalAmount))}

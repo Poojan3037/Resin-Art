@@ -10,6 +10,7 @@
  */
 export type * from './models/User'
 export type * from './models/Workshop'
+export type * from './models/WorkshopImage'
 export type * from './models/Registration'
 export type * from './models/WorkshopPayment'
 export type * from './models/Product'

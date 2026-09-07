@@ -10,6 +10,7 @@ import {
   formatWorkshopTime,
 } from "@/lib/workshop-time-formatter";
 import { useState, useRef } from "react";
+import Link from "next/link";
 import WorkshopBookingDialog from "./WorkshopBookingDialog";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -24,6 +25,10 @@ const WorkshopCard = ({ workshop, index }: PropsType) => {
   const [selectedWorkshop, setSelectedWorkshop] = useState<Workshop | null>(
     null,
   );
+
+  const closeDialog = () => setSelectedWorkshop(null);
+
+  const handleBookNow = () => setSelectedWorkshop(workshop);
 
   useGSAP(
     () => {
@@ -56,11 +61,24 @@ const WorkshopCard = ({ workshop, index }: PropsType) => {
       {selectedWorkshop && (
         <WorkshopBookingDialog
           workshop={selectedWorkshop}
-          onClose={() => setSelectedWorkshop(null)}
+          onClose={closeDialog}
         />
       )}
       <div ref={cardRef}>
-        <div className="wcard border border-light-gray bg-white p-8 transition-all hover:border-gold h-full">
+        <div className="wcard group relative border border-light-gray bg-cream transition-all duration-300 hover:border-gold hover:shadow-xl h-full overflow-hidden">
+          <div className="pointer-events-none absolute inset-0 bg-gold/0 transition-colors duration-300 group-hover:bg-gold/5" />
+          <Link
+            href={`/workshops/${workshop.id}`}
+            className="relative block border-b border-light-gray overflow-hidden"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={workshop.bannerUrl ?? "/images/art/art-1.jpg"}
+              alt={workshop.title}
+              className="w-full aspect-[4/3] object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          </Link>
+          <div className="relative p-8">
           <div className="flex justify-between items-center mb-5">
             <span
               className={
@@ -76,17 +94,13 @@ const WorkshopCard = ({ workshop, index }: PropsType) => {
               ${workshop.price}
             </span>
           </div>
-          <h3 className=" text-[22px] font-semibold text-charcoal mb-2 leading-[1.3]">
+          <h3 className="text-[22px] font-semibold text-charcoal mb-2 leading-[1.3]">
             {workshop.title}
           </h3>
-          <p className="text-charcoal mb-4 leading-[1.2]">
-            {workshop.description}
-          </p>
           <div className="flex flex-col gap-2 mb-7">
             {[
               ["📅", dateLabel],
               ["🕐", timeLabel],
-              ["📍", workshop.location],
             ].map(([ic, val]) => (
               <div key={val} className="flex gap-2.5 items-center">
                 <span className="text-[13px]">{ic}</span>
@@ -108,12 +122,19 @@ const WorkshopCard = ({ workshop, index }: PropsType) => {
           <Button
             variant="primary"
             fullWidth
-            onClick={() => setSelectedWorkshop(workshop)}
+            onClick={handleBookNow}
             className="font-extrabold"
             disabled={workshop.availableSeats === 0}
           >
             Book Now
           </Button>
+
+          <Link href={`/workshops/${workshop.id}`} className="block mt-3">
+            <Button variant="outline" fullWidth className="font-extrabold">
+              View Details
+            </Button>
+          </Link>
+          </div>
         </div>
       </div>
     </>

@@ -117,7 +117,7 @@ const WorkshopExperienceSection = () => {
             <Button
               variant="primary"
               size="lg"
-              className="sm:px-13 sm:py-4.5 sm:text-[16px] font-extrabold"
+              className="font-extrabold"
             >
               Book This Experience
             </Button>

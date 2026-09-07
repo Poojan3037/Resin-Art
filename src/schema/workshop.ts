@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { CANADIAN_PROVINCES } from "@/lib/tax/canada";
+import { ImageSchema, RequiredBannerImageSchema } from "@/schema/image";
 
 // HH:MM in 24-hour format (00:00 - 23:59) for native time inputs.
 const timeRegex = /^([01]\d|2[0-3]):[0-5]\d$/;
@@ -49,6 +50,10 @@ export const WorkshopSchema = z
       .min(0, "Seats cannot be negative"),
     showToUsers: z.boolean(),
     status: z.enum(["UPCOMING", "ONGOING", "COMPLETED", "CANCELLED"]),
+    bannerImage: RequiredBannerImageSchema,
+    galleryImages: z
+      .array(ImageSchema)
+      .max(9, "Up to 9 gallery images are allowed"),
   })
   .refine((data) => toMinutes(data.endTime) > toMinutes(data.startTime), {
     message: "End time must be after start time",

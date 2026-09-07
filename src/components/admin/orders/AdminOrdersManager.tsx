@@ -120,7 +120,10 @@ const AdminOrdersManager = ({ orders }: AdminOrdersManagerPropsType) => {
         ) : (
           <div className="space-y-4">
             {orders.map((order) => (
-              <div key={order.id} className="border border-light-gray p-4">
+              <div
+                key={order.id}
+                className="bg-cream border border-light-gray hover:border-gold hover:shadow-lg transition-all duration-300 p-4"
+              >
                 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
                   <div>
                     <p className="text-[16px] font-semibold text-charcoal">

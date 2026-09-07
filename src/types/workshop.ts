@@ -21,6 +21,22 @@ export type Workshop = {
   lastNotifiedAt: string | null;
   createdAt: string;
   updatedAt: string;
+  /** Banner image URL, if any — populated for the public list/card without loading the full gallery. */
+  bannerUrl?: string | null;
+};
+
+export type WorkshopImageType = {
+  id: string;
+  workshopId: string;
+  url: string;
+  altText: string | null;
+  isPrimary: boolean;
+  sortOrder: number;
+  createdAt: string;
+};
+
+export type WorkshopWithImagesType = Workshop & {
+  images: WorkshopImageType[];
 };
 
 export type WorkshopActionState = {

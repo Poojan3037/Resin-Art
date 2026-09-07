@@ -40,17 +40,17 @@ const AdminDashboardPage = async () => {
         </h2>
         <div className="flex flex-wrap gap-3">
           <Link href="/admin/products">
-            <button className="bg-charcoal text-gold-light px-6 py-3.5 text-[14px] tracking-[0.12em] uppercase font-semibold hover:bg-gold hover:text-white transition-all duration-300 flex gap-2 items-center">
+            <button className="bg-charcoal text-gold-light px-4 py-2.5 text-[13px] sm:px-6 sm:py-3.5 sm:text-[14px] tracking-[0.12em] uppercase font-semibold hover:bg-gold hover:text-white transition-all duration-300 flex gap-2 items-center">
               <PlusIcon /> Add Product
             </button>
           </Link>
           <Link href="/admin/workshops">
-            <button className="bg-charcoal text-gold-light px-6 py-3.5 text-[14px] tracking-[0.12em] uppercase font-semibold hover:bg-gold hover:text-white transition-all duration-300 flex gap-2 items-center">
+            <button className="bg-charcoal text-gold-light px-4 py-2.5 text-[13px] sm:px-6 sm:py-3.5 sm:text-[14px] tracking-[0.12em] uppercase font-semibold hover:bg-gold hover:text-white transition-all duration-300 flex gap-2 items-center">
               <PlusIcon /> Add Workshop
             </button>
           </Link>
           <Link href="/admin/orders">
-            <button className="bg-transparent text-charcoal border border-light-gray px-6 py-3.5 text-[14px] tracking-[0.12em] uppercase font-semibold hover:border-gold hover:text-gold transition-all duration-300">
+            <button className="bg-transparent text-charcoal border border-light-gray px-4 py-2.5 text-[13px] sm:px-6 sm:py-3.5 sm:text-[14px] tracking-[0.12em] uppercase font-semibold hover:border-gold hover:text-gold transition-all duration-300">
               View All Orders
             </button>
           </Link>

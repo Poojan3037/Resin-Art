@@ -52,7 +52,7 @@ const WorkshopInquirySection = () => {
             {item.desc}
           </p>
           <button
-            className="border border-charcoal bg-transparent px-6 py-3.5 text-[14px] tracking-[0.12em] uppercase cursor-pointer font-semibold hover:bg-charcoal hover:text-gold-light"
+            className="border border-charcoal bg-transparent px-4 py-2.5 text-[13px] sm:px-6 sm:py-3.5 sm:text-[14px] tracking-[0.12em] uppercase cursor-pointer font-semibold hover:bg-charcoal hover:text-gold-light"
             onClick={() =>
               router.push(`/contact?messageType=${item.messageType}`)
             }

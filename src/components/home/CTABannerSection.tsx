@@ -7,6 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { useGSAP } from "@gsap/react";
 import { useRef } from "react";
+import Link from "next/link";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -105,13 +106,11 @@ const CTABannerSection = () => {
             resin art workshop and enjoy an unforgettable artistic journey.
           </p>
           <div className="cta-btn inline-block">
-            <Button
-              variant="primary"
-              size="lg"
-              className="sm:px-13 sm:py-4.5 sm:text-[16px] font-extrabold"
-            >
-              Book Your Workshop
-            </Button>
+            <Link href="/workshops">
+              <Button variant="primary" size="lg" className="font-extrabold">
+                Book Your Workshop
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

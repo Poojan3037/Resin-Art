@@ -31,13 +31,6 @@ export type ProductWithImagesType = ProductType & {
   images: ProductImageType[];
 };
 
-export type ProductFormImageType = {
-  url: string;
-  altText?: string;
-  isPrimary?: boolean;
-  sortOrder?: number;
-};
-
 export type ProductActionStateType = {
   success: boolean;
   message: string;

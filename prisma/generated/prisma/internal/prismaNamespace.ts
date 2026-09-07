@@ -386,6 +386,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   User: 'User',
   Workshop: 'Workshop',
+  WorkshopImage: 'WorkshopImage',
   Registration: 'Registration',
   WorkshopPayment: 'WorkshopPayment',
   Product: 'Product',
@@ -411,7 +412,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "workshop" | "registration" | "workshopPayment" | "product" | "productImage" | "order" | "orderItem" | "orderPayment" | "rateLimit" | "orderCounter" | "subscriber"
+    modelProps: "user" | "workshop" | "workshopImage" | "registration" | "workshopPayment" | "product" | "productImage" | "order" | "orderItem" | "orderPayment" | "rateLimit" | "orderCounter" | "subscriber"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -560,6 +561,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.WorkshopCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.WorkshopCountAggregateOutputType> | number
+        }
+      }
+    }
+    WorkshopImage: {
+      payload: Prisma.$WorkshopImagePayload<ExtArgs>
+      fields: Prisma.WorkshopImageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WorkshopImageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkshopImagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WorkshopImageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkshopImagePayload>
+        }
+        findFirst: {
+          args: Prisma.WorkshopImageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkshopImagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WorkshopImageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkshopImagePayload>
+        }
+        findMany: {
+          args: Prisma.WorkshopImageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkshopImagePayload>[]
+        }
+        create: {
+          args: Prisma.WorkshopImageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkshopImagePayload>
+        }
+        createMany: {
+          args: Prisma.WorkshopImageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.WorkshopImageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkshopImagePayload>[]
+        }
+        delete: {
+          args: Prisma.WorkshopImageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkshopImagePayload>
+        }
+        update: {
+          args: Prisma.WorkshopImageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkshopImagePayload>
+        }
+        deleteMany: {
+          args: Prisma.WorkshopImageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WorkshopImageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.WorkshopImageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkshopImagePayload>[]
+        }
+        upsert: {
+          args: Prisma.WorkshopImageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkshopImagePayload>
+        }
+        aggregate: {
+          args: Prisma.WorkshopImageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWorkshopImage>
+        }
+        groupBy: {
+          args: Prisma.WorkshopImageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WorkshopImageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WorkshopImageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WorkshopImageCountAggregateOutputType> | number
         }
       }
     }
@@ -1379,6 +1454,19 @@ export const WorkshopScalarFieldEnum = {
 export type WorkshopScalarFieldEnum = (typeof WorkshopScalarFieldEnum)[keyof typeof WorkshopScalarFieldEnum]
 
 
+export const WorkshopImageScalarFieldEnum = {
+  id: 'id',
+  workshopId: 'workshopId',
+  url: 'url',
+  altText: 'altText',
+  isPrimary: 'isPrimary',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt'
+} as const
+
+export type WorkshopImageScalarFieldEnum = (typeof WorkshopImageScalarFieldEnum)[keyof typeof WorkshopImageScalarFieldEnum]
+
+
 export const RegistrationScalarFieldEnum = {
   id: 'id',
   workshopId: 'workshopId',
@@ -1855,6 +1943,7 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   workshop?: Prisma.WorkshopOmit
+  workshopImage?: Prisma.WorkshopImageOmit
   registration?: Prisma.RegistrationOmit
   workshopPayment?: Prisma.WorkshopPaymentOmit
   product?: Prisma.ProductOmit

@@ -98,7 +98,7 @@ const Navbar = () => {
       <div
         className={clsx(
           "lg:hidden overflow-hidden transition-all duration-300",
-          menuOpen ? "max-h-125 border-t border-light-gray" : "max-h-0",
+          menuOpen ? "max-h-175 border-t border-light-gray" : "max-h-0",
         )}
       >
         <div className="flex flex-col px-4 sm:px-6 py-4 gap-1 bg-white">

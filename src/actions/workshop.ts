@@ -1,10 +1,12 @@
 "use server";
 
+import { deleteCloudinaryAssetByUrl } from "@/lib/cloudinary";
+import { flattenBannerGallery } from "@/lib/image";
 import prisma from "@/lib/prisma";
 import { WorkshopFormData } from "@/schema/workshop";
 import { PaymentStatus } from "../../prisma/generated/prisma/client";
 import { revalidatePath, updateTag } from "next/cache";
-import { WorkshopActionState } from "@/types/workshop";
+import { WorkshopActionState, WorkshopWithImagesType } from "@/types/workshop";
 import { verifySession } from "./dal";
 import { CACHE } from "@/constants/cache";
 import { chargeSquarePayment, refundSquarePayment } from "./payment";
@@ -14,6 +16,76 @@ import { calculateCanadianTax, type TaxLineType } from "@/lib/tax/canada";
 import { checkRateLimitByIp, rateLimitMessage } from "@/lib/rate-limit";
 import { getTodayKey, startOfDayUtc } from "@/lib/workshop-date";
 import { sendWorkshopConfirmationEmail } from "./email/workshop";
+
+const IMAGE_ORDER_BY = [
+  { isPrimary: "desc" as const },
+  { sortOrder: "asc" as const },
+  { createdAt: "asc" as const },
+];
+
+const toWorkshopWithImages = (workshop: {
+  id: string;
+  title: string;
+  description: string | null;
+  date: Date;
+  startTime: string;
+  startPeriod: string;
+  endTime: string;
+  endPeriod: string;
+  location: string;
+  province: string | null;
+  priceCents: number;
+  totalSeats: number;
+  availableSeats: number;
+  showToUsers: boolean;
+  status: string;
+  lastNotifiedAt: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
+  images: Array<{
+    id: string;
+    workshopId: string;
+    url: string;
+    altText: string | null;
+    isPrimary: boolean;
+    sortOrder: number;
+    createdAt: Date;
+  }>;
+}): WorkshopWithImagesType => {
+  return {
+    id: workshop.id,
+    title: workshop.title,
+    description: workshop.description ?? "",
+    date: workshop.date.toISOString(),
+    startTime: workshop.startTime,
+    startPeriod: workshop.startPeriod,
+    endTime: workshop.endTime,
+    endPeriod: workshop.endPeriod,
+    location: workshop.location,
+    province: workshop.province as WorkshopWithImagesType["province"],
+    price: workshop.priceCents / 100,
+    totalSeats: workshop.totalSeats,
+    availableSeats: workshop.availableSeats,
+    showToUsers: workshop.showToUsers,
+    status: workshop.status as WorkshopWithImagesType["status"],
+    lastNotifiedAt: workshop.lastNotifiedAt?.toISOString() ?? null,
+    createdAt: workshop.createdAt.toISOString(),
+    updatedAt: workshop.updatedAt.toISOString(),
+    bannerUrl: workshop.images[0]?.url ?? null,
+    images: workshop.images
+      .slice()
+      .sort((a, b) => a.sortOrder - b.sortOrder)
+      .map((image) => ({
+        id: image.id,
+        workshopId: image.workshopId,
+        url: image.url,
+        altText: image.altText,
+        isPrimary: image.isPrimary,
+        sortOrder: image.sortOrder,
+        createdAt: image.createdAt.toISOString(),
+      })),
+  };
+};
 
 /** Raised when the conditional seat decrement matches zero rows. */
 class SeatsUnavailableError extends Error {}
@@ -40,6 +112,9 @@ export const getAdminWorkshops = async ({ search }: { search: string }) => {
         contains: search,
       },
     },
+    include: {
+      images: { where: { isPrimary: true }, take: 1 },
+    },
   });
   return workshops.map((workshop) => {
     return {
@@ -52,7 +127,7 @@ export const getAdminWorkshops = async ({ search }: { search: string }) => {
       endTime: workshop.endTime,
       endPeriod: workshop.endPeriod,
       location: workshop.location,
-    province: workshop.province,
+      province: workshop.province,
       price: workshop.priceCents / 100,
       totalSeats: workshop.totalSeats,
       availableSeats: workshop.availableSeats,
@@ -61,6 +136,7 @@ export const getAdminWorkshops = async ({ search }: { search: string }) => {
       lastNotifiedAt: workshop.lastNotifiedAt?.toISOString() ?? null,
       createdAt: workshop.createdAt.toISOString(),
       updatedAt: workshop.updatedAt.toISOString(),
+      bannerUrl: workshop.images[0]?.url ?? null,
     };
   });
 };
@@ -69,30 +145,26 @@ export const getWorkShopById = async (id: string) => {
   const { isUserVerified } = await verifySession({ isAdmin: true });
   if (!isUserVerified) return null;
 
-  const workshop = await prisma.workshop.findFirst({ where: { id } });
+  const workshop = await prisma.workshop.findFirst({
+    where: { id },
+    include: { images: { orderBy: IMAGE_ORDER_BY } },
+  });
   if (!workshop) {
     return null;
   }
 
-  return {
-    id: workshop.id,
-    title: workshop.title,
-    description: workshop.description ?? "",
-    date: workshop.date.toISOString(),
-    startTime: workshop.startTime,
-    startPeriod: workshop.startPeriod,
-    endTime: workshop.endTime,
-    endPeriod: workshop.endPeriod,
-    location: workshop.location,
-    province: workshop.province,
-    price: workshop.priceCents / 100,
-    totalSeats: workshop.totalSeats,
-    availableSeats: workshop.availableSeats,
-    showToUsers: workshop.showToUsers,
-    status: workshop.status,
-    createdAt: workshop.createdAt.toISOString(),
-    updatedAt: workshop.updatedAt.toISOString(),
-  };
+  return toWorkshopWithImages(workshop);
+};
+
+/** Public, non-admin-gated fetch for the workshop details page. */
+export const getPublicWorkshopById = async (id: string) => {
+  const workshop = await prisma.workshop.findFirst({
+    where: { id, showToUsers: true },
+    include: { images: { orderBy: IMAGE_ORDER_BY } },
+  });
+  if (!workshop) return null;
+
+  return toWorkshopWithImages(workshop);
 };
 
 export const addWorkshop = async (
@@ -121,6 +193,10 @@ export const addWorkshop = async (
 
     const normalizedStart = to12HourTime(data.startTime);
     const normalizedEnd = to12HourTime(data.endTime);
+    const flatImages = flattenBannerGallery(
+      validated.data.bannerImage,
+      validated.data.galleryImages,
+    );
 
     await prisma.workshop.create({
       data: {
@@ -138,6 +214,16 @@ export const addWorkshop = async (
         availableSeats: data.totalSeats,
         showToUsers: data.showToUsers,
         status: data.status,
+        images: {
+          createMany: {
+            data: flatImages.map((image) => ({
+              url: image.url,
+              altText: image.altText?.trim() || null,
+              isPrimary: image.isPrimary,
+              sortOrder: image.sortOrder,
+            })),
+          },
+        },
       },
     });
 
@@ -180,36 +266,70 @@ export const editWorkshop = async (
 
     const normalizedStart = to12HourTime(data.startTime);
     const normalizedEnd = to12HourTime(data.endTime);
-
-    const existing = await prisma.workshop.findFirst({
-      where: { id: data.id },
-    });
-    const seatsDelta =
-      data.totalSeats - (existing?.totalSeats ?? data.totalSeats);
-    const newAvailableSeats = Math.max(
-      0,
-      (existing?.availableSeats ?? data.totalSeats) + seatsDelta,
+    const flatImages = flattenBannerGallery(
+      validated.data.bannerImage,
+      validated.data.galleryImages,
     );
 
-    await prisma.workshop.update({
-      where: { id: data.id },
-      data: {
-        title: data.title,
-        description: data.description ?? "",
-        date: parsedDate,
-        startTime: normalizedStart.time,
-        startPeriod: normalizedStart.period,
-        endTime: normalizedEnd.time,
-        endPeriod: normalizedEnd.period,
-        location: data.location,
-        province: data.province,
-        priceCents: Math.round(data.price * 100),
-        totalSeats: data.totalSeats,
-        availableSeats: newAvailableSeats,
-        showToUsers: data.showToUsers,
-        status: data.status,
-      },
+    const removedImageUrls = await prisma.$transaction(async (tx) => {
+      const existing = await tx.workshop.findFirst({
+        where: { id: data.id },
+      });
+      const seatsDelta =
+        data.totalSeats - (existing?.totalSeats ?? data.totalSeats);
+      const newAvailableSeats = Math.max(
+        0,
+        (existing?.availableSeats ?? data.totalSeats) + seatsDelta,
+      );
+
+      const existingImages = await tx.workshopImage.findMany({
+        where: { workshopId: data.id },
+        select: { url: true },
+      });
+      const incomingUrls = new Set(flatImages.map((image) => image.url));
+      const removedImages = existingImages.filter(
+        (image) => !incomingUrls.has(image.url),
+      );
+
+      await tx.workshop.update({
+        where: { id: data.id },
+        data: {
+          title: data.title,
+          description: data.description ?? "",
+          date: parsedDate,
+          startTime: normalizedStart.time,
+          startPeriod: normalizedStart.period,
+          endTime: normalizedEnd.time,
+          endPeriod: normalizedEnd.period,
+          location: data.location,
+          province: data.province,
+          priceCents: Math.round(data.price * 100),
+          totalSeats: data.totalSeats,
+          availableSeats: newAvailableSeats,
+          showToUsers: data.showToUsers,
+          status: data.status,
+        },
+      });
+
+      await tx.workshopImage.deleteMany({ where: { workshopId: data.id } });
+      await tx.workshopImage.createMany({
+        data: flatImages.map((image) => ({
+          workshopId: data.id,
+          url: image.url,
+          altText: image.altText?.trim() || null,
+          isPrimary: image.isPrimary,
+          sortOrder: image.sortOrder,
+        })),
+      });
+
+      return removedImages.map((image) => image.url);
     });
+
+    await Promise.all(
+      removedImageUrls.map((url) =>
+        deleteCloudinaryAssetByUrl(url).catch(() => null),
+      ),
+    );
 
     revalidatePath("/admin/workshops");
     updateTag(CACHE.WORKSHOP);
@@ -229,7 +349,10 @@ export const deleteWorkshop = async (id: string) => {
   if (!isUserVerified) return { success: false, message: "Unauthorized." };
 
   try {
-    const isWorkshopExist = await prisma.workshop.findFirst({ where: { id } });
+    const isWorkshopExist = await prisma.workshop.findFirst({
+      where: { id },
+      include: { images: { select: { url: true } } },
+    });
 
     if (!isWorkshopExist) {
       return {
@@ -239,6 +362,12 @@ export const deleteWorkshop = async (id: string) => {
     }
 
     await prisma.workshop.delete({ where: { id } });
+
+    await Promise.all(
+      isWorkshopExist.images.map((image) =>
+        deleteCloudinaryAssetByUrl(image.url).catch(() => null),
+      ),
+    );
 
     revalidatePath("/admin/workshops");
     updateTag(CACHE.WORKSHOP);
@@ -310,14 +439,19 @@ export const bookWorkshop = async (
   // Unauthenticated action that charges a card: throttle before touching Square.
   const limit = await checkRateLimitByIp("booking");
   if (!limit.allowed) {
-    return { success: false, message: rateLimitMessage(limit.retryAfterSeconds) };
+    return {
+      success: false,
+      message: rateLimitMessage(limit.retryAfterSeconds),
+    };
   }
 
   if (typeof sourceId !== "string" || sourceId.length === 0) {
     return { success: false, message: "Payment token is missing." };
   }
 
-  const workshop = await prisma.workshop.findFirst({ where: { id: workshopId } });
+  const workshop = await prisma.workshop.findFirst({
+    where: { id: workshopId },
+  });
 
   if (!workshop || !workshop.showToUsers) {
     return { success: false, message: "Workshop not found." };
@@ -425,7 +559,10 @@ export const bookWorkshop = async (
       return { success: false, message: error.message };
     }
     console.error("[booking] Reservation failed:", error);
-    return { success: false, message: "Could not book your seat. Please try again." };
+    return {
+      success: false,
+      message: "Could not book your seat. Please try again.",
+    };
   }
 
   // --- CHARGE, keyed to the reservation so a double submit cannot charge twice.
@@ -506,7 +643,9 @@ export const bookWorkshop = async (
       price: workshop.priceCents / 100,
     },
     receiptUrl: payment.receiptUrl,
-  }).catch((err) => console.error("[email] Workshop confirmation failed:", err));
+  }).catch((err) =>
+    console.error("[email] Workshop confirmation failed:", err),
+  );
 
   return { success: true, message: "Booking successful!" };
 };
@@ -553,6 +692,9 @@ export const getWorkshops = async (todayKey: string) => {
       orderBy: {
         date: "asc",
       },
+      include: {
+        images: { where: { isPrimary: true }, take: 1 },
+      },
     });
 
     return workshops.map((workshop) => {
@@ -566,7 +708,7 @@ export const getWorkshops = async (todayKey: string) => {
         endTime: workshop.endTime,
         endPeriod: workshop.endPeriod,
         location: workshop.location,
-    province: workshop.province,
+        province: workshop.province,
         price: workshop.priceCents / 100,
         totalSeats: workshop.totalSeats,
         availableSeats: workshop.availableSeats,
@@ -575,6 +717,7 @@ export const getWorkshops = async (todayKey: string) => {
         lastNotifiedAt: workshop.lastNotifiedAt?.toISOString() ?? null,
         createdAt: workshop.createdAt.toISOString(),
         updatedAt: workshop.updatedAt.toISOString(),
+        bannerUrl: workshop.images[0]?.url ?? null,
       };
     });
   } catch {
