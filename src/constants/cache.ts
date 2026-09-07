@@ -1,0 +1,5 @@
+export enum CACHE {
+  WORKSHOP = "WORKSHOP",
+  PRODUCT = "PRODUCT",
+  ORDER = "ORDER",
+}
