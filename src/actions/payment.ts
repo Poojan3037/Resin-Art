@@ -84,11 +84,27 @@ export const chargeSquarePayment = async ({
       "[payment] Square charge failed:",
       apiError?.errors ?? error,
     );
+    const code = apiError?.errors?.[0]?.code;
     return {
       success: false,
-      message: "Payment failed. Please check your card details and try again.",
+      message:
+        (code && SQUARE_ERROR_MESSAGES[code]) ??
+        "Payment failed. Please check your card details and try again.",
     };
   }
+};
+
+// Safe, user-facing messages for common Square decline codes. Raw provider
+// `detail` strings are never returned to the client.
+const SQUARE_ERROR_MESSAGES: Record<string, string> = {
+  CARD_DECLINED: "Your card was declined.",
+  GENERIC_DECLINE: "Your card was declined.",
+  CVV_FAILURE: "The security code (CVV) is incorrect.",
+  ADDRESS_VERIFICATION_FAILURE: "The postal code doesn't match the card.",
+  INVALID_EXPIRATION: "Card details are invalid.",
+  INVALID_CARD: "Card details are invalid.",
+  INVALID_CARD_DATA: "Card details are invalid.",
+  INSUFFICIENT_FUNDS: "Insufficient funds.",
 };
 
 /**
