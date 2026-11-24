@@ -6,6 +6,11 @@ const globalForPrisma = global as unknown as {
 };
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL,
+  // Neon closes idle connections (and suspends compute) server-side; release
+  // ours first so the pool never hands Prisma a dead socket.
+  idleTimeoutMillis: 10_000,
+  connectionTimeoutMillis: 15_000,
+  keepAlive: true,
 });
 const prisma =
   globalForPrisma.prisma ||
